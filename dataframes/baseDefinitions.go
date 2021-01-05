@@ -1,9 +1,5 @@
 package dataframes
 
-import (
-	orderedmap "github.com/wk8/go-ordered-map"
-)
-
 // DType contains the supported data type definitions
 type DType string
 
@@ -20,11 +16,16 @@ const (
 	DateTime DType = "DateTime"
 	// Category is finite list of text values
 	Category DType = "Category"
+	// NA represents empty cells
+	NA DType = "NA"
 )
+
+// DataFrameData describes the shape of data stored in dataframe
+type DataFrameData map[string][]interface{}
 
 // DataFrame includes the fields that describes a dataframe
 type DataFrame struct {
-	data    *orderedmap.OrderedMap
+	data    DataFrameData
 	length  int
 	columns []Column
 }
@@ -35,17 +36,18 @@ func (df *DataFrame) Length() int {
 }
 
 // CreateDataFrame creates a dataframe using given data
-func CreateDataFrame(data *orderedmap.OrderedMap) *DataFrame {
+func CreateDataFrame(data [][]interface{}, columns []string) *DataFrame {
 	df := new(DataFrame)
-	df.data = data
+	df.data = make(DataFrameData)
+	df.columns = make([]Column, 0)
 
-	index := 0
-	for pair := data.Oldest(); pair != nil; pair = pair.Next() {
+	for i, colData := range data {
+		df.data[columns[i]] = colData
 		column := Column{}
-		column.name = pair.Key.(string)
+		column.name = columns[i]
 		column.dtype = Object // temporary
-		column.colIndex = index
-		index++
+		column.colIndex = i
+		df.columns = append(df.columns, column)
 	}
 
 	return df
