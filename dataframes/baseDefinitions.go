@@ -4,7 +4,7 @@ package dataframes
 type DType string
 
 const (
-	// Object is Text of mixed numeric values
+	// Object is Text or mixed numeric values
 	Object DType = "Object"
 	// Int64 is int64 typed numeric values
 	Int64 DType = "Int64"
@@ -18,12 +18,6 @@ const (
 	Category DType = "Category"
 )
 
-// Column includes the Column name and type information
-type Column struct {
-	name  string
-	dtype DType
-}
-
 // DataFrame includes the fields that describes a dataframe
 type DataFrame struct {
 	data    []interface{}
@@ -34,13 +28,4 @@ type DataFrame struct {
 // Length returns the no of rows of the dataframe
 func (df *DataFrame) Length() int {
 	return df.length
-}
-
-// Columns returns the column names of the dataframe
-func (df *DataFrame) Columns() []string {
-	names := make([]string, len(df.columns))
-	for i, val := range df.columns {
-		names[i] = val.name
-	}
-	return names
 }
