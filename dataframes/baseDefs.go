@@ -40,6 +40,7 @@ func CreateDataFrame(data [][]interface{}, columns []string) *DataFrame {
 	df := new(DataFrame)
 	df.data = make(DataFrameData)
 	df.columns = make([]Column, 0)
+	df.length = len(data[0])
 
 	for i, colData := range data {
 		df.data[columns[i]] = colData
