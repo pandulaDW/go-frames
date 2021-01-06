@@ -1,11 +1,18 @@
 package dataframes
 
 import (
+	"bytes"
+	"encoding/gob"
 	"fmt"
-	"unsafe"
 
 	"github.com/pandulaDW/go-frames/helpers"
 )
+
+func getRealSizeOf(v interface{}) int {
+	b := new(bytes.Buffer)
+	gob.NewEncoder(b).Encode(v)
+	return b.Len()
+}
 
 func (df *DataFrame) createInfoFooter() string {
 	dtypes := make([]interface{}, 0, len(df.columns))
@@ -18,7 +25,7 @@ func (df *DataFrame) createInfoFooter() string {
 	dtypeStr := fmt.Sprintf("dtypes: float(%d), int(%d), object(%d), bool(%d)\n",
 		valueCounts[Float], valueCounts[Int], valueCounts[Object], valueCounts[Bool])
 
-	memSize := fmt.Sprintf("memory usage: %v bytes", unsafe.Sizeof(df))
+	memSize := fmt.Sprintf("memory usage: %d bytes", getRealSizeOf(df.Data))
 	return dtypeStr + memSize
 }
 
