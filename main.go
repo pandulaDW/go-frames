@@ -12,7 +12,7 @@ func main() {
 	col3 := make([]interface{}, 0)
 	col4 := make([]interface{}, 0)
 
-	for _, v := range []int{12, 34, 54, 65} {
+	for _, v := range []interface{}{12, 34, 54, 65} {
 		col1 = append(col1, v)
 	}
 
@@ -20,7 +20,7 @@ func main() {
 		col2 = append(col2, v)
 	}
 
-	for _, v := range []string{"foo2", "baz2", "oranges", "apple2"} {
+	for _, v := range []float32{54.31, 1.23, 45.6, 23.12} {
 		col3 = append(col3, v)
 	}
 
@@ -36,6 +36,5 @@ func main() {
 
 	columns := []string{"col1", "col2", "col3", "col4"}
 	df := dataframes.CreateDataFrame(data, columns)
-
-	fmt.Println(df)
+	fmt.Println(df.Info())
 }
