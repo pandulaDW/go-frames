@@ -15,6 +15,17 @@ func Max(nums []int) int {
 	return max
 }
 
+// Max returns the maximum element of a given int array
+func Min(nums []int) int {
+	max := math.MinInt32
+	for _, val := range nums {
+		if max < val {
+			max = val
+		}
+	}
+	return max
+}
+
 // ValueCounts will find the duplicate elements from a given array of
 // empty interfaces and will return a map containing a value count for each unique elements
 func ValueCounts(arr []interface{}) map[interface{}]int {
