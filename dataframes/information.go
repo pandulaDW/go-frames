@@ -22,7 +22,7 @@ func (df *DataFrame) createInfoFooter() string {
 	dtypes := make([]interface{}, 0, len(df.columns))
 
 	for _, val := range df.columns {
-		dtypes = append(dtypes, val.dtype)
+		dtypes = append(dtypes, val.Dtype)
 	}
 
 	valueCounts := helpers.ValueCounts(dtypes)
@@ -44,9 +44,9 @@ func (df *DataFrame) Info() string {
 
 	for i := 0; i < len(df.columns); i++ {
 		indices = append(indices, i+1)
-		columnNames = append(columnNames, df.columns[i].name)
+		columnNames = append(columnNames, df.columns[i].Name)
 		nonNulls = append(nonNulls, fmt.Sprintf("%d non-null", df.length))
-		dTypes = append(dTypes, df.columns[i].dtype)
+		dTypes = append(dTypes, df.columns[i].Dtype)
 	}
 
 	data := make([][]interface{}, 4)
@@ -63,12 +63,11 @@ func (df *DataFrame) Info() string {
 // dispersion and shape of a dataset’s distribution, excluding NA values. information would only be displayed
 // for the numerical columns.
 func (df *DataFrame) Describe() {
-	columns := make([]Column, 0)
+	columns := make([]base.Column, 0)
 
 	// extract only the numerical columns
 	for _, val := range df.columns {
-		fmt.Println(val.dtype)
-		if val.dtype == base.Int || val.dtype == base.Float {
+		if val.Dtype == base.Int || val.Dtype == base.Float {
 			columns = append(columns, val)
 		}
 	}
@@ -76,7 +75,8 @@ func (df *DataFrame) Describe() {
 	maxSeries := df.Agg(columns, helpers.MaxSeries)
 	minSeries := df.Agg(columns, helpers.MinSeries)
 
+	fmt.Println(maxSeries)
+	fmt.Println(minSeries)
 	_ = maxSeries
 	_ = minSeries
-
 }

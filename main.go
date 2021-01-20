@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/pandulaDW/go-frames/dataframes"
 )
 
@@ -36,7 +35,7 @@ func main() {
 
 	columns := []string{"col1", "col2", "col3", "col4"}
 	df := dataframes.CreateDataFrame(data, columns)
-	fmt.Println(df.Info())
+	fmt.Println(df)
 
 	df.Describe()
 }

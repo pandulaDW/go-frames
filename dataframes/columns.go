@@ -5,18 +5,11 @@ import (
 	"github.com/pandulaDW/go-frames/base"
 )
 
-// Column includes the Column name and type information
-type Column struct {
-	name     string
-	dtype    base.DType
-	colIndex int
-}
-
 // Columns returns the column names of the dataframe
 func (df *DataFrame) Columns() []string {
 	names := make([]string, len(df.columns))
 	for i, val := range df.columns {
-		names[i] = val.name
+		names[i] = val.Name
 	}
 	return names
 }
@@ -25,8 +18,8 @@ func (df *DataFrame) Columns() []string {
 // found, it will return an error with an empty string
 func (df *DataFrame) ColDType(colName string) (base.DType, error) {
 	for _, val := range df.columns {
-		if val.name == colName {
-			return val.dtype, nil
+		if val.Name == colName {
+			return val.Dtype, nil
 		}
 	}
 	return "", errors.New("column not found")
@@ -36,16 +29,16 @@ func (df *DataFrame) ColDType(colName string) (base.DType, error) {
 // type of the column. If the type contains mix type data, it will default to Object type
 func (df *DataFrame) assertType() {
 	for i, col := range df.columns {
-		for _, val := range df.Data[col.name] {
+		for _, val := range df.Data[col.Name] {
 			switch val.(type) {
-			case int64:
-				df.columns[i].dtype = base.Int
-			case float64:
-				df.columns[i].dtype = base.Float
+			case int:
+				df.columns[i].Dtype = base.Int
+			case float32:
+				df.columns[i].Dtype = base.Float
 			case bool:
-				df.columns[i].dtype = base.Bool
+				df.columns[i].Dtype = base.Bool
 			default:
-				df.columns[i].dtype = base.Object
+				df.columns[i].Dtype = base.Object
 			}
 		}
 	}

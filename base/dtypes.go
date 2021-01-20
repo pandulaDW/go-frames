@@ -6,9 +6,9 @@ type DType string
 const (
 	// Object is Text or mixed numeric values
 	Object DType = "Object"
-	// Int is int64 typed numeric values
+	// Int is int typed numeric values
 	Int DType = "Int"
-	// Float is Float64 typed floating point values
+	// Float is float32 typed floating point values
 	Float DType = "Float"
 	// Bool is True/False values
 	Bool DType = "Bool"
