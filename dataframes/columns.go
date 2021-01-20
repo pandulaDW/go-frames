@@ -35,10 +35,8 @@ func (df *DataFrame) assertType() {
 	for i, col := range df.columns {
 		for _, val := range df.Data[col.name] {
 			switch val.(type) {
-			case int:
+			case int64:
 				df.columns[i].dtype = Int
-			case float32:
-				df.columns[i].dtype = Float
 			case float64:
 				df.columns[i].dtype = Float
 			case bool:
