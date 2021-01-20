@@ -10,7 +10,10 @@ import (
 
 func getRealSizeOf(v interface{}) int {
 	b := new(bytes.Buffer)
-	gob.NewEncoder(b).Encode(v)
+	err := gob.NewEncoder(b).Encode(v)
+	if err != nil {
+		panic(err)
+	}
 	return b.Len()
 }
 
@@ -53,4 +56,13 @@ func (df *DataFrame) Info() string {
 
 	info := CreateDataFrame(data, columns)
 	return info.String() + "\n" + df.createInfoFooter()
+}
+
+// Describe Generate descriptive statistics. including those that summarize the central tendency,
+// dispersion and shape of a dataset’s distribution, excluding NA values. information would only be displayed
+// for the numerical columns.
+func (df *DataFrame) Describe() {
+	columns := make([]string, 0)
+	columns = append(columns, "")
+
 }

@@ -26,7 +26,7 @@ func (df *DataFrame) ColDType(colName string) (DType, error) {
 			return val.dtype, nil
 		}
 	}
-	return "", errors.New("Column not found")
+	return "", errors.New("column not found")
 }
 
 // assertType would take a column of data as an argument and will infer the
