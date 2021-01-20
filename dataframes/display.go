@@ -17,7 +17,7 @@ func (df *DataFrame) getMaxLengthColumn(col string) int {
 	}
 	strLengths = append(strLengths, len(col))
 
-	return helpers.Max(strLengths)
+	return helpers.MaxIntSlice(strLengths)
 }
 
 // creates the header portion of the dataframe with columns

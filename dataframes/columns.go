@@ -1,11 +1,14 @@
 package dataframes
 
-import "errors"
+import (
+	"errors"
+	"github.com/pandulaDW/go-frames/base"
+)
 
 // Column includes the Column name and type information
 type Column struct {
 	name     string
-	dtype    DType
+	dtype    base.DType
 	colIndex int
 }
 
@@ -20,7 +23,7 @@ func (df *DataFrame) Columns() []string {
 
 // ColDType returns the datatype of the column. If the column is not
 // found, it will return an error with an empty string
-func (df *DataFrame) ColDType(colName string) (DType, error) {
+func (df *DataFrame) ColDType(colName string) (base.DType, error) {
 	for _, val := range df.columns {
 		if val.name == colName {
 			return val.dtype, nil
@@ -36,13 +39,13 @@ func (df *DataFrame) assertType() {
 		for _, val := range df.Data[col.name] {
 			switch val.(type) {
 			case int64:
-				df.columns[i].dtype = Int
+				df.columns[i].dtype = base.Int
 			case float64:
-				df.columns[i].dtype = Float
+				df.columns[i].dtype = base.Float
 			case bool:
-				df.columns[i].dtype = Bool
+				df.columns[i].dtype = base.Bool
 			default:
-				df.columns[i].dtype = Object
+				df.columns[i].dtype = base.Object
 			}
 		}
 	}

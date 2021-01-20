@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
+	"github.com/pandulaDW/go-frames/base"
 
 	"github.com/pandulaDW/go-frames/helpers"
 )
@@ -26,7 +27,7 @@ func (df *DataFrame) createInfoFooter() string {
 
 	valueCounts := helpers.ValueCounts(dtypes)
 	dtypeStr := fmt.Sprintf("dtypes: float(%d), int(%d), object(%d), bool(%d)\n",
-		valueCounts[Float], valueCounts[Int], valueCounts[Object], valueCounts[Bool])
+		valueCounts[base.Float], valueCounts[base.Int], valueCounts[base.Object], valueCounts[base.Bool])
 
 	memSize := fmt.Sprintf("memory usage: %d bytes", getRealSizeOf(df.Data))
 	return dtypeStr + memSize
@@ -62,7 +63,22 @@ func (df *DataFrame) Info() string {
 // dispersion and shape of a dataset’s distribution, excluding NA values. information would only be displayed
 // for the numerical columns.
 func (df *DataFrame) Describe() {
-	columns := make([]string, 0)
-	columns = append(columns, "")
+	columns := make([]*Column, 0)
+	columns = append(columns, nil)
+
+	for _, val := range df.columns {
+		if val.dtype == base.Int || val.dtype == base.Float {
+			columns = append(columns, &val)
+		}
+	}
+
+	var maxSeries, minSeries []interface{}
+	_ = minSeries
+
+	//for _, col := range columns {
+	//	//maxSeries = df.Agg(df.Data[col.name], col.dtype)
+	//}
+
+	_ = maxSeries
 
 }
