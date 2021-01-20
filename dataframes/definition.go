@@ -1,15 +1,18 @@
 package dataframes
 
-import "github.com/pandulaDW/go-frames/base"
+import (
+	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/series"
+)
 
 // DataFrameData describes the shape of data stored in dataframe
-type DataFrameData map[string][]interface{}
+type DataFrameData map[string]*series.Series
 
 // DataFrame includes the fields that describes a dataframe
 type DataFrame struct {
 	Data    DataFrameData
 	length  int
-	columns []base.Column
+	columns []*base.Column
 }
 
 // Length returns the no of rows of the dataframe

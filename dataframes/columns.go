@@ -29,7 +29,7 @@ func (df *DataFrame) ColDType(colName string) (base.DType, error) {
 // type of the column. If the type contains mix type data, it will default to Object type
 func (df *DataFrame) assertType() {
 	for i, col := range df.columns {
-		for _, val := range df.Data[col.Name] {
+		for _, val := range df.Data[col.Name].Data() {
 			switch val.(type) {
 			case int:
 				df.columns[i].Dtype = base.Int
