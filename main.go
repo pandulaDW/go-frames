@@ -37,4 +37,6 @@ func main() {
 	columns := []string{"col1", "col2", "col3", "col4"}
 	df := dataframes.CreateDataFrame(data, columns)
 	fmt.Println(df.Info())
+
+	df.Describe()
 }

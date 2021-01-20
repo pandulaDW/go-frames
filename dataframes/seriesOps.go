@@ -9,8 +9,12 @@ type AggFuncType func(num []interface{}, dtype base.DType) interface{}
 
 // Agg returns the maximum of the column specified. Panics if
 // the column is not found
-func (df *DataFrame) Agg(series []interface{}, dtype base.DType, aggregator AggFuncType) []interface{} {
+func (df *DataFrame) Agg(columns []Column, aggregator AggFuncType) []interface{} {
 	var aggSeries []interface{}
-	aggSeries = append(aggSeries, aggregator(series, dtype))
+
+	for _, col := range columns {
+		aggSeries = append(aggSeries, aggregator(df.Data[col.name], col.dtype))
+	}
+
 	return aggSeries
 }

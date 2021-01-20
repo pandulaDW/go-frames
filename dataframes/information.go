@@ -63,22 +63,20 @@ func (df *DataFrame) Info() string {
 // dispersion and shape of a dataset’s distribution, excluding NA values. information would only be displayed
 // for the numerical columns.
 func (df *DataFrame) Describe() {
-	columns := make([]*Column, 0)
-	columns = append(columns, nil)
+	columns := make([]Column, 0)
 
+	// extract only the numerical columns
 	for _, val := range df.columns {
+		fmt.Println(val.dtype)
 		if val.dtype == base.Int || val.dtype == base.Float {
-			columns = append(columns, &val)
+			columns = append(columns, val)
 		}
 	}
 
-	var maxSeries, minSeries []interface{}
-	_ = minSeries
-
-	//for _, col := range columns {
-	//	//maxSeries = df.Agg(df.Data[col.name], col.dtype)
-	//}
+	maxSeries := df.Agg(columns, helpers.MaxSeries)
+	minSeries := df.Agg(columns, helpers.MinSeries)
 
 	_ = maxSeries
+	_ = minSeries
 
 }
