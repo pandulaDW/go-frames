@@ -1,6 +1,7 @@
 package dataframes
 
 import (
+	"errors"
 	"github.com/pandulaDW/go-frames/base"
 )
 
@@ -20,8 +21,12 @@ func (df *DataFrame) Agg(columns []base.Column, aggregator base.Aggregator) []in
 			aggSeries = append(aggSeries, s.Max())
 		case base.MIN:
 			aggSeries = append(aggSeries, s.Min())
+		case base.SUM:
+			aggSeries = append(aggSeries, s.Sum())
+		case base.AVG:
+			aggSeries = append(aggSeries, s.Avg())
 		default:
-			panic(aggregator + " is not a valid aggregator identifier")
+			panic(errors.New(string(aggregator + " is not a valid aggregator identifier")))
 		}
 	}
 

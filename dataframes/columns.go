@@ -33,7 +33,7 @@ func (df *DataFrame) assertType() {
 			switch val.(type) {
 			case int:
 				df.columns[i].Dtype = base.Int
-			case float32:
+			case float64:
 				df.columns[i].Dtype = base.Float
 			case bool:
 				df.columns[i].Dtype = base.Bool

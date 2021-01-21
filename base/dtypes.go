@@ -8,7 +8,7 @@ const (
 	Object DType = "Object"
 	// Int is int typed numeric values
 	Int DType = "Int"
-	// Float is float32 typed floating point values
+	// Float is float64 typed floating point values
 	Float DType = "Float"
 	// Bool is True/False values
 	Bool DType = "Bool"

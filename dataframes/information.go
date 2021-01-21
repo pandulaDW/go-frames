@@ -42,7 +42,7 @@ func (df *DataFrame) Info() string {
 	col2 := series.NewSeries("Non-Null Count", nonNulls...)
 	col3 := series.NewSeries("Dtype", dTypes...)
 
-	info := CreateDataFrame(col0, col1, col2, col3)
+	info := NewDataFrame(col0, col1, col2, col3)
 	return info.String() + "\n" + df.createInfoFooter()
 }
 
@@ -61,11 +61,13 @@ func (df *DataFrame) Describe() {
 
 	maxSeries := df.Agg(columns, base.MAX)
 	minSeries := df.Agg(columns, base.MIN)
+	sumSeries := df.Agg(columns, base.SUM)
+	avgSeries := df.Agg(columns, base.AVG)
 
 	fmt.Println(maxSeries)
 	fmt.Println(minSeries)
-	_ = maxSeries
-	_ = minSeries
+	fmt.Println(sumSeries)
+	fmt.Println(avgSeries)
 }
 
 // TODO - Add non null columns properly
