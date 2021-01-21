@@ -49,7 +49,7 @@ func (df *DataFrame) Info() string {
 // Describe Generate descriptive statistics. including those that summarize the central tendency,
 // dispersion and shape of a dataset’s distribution, excluding NA values. information would only be displayed
 // for the numerical columns.
-func (df *DataFrame) Describe() {
+func (df *DataFrame) Describe() *DataFrame {
 	columns := make([]base.Column, 0)
 
 	// extract only the numerical columns
@@ -59,15 +59,12 @@ func (df *DataFrame) Describe() {
 		}
 	}
 
-	maxSeries := df.Agg(columns, base.MAX)
-	minSeries := df.Agg(columns, base.MIN)
-	sumSeries := df.Agg(columns, base.SUM)
-	avgSeries := df.Agg(columns, base.AVG)
+	maxSeries := series.NewSeries("max", df.Agg(columns, base.MAX)...)
+	minSeries := series.NewSeries("min", df.Agg(columns, base.MIN)...)
+	sumSeries := series.NewSeries("sum", df.Agg(columns, base.SUM)...)
+	avgSeries := series.NewSeries("avg", df.Agg(columns, base.AVG)...)
 
-	fmt.Println(maxSeries)
-	fmt.Println(minSeries)
-	fmt.Println(sumSeries)
-	fmt.Println(avgSeries)
+	return NewDataFrame(maxSeries, minSeries, sumSeries, avgSeries)
 }
 
 // TODO - Add non null columns properly
