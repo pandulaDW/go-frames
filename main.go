@@ -15,5 +15,5 @@ func main() {
 	df := dataframes.CreateDataFrame(col1, col2, col3, col4)
 	fmt.Println(df)
 	fmt.Println(df.Info())
-	//df.Describe()
+	df.Describe()
 }

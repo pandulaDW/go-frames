@@ -43,3 +43,5 @@ func (df *DataFrame) assertType() {
 		}
 	}
 }
+
+// TODO - Make the type assertion a series method

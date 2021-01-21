@@ -37,10 +37,10 @@ func (df *DataFrame) Info() string {
 		dTypes = append(dTypes, df.columns[i].Dtype)
 	}
 
-	col0 := series.NewSeries("#", indices)
-	col1 := series.NewSeries("Column", columnNames)
-	col2 := series.NewSeries("Non-Null Count", nonNulls)
-	col3 := series.NewSeries("Dtype", dTypes)
+	col0 := series.NewSeries("#", indices...)
+	col1 := series.NewSeries("Column", columnNames...)
+	col2 := series.NewSeries("Non-Null Count", nonNulls...)
+	col3 := series.NewSeries("Dtype", dTypes...)
 
 	info := CreateDataFrame(col0, col1, col2, col3)
 	return info.String() + "\n" + df.createInfoFooter()
@@ -59,8 +59,8 @@ func (df *DataFrame) Describe() {
 		}
 	}
 
-	maxSeries := df.Agg(columns, helpers.MaxSeries)
-	minSeries := df.Agg(columns, helpers.MinSeries)
+	maxSeries := df.Agg(columns, base.MAX)
+	minSeries := df.Agg(columns, base.MIN)
 
 	fmt.Println(maxSeries)
 	fmt.Println(minSeries)
