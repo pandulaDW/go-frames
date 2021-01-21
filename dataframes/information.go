@@ -9,20 +9,17 @@ import (
 )
 
 func (df *DataFrame) createInfoFooter() string {
+	var memSize int
 	dtypes := make([]interface{}, 0, len(df.columns))
 
-	for _, val := range df.columns {
-		dtypes = append(dtypes, val.Dtype)
+	for _, col := range df.columns {
+		dtypes = append(dtypes, col.Dtype)
+		memSize += df.Data[col.Name].MemSize()
 	}
 
 	valueCounts := helpers.ValueCounts(dtypes)
 	dtypeStr := fmt.Sprintf("dtypes: float(%d), int(%d), object(%d), bool(%d)\n",
 		valueCounts[base.Float], valueCounts[base.Int], valueCounts[base.Object], valueCounts[base.Bool])
-
-	var memSize int
-	for _, col := range df.columns {
-		memSize += df.Data[col.Name].MemSize()
-	}
 
 	memSizeStr := fmt.Sprintf("memory usage: %d bytes", memSize)
 	return dtypeStr + memSizeStr

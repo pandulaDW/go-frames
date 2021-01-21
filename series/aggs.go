@@ -1,29 +1,18 @@
-package helpers
+package series
 
 import (
 	"github.com/pandulaDW/go-frames/base"
 	"math"
 )
 
-// MaxIntSlice returns the maximum element of a given int array
-func MaxIntSlice(nums []int) int {
-	max := math.MinInt32
-	for _, val := range nums {
-		if max < val {
-			max = val
-		}
-	}
-	return max
-}
-
-// MaxSeries returns the maximum of a series
-func MaxSeries(num []interface{}, dtype base.DType) interface{} {
+// Max returns the maximum value of the series based on it's data type
+func (s *Series) Max() interface{} {
 	maxInt := math.MinInt64
 	maxFloat := float32(math.MinInt64)
 
-	switch dtype {
+	switch s.column.Dtype {
 	case base.Int:
-		for _, val := range num {
+		for _, val := range s.Data {
 			if val.(int) > maxInt {
 				maxInt = val.(int)
 			}
@@ -31,7 +20,7 @@ func MaxSeries(num []interface{}, dtype base.DType) interface{} {
 		return maxInt
 
 	case base.Float:
-		for _, val := range num {
+		for _, val := range s.Data {
 			if val.(float32) > maxFloat {
 				maxFloat = val.(float32)
 			}
@@ -41,14 +30,14 @@ func MaxSeries(num []interface{}, dtype base.DType) interface{} {
 	return nil
 }
 
-// MinSeries returns the minimum of a series
-func MinSeries(num []interface{}, dtype base.DType) interface{} {
+// Min returns the minimum value of the series based on it's data type
+func (s *Series) Min() interface{} {
 	minInt := math.MaxInt64
 	minFloat := float32(math.MaxInt64)
 
-	switch dtype {
+	switch s.column.Dtype {
 	case base.Int:
-		for _, val := range num {
+		for _, val := range s.Data {
 			if val.(int) < minInt {
 				minInt = val.(int)
 			}
@@ -56,7 +45,7 @@ func MinSeries(num []interface{}, dtype base.DType) interface{} {
 		return minInt
 
 	case base.Float:
-		for _, val := range num {
+		for _, val := range s.Data {
 			if val.(float32) < minFloat {
 				minFloat = val.(float32)
 			}
