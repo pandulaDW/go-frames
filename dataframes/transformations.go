@@ -15,8 +15,8 @@ func (df *DataFrame) Transpose(header bool) *DataFrame {
 
 	if header {
 		colNames := make([]interface{}, 0)
-		for _, col := range df.columns {
-			colNames = append(colNames, col.Name)
+		for _, val := range df.Columns() {
+			colNames = append(colNames, val)
 		}
 		newSeriesArray = append(newSeriesArray, series.NewSeries("v0", colNames...))
 	}

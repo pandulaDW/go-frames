@@ -59,12 +59,24 @@ func (df *DataFrame) Describe() *DataFrame {
 		}
 	}
 
+	// create aggregation series
 	maxSeries := series.NewSeries("max", df.Agg(columns, base.MAX)...)
 	minSeries := series.NewSeries("min", df.Agg(columns, base.MIN)...)
 	sumSeries := series.NewSeries("sum", df.Agg(columns, base.SUM)...)
 	avgSeries := series.NewSeries("avg", df.Agg(columns, base.AVG)...)
 
-	return NewDataFrame(maxSeries, minSeries, sumSeries, avgSeries)
+	infoDF := NewDataFrame(maxSeries, minSeries, sumSeries, avgSeries)
+	transposedInfo := infoDF.Transpose(true)
+
+	// Set column names
+	colNames := make([]string, 0)
+	colNames = append(colNames, "")
+	for _, column := range columns {
+		colNames = append(colNames, column.Name)
+	}
+	transposedInfo.SetColumnNames(colNames)
+
+	return transposedInfo
 }
 
 // TODO - Add non null columns properly

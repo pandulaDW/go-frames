@@ -11,7 +11,7 @@ func main() {
 	col2 := series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
 	col3 := series.NewSeries("col3", 54.31, 1.23, 45.6, 23.12, 23.2)
 	col4 := series.NewSeries("col4", true, false, true, true, false)
-	col5 := series.NewSeries("col5", 14, 123, 32, 64, 34)
+	col5 := series.NewSeries("col5", 14, 124, 32, 64, 34)
 	col6 := series.NewSeries("col6", 24.31, 5.63, 78.3, 2.13, 43.7)
 	col7 := series.NewSeries("col7", 25, 56, 12, 27, 59)
 
