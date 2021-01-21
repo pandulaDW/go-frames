@@ -13,6 +13,8 @@ func main() {
 	col4 := series.NewSeries("col4", true, false, true, true, false)
 
 	df := dataframes.NewDataFrame(col1, col2, col3, col4)
+	df.SetColumnNames([]string{"Int", "words", "floats", "bolls"})
+
 	fmt.Println(df)
 	fmt.Println(df.Info())
 
