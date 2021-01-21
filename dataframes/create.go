@@ -16,10 +16,13 @@ func CreateDataFrame(data ...*series.Series) *DataFrame {
 
 	df.Data = make(DataFrameData)
 	df.columns = make([]*base.Column, 0)
-	df.length = len(data[0].Data())
+	df.length = data[0].Len()
 
 	// Populate the dataframe and the columns
 	for i, s := range data {
+		if s.Len() != df.length {
+			panic("Mismatched row lengths found. Dataframe can only contain equal number of rows")
+		}
 		df.Data[s.GetColumn().Name] = s
 		s.SetColIndex(i)
 		df.columns = append(df.columns, s.GetColumn())

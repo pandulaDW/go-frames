@@ -13,7 +13,7 @@ func (df *DataFrame) Agg(columns []base.Column, aggregator AggFuncType) []interf
 	var aggSeries []interface{}
 
 	for _, col := range columns {
-		aggSeries = append(aggSeries, aggregator(df.Data[col.Name], col.Dtype))
+		aggSeries = append(aggSeries, aggregator(df.Data[col.Name].Data, col.Dtype))
 	}
 
 	return aggSeries

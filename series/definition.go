@@ -5,22 +5,13 @@ import (
 )
 
 type Series struct {
-	data   []interface{}
+	Data   []interface{}
 	column base.Column
 }
 
-//NewSeries will create a new series based on the column name and the
-// variadic arguments given
-func NewSeries(colName string, data ...interface{}) *Series {
-	column := base.Column{Name: colName, Dtype: base.Object}
-	seriesData := make([]interface{}, 0, len(data))
-
-	for _, val := range data {
-		seriesData = append(seriesData, val)
-	}
-
-	series := Series{column: column, data: seriesData}
-	return &series
+//Len returns the length of the underlying series data
+func (s *Series) Len() int {
+	return len(s.Data)
 }
 
 // GetColumn will return the column type of the series
@@ -36,9 +27,4 @@ func (s *Series) SetColName(colName string) {
 //SetColIndex will set the column index of the series
 func (s *Series) SetColIndex(colIndex int) {
 	s.column.ColIndex = colIndex
-}
-
-// Data will return the underlying data of the series
-func (s *Series) Data() []interface{} {
-	return s.data
 }

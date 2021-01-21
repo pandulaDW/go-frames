@@ -11,7 +11,7 @@ import (
 func (df *DataFrame) getMaxLengthColumn(col string) int {
 	strLengths := make([]int, 0, df.length)
 
-	for _, val := range df.Data[col] {
+	for _, val := range df.Data[col].Data {
 		strRepr := fmt.Sprintf("%v", val)
 		strLengths = append(strLengths, len(strRepr))
 	}
@@ -53,7 +53,7 @@ func (df *DataFrame) createBody(colLengths []int) string {
 
 	for i := 0; i < df.length; i++ {
 		for colIndex, col := range df.Columns() {
-			strRepr := fmt.Sprintf("%v", df.Data[col][i])
+			strRepr := fmt.Sprintf("%v", df.Data[col].Data[i])
 			extraSpaces := strings.Repeat(" ", colLengths[colIndex]-len(strRepr))
 			sb.WriteString("|" + extraSpaces + strRepr)
 		}

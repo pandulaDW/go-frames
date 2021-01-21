@@ -1,22 +1,12 @@
 package dataframes
 
 import (
-	"bytes"
-	"encoding/gob"
 	"fmt"
 	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/series"
 
 	"github.com/pandulaDW/go-frames/helpers"
 )
-
-func getRealSizeOf(v interface{}) int {
-	b := new(bytes.Buffer)
-	err := gob.NewEncoder(b).Encode(v)
-	if err != nil {
-		panic(err)
-	}
-	return b.Len()
-}
 
 func (df *DataFrame) createInfoFooter() string {
 	dtypes := make([]interface{}, 0, len(df.columns))
@@ -29,18 +19,19 @@ func (df *DataFrame) createInfoFooter() string {
 	dtypeStr := fmt.Sprintf("dtypes: float(%d), int(%d), object(%d), bool(%d)\n",
 		valueCounts[base.Float], valueCounts[base.Int], valueCounts[base.Object], valueCounts[base.Bool])
 
-	memSize := fmt.Sprintf("memory usage: %d bytes", getRealSizeOf(df.Data))
-	return dtypeStr + memSize
+	var memSize int
+	for _, col := range df.columns {
+		memSize += df.Data[col.Name].MemSize()
+	}
+
+	memSizeStr := fmt.Sprintf("memory usage: %d bytes", memSize)
+	return dtypeStr + memSizeStr
 }
 
 // Info returns a dataframe containing information about the DataFrame including the
 // index dtype and columns, non-null values and memory usage.
 func (df *DataFrame) Info() string {
-	columns := []string{"#", "Column", "Non-Null Count", "Dtype"}
-	indices := make([]interface{}, 0)
-	columnNames := make([]interface{}, 0)
-	nonNulls := make([]interface{}, 0)
-	dTypes := make([]interface{}, 0)
+	var indices, columnNames, nonNulls, dTypes []interface{}
 
 	for i := 0; i < len(df.columns); i++ {
 		indices = append(indices, i+1)
@@ -49,13 +40,12 @@ func (df *DataFrame) Info() string {
 		dTypes = append(dTypes, df.columns[i].Dtype)
 	}
 
-	data := make([][]interface{}, 4)
-	data[0] = indices
-	data[1] = columnNames
-	data[2] = nonNulls
-	data[3] = dTypes
+	col0 := series.NewSeries("#", indices)
+	col1 := series.NewSeries("Column", columnNames)
+	col2 := series.NewSeries("Non-Null Count", nonNulls)
+	col3 := series.NewSeries("Dtype", dTypes)
 
-	info := CreateDataFrame(data, columns)
+	info := CreateDataFrame(col0, col1, col2, col3)
 	return info.String() + "\n" + df.createInfoFooter()
 }
 
@@ -68,7 +58,7 @@ func (df *DataFrame) Describe() {
 	// extract only the numerical columns
 	for _, val := range df.columns {
 		if val.Dtype == base.Int || val.Dtype == base.Float {
-			columns = append(columns, val)
+			columns = append(columns, *val)
 		}
 	}
 
@@ -80,3 +70,6 @@ func (df *DataFrame) Describe() {
 	_ = maxSeries
 	_ = minSeries
 }
+
+// TODO - Add non null columns properly
+// TODO  - Refactor using series.loc later
