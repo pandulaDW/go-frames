@@ -1,11 +1,13 @@
 package series
 
 import (
+	"errors"
 	"github.com/pandulaDW/go-frames/base"
 	"math"
 )
 
-// Max returns the maximum value of the series based on it's data type
+// Max returns the maximum value of the series based on it's data type.
+// Returns nil, when the dtype is not applicable
 func (s *Series) Max() interface{} {
 	maxInt := math.MinInt64
 	maxFloat := float64(math.MinInt64)
@@ -29,11 +31,13 @@ func (s *Series) Max() interface{} {
 			}
 		}
 		return maxFloat
+	default:
+		return nil
 	}
-	return nil
 }
 
-// Min returns the minimum value of the series based on it's data type
+// Min returns the minimum value of the series based on it's data type.
+// Returns nil, when the dtype is not applicable
 func (s *Series) Min() interface{} {
 	minInt := math.MaxInt64
 	minFloat := float64(math.MaxInt64)
@@ -57,12 +61,13 @@ func (s *Series) Min() interface{} {
 			}
 		}
 		return minFloat
+	default:
+		return nil
 	}
-	return nil
 }
 
 // Sum returns the total value of the series for integer and floating type
-// as a float64
+// as a float64. Panic when Dtype is not applicable
 func (s *Series) Sum() float64 {
 	var sumInt int
 	var sumFloat float64
@@ -83,12 +88,13 @@ func (s *Series) Sum() float64 {
 		}
 		return sumFloat
 	default:
-		panic("Sum can only be applied for a numerical series")
+		panic(errors.New("sum can only be applied for a numerical series"))
 	}
 }
 
-// Avg returns the average value of the series for integer and floating type
+// Avg returns the average value of the series for integer and floating type.
+// Returns nil, when the dtype is not applicable
 func (s *Series) Avg() float64 {
 	avgVal := s.Sum() / float64(s.Len())
-	return math.Floor(avgVal*100) / 100
+	return avgVal
 }
