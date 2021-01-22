@@ -43,24 +43,3 @@ func (df *DataFrame) SetColumnNames(cols []string) {
 
 	*df = *NewDataFrame(newSeriesArray...)
 }
-
-// assertType would take a column of data as an argument and will infer the
-// type of the column. If the type contains mix type data, it will default to Object type
-func (df *DataFrame) assertType() {
-	for i, col := range df.columns {
-		for _, val := range df.Data[col.Name].Data {
-			switch val.(type) {
-			case int:
-				df.columns[i].Dtype = base.Int
-			case float64:
-				df.columns[i].Dtype = base.Float
-			case bool:
-				df.columns[i].Dtype = base.Bool
-			default:
-				df.columns[i].Dtype = base.Object
-			}
-		}
-	}
-}
-
-// TODO - Make the type assertion a series method

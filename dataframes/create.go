@@ -28,8 +28,5 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 		df.columns = append(df.columns, s.GetColumn())
 	}
 
-	// infer the types
-	df.assertType()
-
 	return df
 }
