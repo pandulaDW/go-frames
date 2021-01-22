@@ -27,12 +27,15 @@ func (suite *testSuite) TestSeries_GetColumn() {
 }
 
 func (suite *testSuite) TestSeries_SetColName() {
-
+	copiedSeries := suite.S.Copy()
+	copiedSeries.SetColName("newColName")
+	assert.Equal(suite.T(), "newColName", copiedSeries.column.Name, "Column name set correctly")
 }
 
 func (suite *testSuite) TestSeries_SetColIndex() {
-	column := base.Column{Name: "col", Dtype: base.Float}
-	assert.Equal(suite.T(), column, *suite.S.GetColumn(), "Column returned correctly")
+	copiedSeries := suite.S.Copy()
+	copiedSeries.SetColIndex(3)
+	assert.Equal(suite.T(), 3, copiedSeries.column.ColIndex, "Column index set correctly")
 }
 
 func TestDefinitionTestSuite(t *testing.T) {
