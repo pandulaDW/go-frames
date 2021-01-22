@@ -1,6 +1,7 @@
 package series
 
 import (
+	"fmt"
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -38,4 +39,16 @@ func TestNewSeries(t *testing.T) {
 	expectedCol := base.Column{Name: "newCol", Dtype: base.Int, ColIndex: 0}
 	actual := Series{column: expectedCol, Data: []interface{}{23, 43, 90, 87}}
 	assert.Equal(t, *expected, actual, "NewSeries creates a Series object correctly")
+}
+
+func TestSeries_Copy(t *testing.T) {
+	s := NewSeries("newCol", 23, 43, 90, 87)
+	copied := s.Copy()
+
+	// assert that two object references are different
+	assert.NotEqual(t, fmt.Sprintf("%p", s), fmt.Sprintf("%p", copied),
+		"two series are two different objects")
+
+	// assert that the series objects are equal
+	assert.Equal(t, *s, *copied, "series is copied correctly")
 }
