@@ -20,8 +20,12 @@ func (s *Series) Max() interface{} {
 		return maxInt
 	case base.Float:
 		for _, val := range s.Data {
-			if val.(float64) > maxFloat {
-				maxFloat = val.(float64)
+			assertedVal, ok := val.(float64)
+			if !ok {
+				assertedVal = float64(val.(int))
+			}
+			if assertedVal > maxFloat {
+				maxFloat = assertedVal
 			}
 		}
 		return maxFloat
@@ -44,8 +48,12 @@ func (s *Series) Min() interface{} {
 		return minInt
 	case base.Float:
 		for _, val := range s.Data {
-			if val.(float64) < minFloat {
-				minFloat = val.(float64)
+			assertedVal, ok := val.(float64)
+			if !ok {
+				assertedVal = float64(val.(int))
+			}
+			if assertedVal < minFloat {
+				minFloat = assertedVal
 			}
 		}
 		return minFloat
@@ -67,15 +75,20 @@ func (s *Series) Sum() float64 {
 		return float64(sumInt)
 	case base.Float:
 		for _, val := range s.Data {
-			sumFloat += val.(float64)
+			assertedVal, ok := val.(float64)
+			if !ok {
+				assertedVal = float64(val.(int))
+			}
+			sumFloat += assertedVal
 		}
 		return sumFloat
 	default:
-		panic("Sum can only be applied for numerical series")
+		panic("Sum can only be applied for a numerical series")
 	}
 }
 
 // Avg returns the average value of the series for integer and floating type
 func (s *Series) Avg() float64 {
-	return s.Sum() / float64(s.Len())
+	avgVal := s.Sum() / float64(s.Len())
+	return math.Floor(avgVal*100) / 100
 }
