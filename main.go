@@ -15,6 +15,7 @@ func main() {
 	col6 := series.NewSeries("col6", 24.31, 5.63, 78.3, 22.43, 43)
 	col7 := series.NewSeries("col7", 25, 56, 12, 27, 59)
 
+	fmt.Println("Starting debugging")
 	df := dataframes.NewDataFrame(col1, col2, col3, col4, col5, col6, col7)
 	fmt.Println(df.Describe())
 }
