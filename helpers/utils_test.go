@@ -20,3 +20,16 @@ func TestGetRealSizeOf(t *testing.T) {
 		GetRealSizeOf(nilVal)
 	})
 }
+
+func TestValueCounts(t *testing.T) {
+	arr := []interface{}{"foo", "bar", "bar", "baz", "foo", "foo", "dar"}
+	expected := map[interface{}]int{"foo": 3, "bar": 2, "baz": 1, "dar": 1}
+
+	// assert that the function returns correct value counts
+	assert.Equal(t, expected, ValueCounts(arr), "returns a correct value count map")
+}
+
+func TestMaxIntSlice(t *testing.T) {
+	arr := []int{12, 45, 65, 56, 90, 81, 22}
+	assert.Equal(t, 90, MaxIntSlice(arr), "returns the correct max value")
+}
