@@ -1,6 +1,7 @@
 package dataframes
 
 import (
+	"errors"
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/series"
 )
@@ -21,7 +22,8 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 	// Populate the dataframe and the columns
 	for i, s := range data {
 		if s.Len() != df.length {
-			panic("Mismatched row lengths found. Dataframe can only contain equal number of rows")
+			panic(errors.New("mismatched row lengths found. " +
+				"Dataframe can only contain equal number of rows"))
 		}
 		df.Data[s.GetColumn().Name] = s
 		s.SetColIndex(i)
