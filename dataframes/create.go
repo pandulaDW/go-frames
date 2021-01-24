@@ -32,3 +32,14 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 
 	return df
 }
+
+// Copy will create a new dataframe and will return a pointer to the new dataframe.
+//
+// As the underlying data is also copied, can cause memory leak in large dataframes.
+func (df *DataFrame) Copy() *DataFrame {
+	copiedSeriesArr := make([]*series.Series, 0, len(df.columns))
+	for _, col := range df.columns {
+		copiedSeriesArr = append(copiedSeriesArr, df.Data[col.Name].Copy())
+	}
+	return NewDataFrame(copiedSeriesArr...)
+}

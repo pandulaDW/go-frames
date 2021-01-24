@@ -2,7 +2,6 @@ package dataframes
 
 import (
 	"errors"
-	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/series"
 )
 
@@ -13,17 +12,6 @@ func (df *DataFrame) Columns() []string {
 		names[i] = val.Name
 	}
 	return names
-}
-
-// ColDType returns the datatype of the column. If the column is not
-// found, it will return an error with an empty string
-func (df *DataFrame) ColDType(colName string) (base.DType, error) {
-	for _, val := range df.columns {
-		if val.Name == colName {
-			return val.Dtype, nil
-		}
-	}
-	return "", errors.New("column not found")
 }
 
 // SetColumnNames will rename the columns based on the column list provided in the given order.

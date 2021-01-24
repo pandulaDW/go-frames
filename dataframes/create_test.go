@@ -1,6 +1,7 @@
 package dataframes
 
 import (
+	"fmt"
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/assert"
@@ -39,4 +40,19 @@ func TestNewDataFrame(t *testing.T) {
 			col6 := series.NewSeries("col1", 12, 34, 54)
 			NewDataFrame(col1, col2, col3, col4, col5, col6)
 		})
+}
+
+func TestDataFrame_Copy(t *testing.T) {
+	col1 := series.NewSeries("col1", 12, 34, 54, 65, 90)
+	col2 := series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
+	col3 := series.NewSeries("col3", 54.31, 1.23, 45.6, 23.12, 23.2)
+	df := NewDataFrame(col1, col2, col3)
+	copied := df.Copy()
+
+	// assert that two object references are different
+	assert.NotEqual(t, fmt.Sprintf("%p", df), fmt.Sprintf("%p", copied),
+		"two dataframes are two different objects")
+
+	// assert that the series objects are equal
+	assert.Equal(t, *df, *copied, "dataframe is copied correctly")
 }
