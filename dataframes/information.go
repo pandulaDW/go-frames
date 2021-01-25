@@ -50,30 +50,30 @@ func (df *DataFrame) Info() string {
 // dispersion and shape of a dataset’s distribution, excluding NA values. information would only be displayed
 // for the numerical columns.
 func (df *DataFrame) Describe() *DataFrame {
-	columns := make([]base.Column, 0)
+	colNames := make([]string, 0)
 
 	// extract only the numerical columns
 	for _, val := range df.columns {
 		if val.Dtype == base.Int || val.Dtype == base.Float {
-			columns = append(columns, *val)
+			colNames = append(colNames, val.Name)
 		}
 	}
 
 	// create aggregation series
-	maxSeries := series.NewSeries("max", df.Agg(columns, base.MAX)...)
-	minSeries := series.NewSeries("min", df.Agg(columns, base.MIN)...)
-	sumSeries := series.NewSeries("sum", df.Agg(columns, base.SUM)...)
-	avgSeries := series.NewSeries("avg", df.Agg(columns, base.AVG)...)
+	maxSeries := series.NewSeries("max", df.Agg(colNames, base.MAX)...)
+	minSeries := series.NewSeries("min", df.Agg(colNames, base.MIN)...)
+	sumSeries := series.NewSeries("sum", df.Agg(colNames, base.SUM)...)
+	avgSeries := series.NewSeries("avg", df.Agg(colNames, base.AVG)...)
 
 	infoDF := NewDataFrame(maxSeries, minSeries, sumSeries, avgSeries)
 	transposedInfo := infoDF.Transpose(true)
 
-	// Set column names
-	colNames := make([]string, 0)
-	colNames = append(colNames, "")
-	for _, column := range columns {
-		colNames = append(colNames, column.Name)
-	}
+	// add initial column
+	colNamesDescribe := make([]string, len(colNames)+1)
+	colNamesDescribe[0] = ""
+	copy(colNamesDescribe[1:], colNames)
+
+	// set column names
 	transposedInfo.SetColumnNames(colNames)
 
 	return transposedInfo
