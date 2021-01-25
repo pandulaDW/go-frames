@@ -28,11 +28,10 @@ func TestNewDataFrame(t *testing.T) {
 	}
 
 	// assert that the dataframe is created successfully
-	assert.Equal(t, expected, actual, "dataframe is created successfully")
+	assert.Equal(t, expected, actual)
 
 	// assert that an empty dataframe is returned when no data is provided
-	assert.Equal(t, new(DataFrame), NewDataFrame(),
-		"empty dataframe is returned when calling with no data")
+	assert.Equal(t, new(DataFrame), NewDataFrame())
 
 	// assert that the function panics when mismatched row numbers are given
 	assert.PanicsWithError(t, "mismatched row lengths found. Dataframe can only contain equal number of rows",
@@ -50,9 +49,8 @@ func TestDataFrame_Copy(t *testing.T) {
 	copied := df.Copy()
 
 	// assert that two object references are different
-	assert.NotEqual(t, fmt.Sprintf("%p", df), fmt.Sprintf("%p", copied),
-		"two dataframes are two different objects")
+	assert.NotEqual(t, fmt.Sprintf("%p", df), fmt.Sprintf("%p", copied))
 
 	// assert that the series objects are equal
-	assert.Equal(t, *df, *copied, "dataframe is copied correctly")
+	assert.Equal(t, *df, *copied)
 }

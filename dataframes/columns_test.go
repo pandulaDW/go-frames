@@ -21,7 +21,8 @@ func (suite *columnsTestSuite) SetupTest() {
 
 func (suite *columnsTestSuite) TestDataFrame_Columns() {
 	expected := []string{"col1", "col2", "col3"}
-	suite.Equal(expected, suite.df.Columns(), "column names are returned correctly")
+	// assert that column names are returned correctly
+	suite.Equal(expected, suite.df.Columns())
 }
 
 func (suite *columnsTestSuite) TestDataFrame_SetColumnNames() {
@@ -30,12 +31,12 @@ func (suite *columnsTestSuite) TestDataFrame_SetColumnNames() {
 	copiedDF.SetColumnNames(newColumnNames)
 
 	// assert that the column names are set correctly
-	suite.Equal(copiedDF.Columns(), newColumnNames, "column names are set correctly")
+	suite.Equal(copiedDF.Columns(), newColumnNames)
 
 	// assert that the function will panic if mismatched number of column names are given
 	suite.PanicsWithError("mismatched number of columns provided", func() {
 		copiedDF.SetColumnNames(newColumnNames[0:2])
-	}, "panics with mismatched error")
+	})
 }
 
 func TestColumnsTestSuite(t *testing.T) {

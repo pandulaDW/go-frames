@@ -18,24 +18,28 @@ func (suite *definitionTestSuite) SetupTest() {
 }
 
 func (suite *definitionTestSuite) TestSeries_Len() {
-	assert.Equal(suite.T(), 4, suite.S.Len(), "Length getter should work correctly")
+	// assert that the length getter works correctly
+	assert.Equal(suite.T(), 4, suite.S.Len())
 }
 
 func (suite *definitionTestSuite) TestSeries_GetColumn() {
 	column := base.Column{Name: "col", Dtype: base.Float}
-	assert.Equal(suite.T(), column, *suite.S.GetColumn(), "Column returned correctly")
+	// assert that Column returned correctly
+	assert.Equal(suite.T(), column, *suite.S.GetColumn())
 }
 
 func (suite *definitionTestSuite) TestSeries_SetColName() {
 	copiedSeries := suite.S.Copy()
 	copiedSeries.SetColName("newColName")
-	assert.Equal(suite.T(), "newColName", copiedSeries.column.Name, "Column name set correctly")
+	// assert that Column name set correctly
+	assert.Equal(suite.T(), "newColName", copiedSeries.column.Name)
 }
 
 func (suite *definitionTestSuite) TestSeries_SetColIndex() {
 	copiedSeries := suite.S.Copy()
 	copiedSeries.SetColIndex(3)
-	assert.Equal(suite.T(), 3, copiedSeries.column.ColIndex, "Column index set correctly")
+	// assert that Column index set correctly
+	assert.Equal(suite.T(), 3, copiedSeries.column.ColIndex)
 }
 
 func TestDefinitionTestSuite(t *testing.T) {

@@ -23,57 +23,57 @@ func (suite *aggregationTestSuite) SetupTest() {
 
 func (suite *aggregationTestSuite) TestSeries_Max() {
 	// assert int series returns correct max value
-	suite.Equal(443, suite.SInt.Max(), "int series returns correct max value")
+	suite.Equal(443, suite.SInt.Max())
 
 	// assert float series returns correct max value
-	suite.Equal(65.75, suite.SFloat.Max(), "float series returns correct max value")
+	suite.Equal(65.75, suite.SFloat.Max())
 
 	// assert mix series returns correct max value
-	suite.Equal(float64(89), suite.SMix.Max(), "mix series returns correct max value")
+	suite.Equal(float64(89), suite.SMix.Max())
 
 	// assert returns correct nil interface as a default when dtype is not applicable
-	suite.Nil(suite.SObject.Max(), "returns nil when the dtype is object")
+	suite.Nil(suite.SObject.Max())
 }
 
 func (suite *aggregationTestSuite) TestSeries_Min() {
 	// assert int series returns correct min value
-	suite.Equal(48, suite.SInt.Min(), "int series returns correct min value")
+	suite.Equal(48, suite.SInt.Min())
 
 	// assert float series returns correct min value
-	suite.Equal(21.1, suite.SFloat.Min(), "float series returns correct min value")
+	suite.Equal(21.1, suite.SFloat.Min())
 
 	// assert mix series returns correct min value
-	suite.Equal(1.58, suite.SMix.Min(), "mix series returns correct min value")
+	suite.Equal(1.58, suite.SMix.Min())
 
 	// assert returns correct nil interface as a default when dtype is not applicable
-	suite.Nil(suite.SObject.Min(), "returns nil when the dtype is object")
+	suite.Nil(suite.SObject.Min())
 }
 
 func (suite *aggregationTestSuite) TestSeries_Sum() {
 	// assert int series returns correct sum
-	suite.Equal(float64(717), suite.SInt.Sum(), "int series returns correct sum")
+	suite.Equal(float64(717), suite.SInt.Sum())
 
 	// assert float series returns correct sum
-	suite.Equal(162.92, suite.SFloat.Sum(), "float series returns correct sum")
+	suite.Equal(162.92, suite.SFloat.Sum())
 
 	// assert mix series returns correct sum
-	suite.Equal(162.02, suite.SMix.Sum(), "mix series returns correct sum")
+	suite.Equal(162.02, suite.SMix.Sum())
 
 	// assert that function panics when the dtype is not applicable
 	suite.PanicsWithError("sum can only be applied for a numerical series", func() {
 		suite.SObject.Sum()
-	}, "panics when the dtype is not applicable")
+	})
 }
 
 func (suite *aggregationTestSuite) TestSeries_Avg() {
 	// assert int series returns correct avg
-	suite.Equal(float64(717)/5, suite.SInt.Avg(), "int series returns correct avg")
+	suite.Equal(float64(717)/5, suite.SInt.Avg())
 
 	// assert float series returns correct avg
-	suite.Equal(162.92/4, suite.SFloat.Avg(), "float series returns correct avg")
+	suite.Equal(162.92/4, suite.SFloat.Avg())
 
 	// assert mix series returns correct avg
-	suite.Equal(162.02/4, suite.SMix.Avg(), "mix series returns correct avg")
+	suite.Equal(162.02/4, suite.SMix.Avg())
 }
 
 func TestAggregationTestSuite(t *testing.T) {

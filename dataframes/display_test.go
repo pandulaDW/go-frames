@@ -34,7 +34,8 @@ func (suite *displayTestSuite) TestString() {
 +----+------+-----+-----+
 `
 	expected = strings.TrimSpace(expected)
-	suite.Equal(expected, suite.df.String(), "string representation matches")
+	// assert that string representation matches
+	suite.Equal(expected, suite.df.String())
 }
 
 func TestDisplayTestSuite(t *testing.T) {

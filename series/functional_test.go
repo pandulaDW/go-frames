@@ -22,12 +22,13 @@ func TestSeries_Map(t *testing.T) {
 
 	// assert that the squared function mapper works for an float series
 	actual, err := s1.Map(mapper)
-	assert.Equal(t, expected, actual, "mapper returns correct values")
-	assert.Nil(t, err, "error is nil")
 
-	// assert that the squared function mapper doesn't work for a float series
+	// assert that mapper returns correct values
+	assert.Equal(t, expected, actual)
+	assert.Nil(t, err)
+
 	actual, err = s2.Map(mapper)
-	assert.Nil(t, actual, "series is nil")
-	assert.EqualError(t, err, "only float values can be included",
-		"mapper returns errors as expected")
+	// assert that the squared function mapper doesn't work for a float series
+	assert.Nil(t, actual)
+	assert.EqualError(t, err, "only float values can be included")
 }
