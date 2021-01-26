@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/pandulaDW/go-frames/base"
 	"math"
+	"time"
 )
 
 // Max returns the maximum value of the series based on it's data type.
@@ -31,6 +32,14 @@ func (s *Series) Max() interface{} {
 			}
 		}
 		return maxFloat
+	case base.DateTime:
+		maxDateTime := s.Data[0].(time.Time)
+		for _, val := range s.Data[1:] {
+			if maxDateTime.Before(val.(time.Time)) {
+				maxDateTime = val.(time.Time)
+			}
+		}
+		return maxDateTime
 	default:
 		return nil
 	}
@@ -61,6 +70,14 @@ func (s *Series) Min() interface{} {
 			}
 		}
 		return minFloat
+	case base.DateTime:
+		minDataTime := s.Data[0].(time.Time)
+		for _, val := range s.Data[1:] {
+			if minDataTime.After(val.(time.Time)) {
+				minDataTime = val.(time.Time)
+			}
+		}
+		return minDataTime
 	default:
 		return nil
 	}

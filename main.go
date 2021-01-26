@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/dataframes"
 	"github.com/pandulaDW/go-frames/series"
-	"time"
 )
 
 func main() {
@@ -14,12 +13,8 @@ func main() {
 	col4 := series.NewSeries("col4", true, false, true, true, false)
 	col5 := series.NewSeries("col5", 14, 124, 32, 64, 34)
 	col6 := series.NewSeries("col6", 24.31, 5.63, 78.3, 22.43, 43)
-	col7 := series.NewSeries("col7", 25, 56, 12, 27, 59)
+	col7 := series.NewSeries("col7", "2012-02-05", "2005-01-25", "1998-11-25", "2001-12-15", "2004-05-12")
 
 	df := dataframes.NewDataFrame(col1, col2, col3, col4, col5, col6, col7)
 	fmt.Println(df.Info())
-
-	layout := "2006-02-01 15:04:05"
-	t, _ := time.Parse(layout, "2016-02-06 13:11:24")
-	fmt.Println(t)
 }
