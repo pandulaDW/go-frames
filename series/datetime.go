@@ -10,7 +10,7 @@ import (
 // CastAsTime would iterate through each element in an object series
 // and will check if all elements conform to the given layout format.
 //
-// The layout string has to be of time 2006-02-01 15:04:05. Any standard time constant
+// The layout string has to be of time 2006-01-02T15:04:05Z (Jan 02). Any standard time constant
 // format such as time.RFC850 and time.RFC822 can be passed as argument to the function
 //
 // function will return an error with the first invalid row number and if no errors are found
