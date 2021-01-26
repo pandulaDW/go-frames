@@ -17,4 +17,10 @@ func main() {
 
 	df := dataframes.NewDataFrame(col1, col2, col3, col4, col5, col6, col7)
 	fmt.Println(df.Info())
+
+	layout := "2006-01-02"
+	err := df.Data["col7"].CastAsTime(layout)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
