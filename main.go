@@ -16,5 +16,5 @@ func main() {
 	col7 := series.NewSeries("col7", 25, 56, 12, 27, 59)
 
 	df := dataframes.NewDataFrame(col1, col2, col3, col4, col5, col6, col7)
-	fmt.Println(df.Transpose(false))
+	fmt.Println(df.Info())
 }

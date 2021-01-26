@@ -25,9 +25,7 @@ func (df *DataFrame) createInfoFooter() string {
 	return dtypeStr + memSizeStr
 }
 
-// Info returns a dataframe containing information about the DataFrame including the
-// index dtype and columns, non-null values and memory usage.
-func (df *DataFrame) Info() string {
+func (df *DataFrame) createInfoDF() *DataFrame {
 	var indices, columnNames, nonNulls, dTypes []interface{}
 
 	for i := 0; i < len(df.columns); i++ {
@@ -43,6 +41,13 @@ func (df *DataFrame) Info() string {
 	col3 := series.NewSeries("Dtype", dTypes...)
 
 	info := NewDataFrame(col0, col1, col2, col3)
+	return info
+}
+
+// Info returns a dataframe containing information about the DataFrame including the
+// index dtype and columns, non-null values and memory usage.
+func (df *DataFrame) Info() string {
+	info := df.createInfoDF()
 	return info.String() + "\n" + df.createInfoFooter()
 }
 

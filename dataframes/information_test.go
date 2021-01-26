@@ -2,6 +2,8 @@ package dataframes
 
 import (
 	"fmt"
+	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -31,6 +33,23 @@ func (suite *infoTestSuite) TestCreateInfoFooter() {
 	expected := fmt.Sprintf("dtypes: float(2), int(3), object(1), bool(1)\nmemory usage: %d bytes", memSize)
 	// assert that the info footer is created successfully
 	suite.Equal(expected, suite.df.createInfoFooter())
+}
+
+func (suite *infoTestSuite) TestCreateInfoDF() {
+	expected := NewDataFrame(
+		series.NewSeries("#", 1, 2, 3, 4, 5, 6, 7),
+		series.NewSeries("Column", "col1", "col2", "col3", "col4", "col5", "col6", "col7"),
+		series.NewSeries("Non-Null Count", helpers.RepeatStringSlice("5 non-null", 7)...),
+		series.NewSeries("Dtype", base.Int, base.Object, base.Float, base.Bool, base.Int, base.Float, base.Int))
+	actual := suite.df.createInfoDF()
+	// assert that the info body dataframe is created successfully
+	suite.Equal(expected, actual)
+}
+
+func (suite *infoTestSuite) TestInfo() {
+	expected := suite.df.createInfoDF().String() + "\n" + suite.df.createInfoFooter()
+	// assert that the info body dataframe is created successfully
+	suite.Equal(expected, suite.df.Info())
 }
 
 func TestInfoTestSuite(t *testing.T) {
