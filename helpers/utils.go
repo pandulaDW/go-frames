@@ -44,9 +44,9 @@ func MaxIntSlice(nums []int) int {
 	return max
 }
 
-//RepeatStringSlice takes in a string and a number of times it needs to be repeated.
+//RepeatIntoSlice takes in any empty interface element and a number of times it needs to be repeated.
 // It will return a slice of nil interfaces instead of a compact string, as the Repeat method in strings package.
-func RepeatStringSlice(s string, n int) []interface{} {
+func RepeatIntoSlice(s interface{}, n int) []interface{} {
 	repeats := make([]interface{}, 0, n)
 	for i := 0; i < n; i++ {
 		repeats = append(repeats, s)

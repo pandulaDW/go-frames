@@ -21,8 +21,7 @@ func (suite *infoTestSuite) SetupTest() {
 	col4 := series.NewSeries("col4", true, false, true, true, false)
 	col5 := series.NewSeries("col5", 14, 124, 32, 64, 34)
 	col6 := series.NewSeries("col6", 24.31, 5.63, 78.3, 22.43, 43)
-	col7 := series.NewSeries("col7", 25, 56, 12, 27, 59)
-	suite.df = NewDataFrame(col1, col2, col3, col4, col5, col6, col7)
+	suite.df = NewDataFrame(col1, col2, col3, col4, col5, col6)
 }
 
 func (suite *infoTestSuite) TestCreateInfoFooter() {
@@ -30,17 +29,17 @@ func (suite *infoTestSuite) TestCreateInfoFooter() {
 	for _, col := range suite.df.Columns() {
 		memSize += suite.df.Data[col].MemSize()
 	}
-	expected := fmt.Sprintf("dtypes: float(2), int(3), object(1), bool(1)\nmemory usage: %d bytes", memSize)
+	expected := fmt.Sprintf("dtypes: float(2), int(2), object(1), bool(1)\nmemory usage: %d bytes", memSize)
 	// assert that the info footer is created successfully
 	suite.Equal(expected, suite.df.createInfoFooter())
 }
 
 func (suite *infoTestSuite) TestCreateInfoDF() {
 	expected := NewDataFrame(
-		series.NewSeries("#", 1, 2, 3, 4, 5, 6, 7),
-		series.NewSeries("Column", "col1", "col2", "col3", "col4", "col5", "col6", "col7"),
-		series.NewSeries("Non-Null Count", helpers.RepeatStringSlice("5 non-null", 7)...),
-		series.NewSeries("Dtype", base.Int, base.Object, base.Float, base.Bool, base.Int, base.Float, base.Int))
+		series.NewSeries("#", 1, 2, 3, 4, 5, 6),
+		series.NewSeries("Column", "col1", "col2", "col3", "col4", "col5", "col6"),
+		series.NewSeries("Non-Null Count", helpers.RepeatIntoSlice("5 non-null", 6)...),
+		series.NewSeries("Dtype", base.Int, base.Object, base.Float, base.Bool, base.Int, base.Float))
 	actual := suite.df.createInfoDF()
 	// assert that the info body dataframe is created successfully
 	suite.Equal(expected, actual)

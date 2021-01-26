@@ -38,5 +38,5 @@ func TestMaxIntSlice(t *testing.T) {
 func TestRepeatStringSlice(t *testing.T) {
 	expected := []interface{}{"foo", "foo", "foo", "foo", "foo", "foo"}
 	// assert that the function correctly returns a slice with correct number of repeated strings
-	assert.Equal(t, expected, RepeatStringSlice("foo", 6))
+	assert.Equal(t, expected, RepeatIntoSlice("foo", 6))
 }
