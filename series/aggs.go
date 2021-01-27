@@ -1,11 +1,10 @@
 package series
 
 import (
-	"errors"
 	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/helpers"
 	"math"
-	"strconv"
 	"time"
 )
 
@@ -17,9 +16,13 @@ func (s *Series) Max() interface{} {
 
 	switch s.column.Dtype {
 	case base.Int:
-		for _, val := range s.Data {
-			if val.(int) > maxInt {
-				maxInt = val.(int)
+		for i, val := range s.Data {
+			intVal, ok := val.(int)
+			if !ok {
+				panic(errors.InvalidSeriesValError(i, s.column.Name))
+			}
+			if intVal > maxInt {
+				maxInt = intVal
 			}
 		}
 		return maxInt
@@ -27,7 +30,7 @@ func (s *Series) Max() interface{} {
 		for i, val := range s.Data {
 			assertedVal, ok := helpers.ConvertToFloat(val)
 			if !ok {
-				panic(errors.New("invalid value at row " + strconv.Itoa(i)))
+				panic(errors.InvalidSeriesValError(i, s.column.Name))
 			}
 			if *assertedVal > maxFloat {
 				maxFloat = *assertedVal
@@ -55,9 +58,13 @@ func (s *Series) Min() interface{} {
 
 	switch s.column.Dtype {
 	case base.Int:
-		for _, val := range s.Data {
-			if val.(int) < minInt {
-				minInt = val.(int)
+		for i, val := range s.Data {
+			intVal, ok := val.(int)
+			if !ok {
+				panic(errors.InvalidSeriesValError(i, s.column.Name))
+			}
+			if intVal < minInt {
+				minInt = intVal
 			}
 		}
 		return minInt
@@ -65,7 +72,7 @@ func (s *Series) Min() interface{} {
 		for i, val := range s.Data {
 			assertedVal, ok := helpers.ConvertToFloat(val)
 			if !ok {
-				panic(errors.New("invalid value at row " + strconv.Itoa(i)))
+				panic(errors.InvalidSeriesValError(i, s.column.Name))
 			}
 			if *assertedVal < minFloat {
 				minFloat = *assertedVal
@@ -93,21 +100,25 @@ func (s *Series) Sum() float64 {
 
 	switch s.column.Dtype {
 	case base.Int:
-		for _, val := range s.Data {
-			sumInt += val.(int)
+		for i, val := range s.Data {
+			intVal, ok := val.(int)
+			if !ok {
+				panic(errors.InvalidSeriesValError(i, s.column.Name))
+			}
+			sumInt += intVal
 		}
 		return float64(sumInt)
 	case base.Float:
-		for _, val := range s.Data {
-			assertedVal, ok := val.(float64)
+		for i, val := range s.Data {
+			assertedVal, ok := helpers.ConvertToFloat(val)
 			if !ok {
-				assertedVal = float64(val.(int))
+				panic(errors.InvalidSeriesValError(i, s.column.Name))
 			}
-			sumFloat += assertedVal
+			sumFloat += *assertedVal
 		}
 		return sumFloat
 	default:
-		panic(errors.New("sum can only be applied for a numerical series"))
+		panic(errors.CustomError("sum can only be applied for a numerical series"))
 	}
 }
 
@@ -117,3 +128,6 @@ func (s *Series) Avg() float64 {
 	avgVal := s.Sum() / float64(s.Len())
 	return avgVal
 }
+
+// TODO - Check for invalid values in int as well
+// TODO - Add column information to errors as well

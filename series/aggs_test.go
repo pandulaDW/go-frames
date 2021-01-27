@@ -94,3 +94,5 @@ func (suite *aggregationTestSuite) TestSeries_Avg() {
 func TestAggregationTestSuite(t *testing.T) {
 	suite.Run(t, new(aggregationTestSuite))
 }
+
+// TODO - assert panic on invalid values
