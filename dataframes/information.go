@@ -68,7 +68,7 @@ func (df *DataFrame) Describe() *DataFrame {
 	maxSeries := series.NewSeries("max", df.Agg(colNames, base.MAX)...)
 	minSeries := series.NewSeries("min", df.Agg(colNames, base.MIN)...)
 	sumSeries := series.NewSeries("sum", df.Agg(colNames, base.SUM)...)
-	avgSeries := series.NewSeries("avg", df.Agg(colNames, base.AVG)...)
+	avgSeries := series.NewSeries("avg", df.Agg(colNames, base.AVG)...).Round(2, true)
 
 	infoDF := NewDataFrame(maxSeries, minSeries, sumSeries, avgSeries)
 	transposedInfo := infoDF.Transpose(true)
@@ -79,7 +79,7 @@ func (df *DataFrame) Describe() *DataFrame {
 	copy(colNamesDescribe[1:], colNames)
 
 	// set column names
-	transposedInfo.SetColumnNames(colNames)
+	transposedInfo.SetColumnNames(colNamesDescribe)
 
 	return transposedInfo
 }
