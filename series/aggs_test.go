@@ -1,6 +1,7 @@
 package series
 
 import (
+	"github.com/pandulaDW/go-frames/errors"
 	"github.com/stretchr/testify/suite"
 	"testing"
 	"time"
@@ -40,6 +41,20 @@ func (suite *aggregationTestSuite) TestSeries_Max() {
 	t, _ := time.Parse(layout, "2012-02-05")
 	suite.Equal(t, suite.sDateTime.Max())
 
+	// assert that function panics when an invalid value is there for int dtype
+	invalidIntSeries := suite.SInt.Copy()
+	invalidIntSeries.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+		invalidIntSeries.Max()
+	})
+
+	// assert that function panics when an invalid value is there for float dtype
+	invalidFloatSeries := suite.SFloat.Copy()
+	invalidFloatSeries.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+		invalidFloatSeries.Max()
+	})
+
 	// assert returns correct nil interface as a default when dtype is not applicable
 	suite.Nil(suite.SObject.Max())
 }
@@ -60,6 +75,20 @@ func (suite *aggregationTestSuite) TestSeries_Min() {
 	t, _ := time.Parse(layout, "1998-11-25")
 	suite.Equal(t, suite.sDateTime.Min())
 
+	// assert that function panics when an invalid value is there for int dtype
+	invalidIntSeries := suite.SInt.Copy()
+	invalidIntSeries.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+		invalidIntSeries.Min()
+	})
+
+	// assert that function panics when an invalid value is there for float dtype
+	invalidFloatSeries := suite.SFloat.Copy()
+	invalidFloatSeries.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+		invalidFloatSeries.Min()
+	})
+
 	// assert returns correct nil interface as a default when dtype is not applicable
 	suite.Nil(suite.SObject.Min())
 }
@@ -77,6 +106,20 @@ func (suite *aggregationTestSuite) TestSeries_Sum() {
 	// assert that function panics when the dtype is not applicable
 	suite.PanicsWithError("sum can only be applied for a numerical series", func() {
 		suite.SObject.Sum()
+	})
+
+	// assert that function panics when an invalid value is there for int dtype
+	invalidIntSeries := suite.SInt.Copy()
+	invalidIntSeries.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+		invalidIntSeries.Sum()
+	})
+
+	// assert that function panics when an invalid value is there for float dtype
+	invalidFloatSeries := suite.SFloat.Copy()
+	invalidFloatSeries.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+		invalidFloatSeries.Sum()
 	})
 }
 
