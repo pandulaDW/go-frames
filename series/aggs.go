@@ -38,10 +38,17 @@ func (s *Series) Max() interface{} {
 		}
 		return maxFloat
 	case base.DateTime:
-		maxDateTime := s.Data[0].(time.Time)
-		for _, val := range s.Data[1:] {
-			if maxDateTime.Before(val.(time.Time)) {
-				maxDateTime = val.(time.Time)
+		maxDateTime, ok := s.Data[0].(time.Time)
+		if !ok {
+			panic(errors.InvalidSeriesValError(0, s.column.Name))
+		}
+		for i, val := range s.Data[1:] {
+			parsedVal, ok := val.(time.Time)
+			if !ok {
+				panic(errors.InvalidSeriesValError(i+1, s.column.Name))
+			}
+			if maxDateTime.Before(parsedVal) {
+				maxDateTime = parsedVal
 			}
 		}
 		return maxDateTime
@@ -80,10 +87,17 @@ func (s *Series) Min() interface{} {
 		}
 		return minFloat
 	case base.DateTime:
-		minDataTime := s.Data[0].(time.Time)
-		for _, val := range s.Data[1:] {
-			if minDataTime.After(val.(time.Time)) {
-				minDataTime = val.(time.Time)
+		minDataTime, ok := s.Data[0].(time.Time)
+		if !ok {
+			panic(errors.InvalidSeriesValError(0, s.column.Name))
+		}
+		for i, val := range s.Data[1:] {
+			parsedTime, ok := val.(time.Time)
+			if !ok {
+				panic(errors.InvalidSeriesValError(i, s.column.Name))
+			}
+			if minDataTime.After(parsedTime) {
+				minDataTime = parsedTime
 			}
 		}
 		return minDataTime

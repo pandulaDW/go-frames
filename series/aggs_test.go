@@ -22,7 +22,7 @@ func (suite *aggregationTestSuite) SetupTest() {
 	suite.SFloat = NewSeries("col", 43.53, 21.1, 32.54, 65.75)
 	suite.SMix = NewSeries("col", 89, 69.1, 2.34, 1.58)
 	suite.SObject = NewSeries("col", "foo", "bar")
-	suite.sDateTime = NewSeries("col7", "2012-02-05", "2005-01-25", "1998-11-25", "2001-12-15")
+	suite.sDateTime = NewSeries("col", "2012-02-05", "2005-01-25", "1998-11-25", "2001-12-15")
 }
 
 func (suite *aggregationTestSuite) TestSeries_Max() {
@@ -40,6 +40,17 @@ func (suite *aggregationTestSuite) TestSeries_Max() {
 	_ = suite.sDateTime.CastAsTime(layout)
 	t, _ := time.Parse(layout, "2012-02-05")
 	suite.Equal(t, suite.sDateTime.Max())
+
+	// assert that function panics when an invalid value is there for datetime dtype in index 0 and elsewhere
+	suite.sDateTime.Data[0] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(0, "col").Error(), func() {
+		suite.sDateTime.Max()
+	})
+	suite.sDateTime.Data[0] = time.Now()
+	suite.sDateTime.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+		suite.sDateTime.Max()
+	})
 
 	// assert that function panics when an invalid value is there for int dtype
 	invalidIntSeries := suite.SInt.Copy()
@@ -74,6 +85,17 @@ func (suite *aggregationTestSuite) TestSeries_Min() {
 	_ = suite.sDateTime.CastAsTime(layout)
 	t, _ := time.Parse(layout, "1998-11-25")
 	suite.Equal(t, suite.sDateTime.Min())
+
+	// assert that function panics when an invalid value is there for datetime dtype in index 0 and elsewhere
+	suite.sDateTime.Data[0] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(0, "col").Error(), func() {
+		suite.sDateTime.Min()
+	})
+	suite.sDateTime.Data[0] = time.Now()
+	suite.sDateTime.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+		suite.sDateTime.Min()
+	})
 
 	// assert that function panics when an invalid value is there for int dtype
 	invalidIntSeries := suite.SInt.Copy()
