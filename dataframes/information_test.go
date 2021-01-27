@@ -51,6 +51,22 @@ func (suite *infoTestSuite) TestInfo() {
 	suite.Equal(expected, suite.df.Info())
 }
 
+func (suite *infoTestSuite) TestDescribe() {
+	expected := NewDataFrame(
+		series.NewSeries("", "max", "min", "sum", "avg"),
+		series.NewSeries("col1", 90, 12, float64(255), float64(51)),
+		series.NewSeries("col3", 54.31, 1.23, 147.46, 29.49),
+		series.NewSeries("col5", 124, 14, float64(268), 53.6),
+		series.NewSeries("col6", 78.3, 5.63, 173.67, 34.73),
+	)
+
+	actual := suite.df.Describe()
+	fmt.Println("data: ", expected.Columns(), actual.Columns())
+
+	// assert that the describe body dataframe is created successfully
+	suite.Equal(expected, actual)
+}
+
 func TestInfoTestSuite(t *testing.T) {
 	suite.Run(t, new(infoTestSuite))
 }

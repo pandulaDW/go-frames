@@ -17,12 +17,4 @@ func main() {
 
 	df := dataframes.NewDataFrame(col1, col2, col3, col4, col5, col6, col7)
 	fmt.Println(df.Describe())
-
-	var val interface{}
-	val = "foo"
-	assertedVal, ok := val.(float64)
-	if !ok {
-		assertedVal = float64(val.(int))
-	}
-	fmt.Println(assertedVal)
 }
