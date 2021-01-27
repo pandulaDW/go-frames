@@ -3,7 +3,6 @@ package series
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"strconv"
 	"testing"
 )
 
@@ -26,8 +25,7 @@ func TestSeries_Round(t *testing.T) {
 
 	// assert that the function will panic if there's an invalid value
 	s.Data[2] = "foo"
-	_, err := strconv.ParseFloat("foo", 64)
-	assert.PanicsWithError(t, fmt.Sprintf("Invalid value at row %d. %s", 2, err.Error()), func() {
+	assert.PanicsWithError(t, fmt.Sprintf("invalid value at row %d", 2), func() {
 		s.Round(2, true)
 	})
 }

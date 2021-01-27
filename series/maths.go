@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/helpers"
 	"strconv"
 )
 
@@ -19,18 +20,12 @@ func (s *Series) Round(n int, inplace bool) *Series {
 	format := "%." + fmt.Sprintf("%df", n)
 
 	for i, val := range s.Data {
-		assertedVal, ok := val.(float64)
+		assertedVal, ok := helpers.ConvertToFloat(val)
 		if !ok {
-			intVal, ok := val.(int)
-			if !ok {
-				assertedVal = float64(intVal)
-			}
+			panic(errors.New(fmt.Sprintf("invalid value at row %d", i)))
 		}
-		roundedStr := fmt.Sprintf(format, assertedVal)
-		roundedVal, err := strconv.ParseFloat(roundedStr, 64)
-		if err != nil {
-			panic(errors.New(fmt.Sprintf("Invalid value at row %d. %s", i, err.Error())))
-		}
+		roundedStr := fmt.Sprintf(format, *assertedVal)
+		roundedVal, _ := strconv.ParseFloat(roundedStr, 64)
 
 		if inplace {
 			s.Data[i] = roundedVal

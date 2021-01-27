@@ -3,7 +3,9 @@ package series
 import (
 	"errors"
 	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/helpers"
 	"math"
+	"strconv"
 	"time"
 )
 
@@ -22,13 +24,13 @@ func (s *Series) Max() interface{} {
 		}
 		return maxInt
 	case base.Float:
-		for _, val := range s.Data {
-			assertedVal, ok := val.(float64)
+		for i, val := range s.Data {
+			assertedVal, ok := helpers.ConvertToFloat(val)
 			if !ok {
-				assertedVal = float64(val.(int))
+				panic(errors.New("invalid value at row " + strconv.Itoa(i)))
 			}
-			if assertedVal > maxFloat {
-				maxFloat = assertedVal
+			if *assertedVal > maxFloat {
+				maxFloat = *assertedVal
 			}
 		}
 		return maxFloat
@@ -60,13 +62,13 @@ func (s *Series) Min() interface{} {
 		}
 		return minInt
 	case base.Float:
-		for _, val := range s.Data {
-			assertedVal, ok := val.(float64)
+		for i, val := range s.Data {
+			assertedVal, ok := helpers.ConvertToFloat(val)
 			if !ok {
-				assertedVal = float64(val.(int))
+				panic(errors.New("invalid value at row " + strconv.Itoa(i)))
 			}
-			if assertedVal < minFloat {
-				minFloat = assertedVal
+			if *assertedVal < minFloat {
+				minFloat = *assertedVal
 			}
 		}
 		return minFloat
