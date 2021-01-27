@@ -21,7 +21,10 @@ func (s *Series) Round(n int, inplace bool) *Series {
 	for i, val := range s.Data {
 		assertedVal, ok := val.(float64)
 		if !ok {
-			assertedVal = float64(val.(int))
+			intVal, ok := val.(int)
+			if !ok {
+				assertedVal = float64(intVal)
+			}
 		}
 		roundedStr := fmt.Sprintf(format, assertedVal)
 		roundedVal, err := strconv.ParseFloat(roundedStr, 64)

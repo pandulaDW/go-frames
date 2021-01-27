@@ -53,3 +53,17 @@ func RepeatIntoSlice(s interface{}, n int) []interface{} {
 	}
 	return repeats
 }
+
+// ConvertToFloat will convert the given empty interface value to float64. Will consider int types
+// also. If there's an error, will return a boolean confirming the result.
+func ConvertToFloat(val interface{}) (*float64, bool) {
+	assertedVal, ok := val.(float64)
+	if !ok {
+		intVal, ok := val.(int)
+		if !ok {
+			return nil, false
+		}
+		assertedVal = float64(intVal)
+	}
+	return &assertedVal, true
+}

@@ -40,3 +40,25 @@ func TestRepeatStringSlice(t *testing.T) {
 	// assert that the function correctly returns a slice with correct number of repeated strings
 	assert.Equal(t, expected, RepeatIntoSlice("foo", 6))
 }
+
+func TestConvertToFloat(t *testing.T) {
+	// assert that float values will be returned correctly
+	v, ok := ConvertToFloat(12.43)
+	assert.Equal(t, *v, 12.43)
+	assert.Equal(t, ok, true)
+
+	// assert that int values will be returned correctly after converting to float
+	v, ok = ConvertToFloat(12)
+	assert.Equal(t, *v, float64(12))
+	assert.Equal(t, ok, true)
+
+	// assert that function returns nil when string type is given
+	v, ok = ConvertToFloat("foo")
+	assert.Nil(t, v)
+	assert.Equal(t, ok, false)
+
+	// assert that function returns nil when bool type is given
+	v, ok = ConvertToFloat(true)
+	assert.Nil(t, v)
+	assert.Equal(t, ok, false)
+}
