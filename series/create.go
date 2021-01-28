@@ -24,6 +24,11 @@ func NewSeries(colName string, data ...interface{}) *Series {
 //
 // If the column contains a mix of int types and float types, then that column will
 // be considered as a float column.
+//
+// Date columns will be initiated as an object value and can be later cased as datetime.
+//
+// blank cells are considered as NA and if they are present in a numerical or boolean columns,
+// column dtype will not be considered as an object.
 func (s *Series) InferType() {
 	for _, val := range s.Data {
 		// if at least one value is object, the column will be set as object
@@ -41,6 +46,9 @@ func (s *Series) InferType() {
 		case bool:
 			s.column.Dtype = base.Bool
 		default:
+			if val == "" && s.column.Dtype != base.Object {
+				continue
+			}
 			s.column.Dtype = base.Object
 		}
 	}
