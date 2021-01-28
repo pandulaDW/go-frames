@@ -14,6 +14,4 @@ const (
 	Bool DType = "Bool"
 	// DateTime is Date and Time values
 	DateTime DType = "DateTime"
-	// NA represents empty cells
-	NA DType = "NA"
 )

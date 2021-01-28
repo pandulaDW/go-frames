@@ -19,7 +19,7 @@ func (s *Series) Max() interface{} {
 		for i, val := range s.Data {
 			intVal, ok := val.(int)
 			if !ok {
-				panic(errors.InvalidSeriesValError(i, s.column.Name))
+				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
 			if intVal > maxInt {
 				maxInt = intVal
@@ -30,7 +30,7 @@ func (s *Series) Max() interface{} {
 		for i, val := range s.Data {
 			assertedVal, ok := helpers.ConvertToFloat(val)
 			if !ok {
-				panic(errors.InvalidSeriesValError(i, s.column.Name))
+				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
 			if *assertedVal > maxFloat {
 				maxFloat = *assertedVal
@@ -40,12 +40,12 @@ func (s *Series) Max() interface{} {
 	case base.DateTime:
 		maxDateTime, ok := s.Data[0].(time.Time)
 		if !ok {
-			panic(errors.InvalidSeriesValError(0, s.column.Name))
+			panic(errors.InvalidSeriesValError(s.Data[0], 0, s.column.Name))
 		}
 		for i, val := range s.Data[1:] {
 			parsedVal, ok := val.(time.Time)
 			if !ok {
-				panic(errors.InvalidSeriesValError(i+1, s.column.Name))
+				panic(errors.InvalidSeriesValError(val, i+1, s.column.Name))
 			}
 			if maxDateTime.Before(parsedVal) {
 				maxDateTime = parsedVal
@@ -68,7 +68,7 @@ func (s *Series) Min() interface{} {
 		for i, val := range s.Data {
 			intVal, ok := val.(int)
 			if !ok {
-				panic(errors.InvalidSeriesValError(i, s.column.Name))
+				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
 			if intVal < minInt {
 				minInt = intVal
@@ -79,7 +79,7 @@ func (s *Series) Min() interface{} {
 		for i, val := range s.Data {
 			assertedVal, ok := helpers.ConvertToFloat(val)
 			if !ok {
-				panic(errors.InvalidSeriesValError(i, s.column.Name))
+				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
 			if *assertedVal < minFloat {
 				minFloat = *assertedVal
@@ -89,12 +89,12 @@ func (s *Series) Min() interface{} {
 	case base.DateTime:
 		minDataTime, ok := s.Data[0].(time.Time)
 		if !ok {
-			panic(errors.InvalidSeriesValError(0, s.column.Name))
+			panic(errors.InvalidSeriesValError(s.Data[0], 0, s.column.Name))
 		}
 		for i, val := range s.Data[1:] {
 			parsedTime, ok := val.(time.Time)
 			if !ok {
-				panic(errors.InvalidSeriesValError(i, s.column.Name))
+				panic(errors.InvalidSeriesValError(val, i+1, s.column.Name))
 			}
 			if minDataTime.After(parsedTime) {
 				minDataTime = parsedTime
@@ -117,7 +117,7 @@ func (s *Series) Sum() float64 {
 		for i, val := range s.Data {
 			intVal, ok := val.(int)
 			if !ok {
-				panic(errors.InvalidSeriesValError(i, s.column.Name))
+				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
 			sumInt += intVal
 		}
@@ -126,7 +126,7 @@ func (s *Series) Sum() float64 {
 		for i, val := range s.Data {
 			assertedVal, ok := helpers.ConvertToFloat(val)
 			if !ok {
-				panic(errors.InvalidSeriesValError(i, s.column.Name))
+				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
 			sumFloat += *assertedVal
 		}

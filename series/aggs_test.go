@@ -43,26 +43,26 @@ func (suite *aggregationTestSuite) TestSeries_Max() {
 
 	// assert that function panics when an invalid value is there for datetime dtype in index 0 and elsewhere
 	suite.sDateTime.Data[0] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(0, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 0, "col").Error(), func() {
 		suite.sDateTime.Max()
 	})
 	suite.sDateTime.Data[0] = time.Now()
 	suite.sDateTime.Data[2] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		suite.sDateTime.Max()
 	})
 
 	// assert that function panics when an invalid value is there for int dtype
 	invalidIntSeries := suite.SInt.Copy()
 	invalidIntSeries.Data[2] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidIntSeries.Max()
 	})
 
 	// assert that function panics when an invalid value is there for float dtype
 	invalidFloatSeries := suite.SFloat.Copy()
 	invalidFloatSeries.Data[2] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidFloatSeries.Max()
 	})
 
@@ -88,26 +88,26 @@ func (suite *aggregationTestSuite) TestSeries_Min() {
 
 	// assert that function panics when an invalid value is there for datetime dtype in index 0 and elsewhere
 	suite.sDateTime.Data[0] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(0, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 0, "col").Error(), func() {
 		suite.sDateTime.Min()
 	})
 	suite.sDateTime.Data[0] = time.Now()
 	suite.sDateTime.Data[2] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		suite.sDateTime.Min()
 	})
 
 	// assert that function panics when an invalid value is there for int dtype
 	invalidIntSeries := suite.SInt.Copy()
 	invalidIntSeries.Data[2] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidIntSeries.Min()
 	})
 
 	// assert that function panics when an invalid value is there for float dtype
 	invalidFloatSeries := suite.SFloat.Copy()
 	invalidFloatSeries.Data[2] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidFloatSeries.Min()
 	})
 
@@ -133,14 +133,14 @@ func (suite *aggregationTestSuite) TestSeries_Sum() {
 	// assert that function panics when an invalid value is there for int dtype
 	invalidIntSeries := suite.SInt.Copy()
 	invalidIntSeries.Data[2] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidIntSeries.Sum()
 	})
 
 	// assert that function panics when an invalid value is there for float dtype
 	invalidFloatSeries := suite.SFloat.Copy()
 	invalidFloatSeries.Data[2] = "foo"
-	suite.PanicsWithError(errors.InvalidSeriesValError(2, "col").Error(), func() {
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidFloatSeries.Sum()
 	})
 }
