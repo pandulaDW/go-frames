@@ -142,6 +142,3 @@ func (s *Series) Avg() float64 {
 	avgVal := s.Sum() / float64(s.Len())
 	return avgVal
 }
-
-// TODO - Check for invalid values in int as well
-// TODO - Add column information to errors as well
