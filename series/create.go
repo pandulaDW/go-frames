@@ -1,6 +1,10 @@
 package series
 
-import "github.com/pandulaDW/go-frames/base"
+import (
+	"fmt"
+	"github.com/pandulaDW/go-frames/base"
+	"strconv"
+)
 
 //NewSeries will create a new series based on the column name and the
 // variadic arguments given
@@ -9,10 +13,15 @@ func NewSeries(colName string, data ...interface{}) *Series {
 	seriesData := make([]interface{}, 0, len(data))
 
 	for _, val := range data {
+		if fmt.Sprintf("%T", val) == "string" {
+			val = convertStringToTypedValue(val.(string))
+		}
 		seriesData = append(seriesData, val)
 	}
 
 	series := Series{column: column, Data: seriesData}
+
+	// convert the string values
 
 	// assert the type
 	series.InferType()
@@ -52,6 +61,28 @@ func (s *Series) InferType() {
 			s.column.Dtype = base.Object
 		}
 	}
+}
+
+//convertStringToTypedValue will take in a string and will try to convert it
+// to an int, float or a boolean. If it's a plain string, then the value will
+// be left as it is
+func convertStringToTypedValue(val string) interface{} {
+	int64Val, err := strconv.ParseInt(val, 10, 64)
+	if err == nil {
+		return int(int64Val)
+	}
+
+	floatVal, err := strconv.ParseFloat(val, 64)
+	if err == nil {
+		return floatVal
+	}
+
+	boolVal, err := strconv.ParseBool(val)
+	if err == nil {
+		return boolVal
+	}
+
+	return val
 }
 
 // Copy will create and return a NewSeries which is a deep copy of on the content of

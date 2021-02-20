@@ -2,7 +2,7 @@ package ioread
 
 import (
 	"github.com/pandulaDW/go-frames/dataframes"
-	errors2 "github.com/pandulaDW/go-frames/errors"
+	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/series"
 	"os"
 )
@@ -11,7 +11,7 @@ import (
 func fileHandling(path string) *os.File {
 	file, err := os.Open(path)
 	if err != nil {
-		panic(errors2.CustomWithStandardError("error in reading the file", err))
+		panic(errors.CustomWithStandardError("error in reading the file", err))
 	}
 
 	return file
