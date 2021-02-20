@@ -10,6 +10,11 @@ func CustomError(msg string) error {
 	return errors.New(msg)
 }
 
+//CustomWithStandardError will return a custom error massage combined with a standard error message
+func CustomWithStandardError(msg string, err error) error {
+	return errors.New(fmt.Sprintf("%s: \n%s", msg, err.Error()))
+}
+
 //InvalidSeriesValError return an error based an error specifying the index and column name
 func InvalidSeriesValError(val interface{}, i int, col string) error {
 	var errStr string

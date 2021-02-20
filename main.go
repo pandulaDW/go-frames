@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/dataframes"
+	"github.com/pandulaDW/go-frames/ioread"
 	"github.com/pandulaDW/go-frames/series"
 )
 
@@ -14,6 +15,8 @@ func main() {
 	col5 := series.NewSeries("col5", 14, 12.23, 32.5, 64, 34.1)
 	col6 := series.NewSeries("col6", 10, 12, "", 45, 89)
 
-	expected := dataframes.NewDataFrame(col1, col2, col3, col4, col5, col6)
-	fmt.Println(expected)
+	_ = dataframes.NewDataFrame(col1, col2, col3, col4, col5, col6)
+
+	df := ioread.ReadCSV(ioread.CsvOptions{Path: "data/iris.csv", Delimiter: ","})
+	fmt.Println(df)
 }
