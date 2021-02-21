@@ -10,7 +10,7 @@ import (
 )
 
 // ReadCSV reads a csv file using the given option arguments.
-func ReadCSV(options CsvOptions) *dataframes.DataFrame {
+func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 	file := fileHandling(options.Path)
 	defer file.Close()
 
@@ -29,7 +29,8 @@ func ReadCSV(options CsvOptions) *dataframes.DataFrame {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			panic(errors.CustomWithStandardError("error in reading line "+strconv.Itoa(rowNumber), err))
+			return nil,
+				errors.CustomWithStandardError("error in reading line "+strconv.Itoa(rowNumber), err)
 		}
 
 		if isHeader {
@@ -38,7 +39,8 @@ func ReadCSV(options CsvOptions) *dataframes.DataFrame {
 		} else {
 			rowData := strings.Split(strings.TrimSpace(row), options.Delimiter)
 			if len(rowData) != columnCount {
-				panic(errors.CustomError("mismatched number of columns in trimmed number " + strconv.Itoa(rowNumber)))
+				return nil,
+					errors.CustomError("mismatched number of columns in trimmed number " + strconv.Itoa(rowNumber))
 			}
 			content = append(content, rowData)
 		}
@@ -46,5 +48,5 @@ func ReadCSV(options CsvOptions) *dataframes.DataFrame {
 		isHeader = false
 	}
 
-	return convertRowContentToDF(colNames, content)
+	return convertRowContentToDF(colNames, content), nil
 }

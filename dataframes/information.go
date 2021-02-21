@@ -67,7 +67,7 @@ func (df *DataFrame) Describe() *DataFrame {
 	// create aggregation series
 	maxSeries := series.NewSeries("max", df.Agg(colNames, base.MAX)...)
 	minSeries := series.NewSeries("min", df.Agg(colNames, base.MIN)...)
-	sumSeries := series.NewSeries("sum", df.Agg(colNames, base.SUM)...)
+	sumSeries := series.NewSeries("sum", df.Agg(colNames, base.SUM)...).Round(2, true)
 	avgSeries := series.NewSeries("avg", df.Agg(colNames, base.AVG)...).Round(2, true)
 
 	infoDF := NewDataFrame(maxSeries, minSeries, sumSeries, avgSeries)
