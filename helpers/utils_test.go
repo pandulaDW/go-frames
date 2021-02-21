@@ -24,6 +24,15 @@ func TestGetRealSizeOf(t *testing.T) {
 func TestConvertSizeToString(t *testing.T) {
 	// assert that bytes are represented as bytes for small sizes
 	assert.Equal(t, "143 bytes", ConvertSizeToString(143))
+
+	// assert that kilo bytes are represented correctly
+	assert.Equal(t, "12.11 KB", ConvertSizeToString(12400))
+
+	// assert that mega bytes are represented correctly
+	assert.Equal(t, "12.40 MB", ConvertSizeToString(13_000_000))
+
+	// assert that bytes are represented as bytes for small sizes
+	assert.Equal(t, "23.51 GB", ConvertSizeToString(25_240_000_000))
 }
 
 func TestValueCounts(t *testing.T) {

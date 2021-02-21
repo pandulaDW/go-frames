@@ -35,6 +35,24 @@ func (suite *createTestSuite) TestSeries_InferType() {
 	// assert that mix types of floats and int will be treated as float
 	s = NewSeries("col", 12, 23.43, 54.32, 43.54, 23, 34.54, 5.6, 90)
 	suite.Equal(base.Float, s.column.Dtype)
+
+	// assert that blanks in types other than string will not be treated as string
+	s = NewSeries("col", "12", "23.43", "54.32", "", "43.54", "23", "34.54")
+	suite.Equal(base.Float, s.column.Dtype)
+}
+
+func (suite *createTestSuite) TestConvertStringToTypedValue() {
+	// assert that a string value will be returned as a string
+	suite.Equal("foo", convertStringToTypedValue("foo"))
+
+	// assert that an int value will be returned as an int
+	suite.Equal(1224, convertStringToTypedValue("1224"))
+
+	// assert that an float value will be returned as an float
+	suite.Equal(12.24, convertStringToTypedValue("12.24"))
+
+	// assert that an bool value will be returned as an bool
+	suite.Equal(true, convertStringToTypedValue("true"))
 }
 
 func (suite *createTestSuite) TestNewSeries() {
