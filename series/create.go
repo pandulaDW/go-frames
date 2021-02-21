@@ -21,8 +21,6 @@ func NewSeries(colName string, data ...interface{}) *Series {
 
 	series := Series{column: column, Data: seriesData}
 
-	// convert the string values
-
 	// assert the type
 	series.InferType()
 

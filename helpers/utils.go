@@ -3,6 +3,7 @@ package helpers
 import (
 	"bytes"
 	"encoding/gob"
+	"fmt"
 	"math"
 )
 
@@ -14,6 +15,24 @@ func GetRealSizeOf(v interface{}) int {
 		panic(err)
 	}
 	return b.Len()
+}
+
+//ConvertSizeToString will convert a number of bytes into a KB, MG, and GB string format
+// respectively given the number of bytes.
+func ConvertSizeToString(size int) string {
+	if size/(1024*1024*1024) > 1 {
+		return fmt.Sprintf("%.2f GB", float32(size)/(1024*1024*1024))
+	}
+
+	if size/(1024*1024) > 1 {
+		return fmt.Sprintf("%.2f MB", float32(size)/(1024*1024))
+	}
+
+	if size/(1024) > 1 {
+		return fmt.Sprintf("%.2f KB", float32(size)/(1024))
+	}
+
+	return fmt.Sprintf("%d bytes", size)
 }
 
 // ValueCounts will find the duplicate elements from a given array of

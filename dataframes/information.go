@@ -21,7 +21,7 @@ func (df *DataFrame) createInfoFooter() string {
 	dtypeStr := fmt.Sprintf("dtypes: float(%d), int(%d), object(%d), bool(%d)\n",
 		valueCounts[base.Float], valueCounts[base.Int], valueCounts[base.Object], valueCounts[base.Bool])
 
-	memSizeStr := fmt.Sprintf("memory usage: %d bytes", memSize)
+	memSizeStr := fmt.Sprintf("memory usage: %s", helpers.ConvertSizeToString(memSize))
 	return dtypeStr + memSizeStr
 }
 

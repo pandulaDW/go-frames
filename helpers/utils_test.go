@@ -21,6 +21,11 @@ func TestGetRealSizeOf(t *testing.T) {
 	})
 }
 
+func TestConvertSizeToString(t *testing.T) {
+	// assert that bytes are represented as bytes for small sizes
+	assert.Equal(t, "143 bytes", ConvertSizeToString(143))
+}
+
 func TestValueCounts(t *testing.T) {
 	arr := []interface{}{"foo", "bar", "bar", "baz", "foo", "foo", "dar"}
 	expected := map[interface{}]int{"foo": 3, "bar": 2, "baz": 1, "dar": 1}
