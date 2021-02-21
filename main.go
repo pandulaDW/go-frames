@@ -6,7 +6,10 @@ import (
 )
 
 func main() {
-	df := ioread.ReadCSV(ioread.CsvOptions{Path: "data/iris.csv", Delimiter: ","})
+	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/iris.csv", Delimiter: ","})
+	if err != nil {
+		return
+	}
 
 	fmt.Println(df.Length())
 	fmt.Println(df.Info())

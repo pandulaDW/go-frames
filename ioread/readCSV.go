@@ -9,7 +9,10 @@ import (
 	"strings"
 )
 
-// ReadCSV reads a csv file using the given option arguments.
+// ReadCSV reads a csv file using the given option arguments. Returns the created dataframe
+// with an error, if any.
+//
+// Refer the CsvOptions struct to get more information on read arguments.
 func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 	file := fileHandling(options.Path)
 	defer file.Close()
@@ -29,8 +32,7 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			return nil,
-				errors.CustomWithStandardError("error in reading line "+strconv.Itoa(rowNumber), err)
+			return nil, errors.CustomWithStandardError("error in reading line "+strconv.Itoa(rowNumber), err)
 		}
 
 		if isHeader {
@@ -39,8 +41,7 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 		} else {
 			rowData := strings.Split(strings.TrimSpace(row), options.Delimiter)
 			if len(rowData) != columnCount {
-				return nil,
-					errors.CustomError("mismatched number of columns in trimmed number " + strconv.Itoa(rowNumber))
+				return nil, errors.CustomError("mismatched number of columns in row " + strconv.Itoa(rowNumber-1))
 			}
 			content = append(content, rowData)
 		}
