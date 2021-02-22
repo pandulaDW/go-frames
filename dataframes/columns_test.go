@@ -27,7 +27,7 @@ func (suite *columnsTestSuite) TestDataFrame_Columns() {
 
 func (suite *columnsTestSuite) TestDataFrame_SetColumnNames() {
 	newColumnNames := []string{"newCol1", "newCol2", "newCol3"}
-	copiedDF := suite.df.Copy()
+	copiedDF := suite.df.DeepCopy()
 	copiedDF.SetColumnNames(newColumnNames)
 
 	// assert that the column names are set correctly

@@ -27,6 +27,7 @@ func TestNewDataFrame(t *testing.T) {
 			{Name: "col4", Dtype: base.Bool, ColIndex: 3},
 			{Name: "col5", Dtype: base.Float, ColIndex: 4},
 			{Name: "col6", Dtype: base.Int, ColIndex: 5}},
+		Index: series.NewSeries("index", 0, 1, 2, 3, 4),
 	}
 
 	// assert that the dataframe is created successfully
@@ -43,16 +44,40 @@ func TestNewDataFrame(t *testing.T) {
 		})
 }
 
-func TestDataFrame_Copy(t *testing.T) {
+func TestDataFrame_DeepCopy(t *testing.T) {
 	col1 := series.NewSeries("col1", 12, 34, 54, 65, 90)
 	col2 := series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
 	col3 := series.NewSeries("col3", 54.31, 1.23, 45.6, 23.12, 23.2)
 	df := NewDataFrame(col1, col2, col3)
-	copied := df.Copy()
+	copied := df.DeepCopy()
 
 	// assert that two object references are different
 	assert.NotEqual(t, fmt.Sprintf("%p", df), fmt.Sprintf("%p", copied))
 
-	// assert that the series objects are equal
-	assert.Equal(t, *df, *copied)
+	// assert that the dataframe objects are equal
+	assert.Equal(t, df, copied)
+
+	// assert that series object references are not equal
+	assert.NotEqual(t, fmt.Sprintf("%p", col1), fmt.Sprintf("%p", copied.Data["col1"]))
+	assert.NotEqual(t, fmt.Sprintf("%p", col2), fmt.Sprintf("%p", copied.Data["col2"]))
+	assert.NotEqual(t, fmt.Sprintf("%p", col3), fmt.Sprintf("%p", copied.Data["col3"]))
+}
+
+func TestDataFrame_ShallowCopy(t *testing.T) {
+	col1 := series.NewSeries("col1", 12, 34, 54, 65, 90)
+	col2 := series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
+	col3 := series.NewSeries("col3", 54.31, 1.23, 45.6, 23.12, 23.2)
+	df := NewDataFrame(col1, col2, col3)
+	copied := df.ShallowCopy()
+
+	// assert that two object references are different
+	assert.NotEqual(t, fmt.Sprintf("%p", df), fmt.Sprintf("%p", copied))
+
+	// assert that the dataframe objects are equal
+	assert.Equal(t, df, copied)
+
+	// assert that series object references are not equal
+	assert.Equal(t, fmt.Sprintf("%p", col1), fmt.Sprintf("%p", copied.Data["col1"]))
+	assert.Equal(t, fmt.Sprintf("%p", col2), fmt.Sprintf("%p", copied.Data["col2"]))
+	assert.Equal(t, fmt.Sprintf("%p", col3), fmt.Sprintf("%p", copied.Data["col3"]))
 }

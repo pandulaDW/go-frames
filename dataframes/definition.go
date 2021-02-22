@@ -11,6 +11,7 @@ type DataFrameData map[string]*series.Series
 // DataFrame includes the fields that describes a dataframe
 type DataFrame struct {
 	Data    DataFrameData
+	Index   *series.Series
 	length  int
 	columns []*base.Column
 }

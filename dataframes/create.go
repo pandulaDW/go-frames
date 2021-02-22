@@ -3,6 +3,7 @@ package dataframes
 import (
 	"errors"
 	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/series"
 )
 
@@ -15,9 +16,14 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 		return df
 	}
 
+	// set the variables
 	df.Data = make(DataFrameData)
 	df.columns = make([]*base.Column, 0)
 	df.length = data[0].Len()
+
+	// set the index
+	indices := helpers.ToInterfaceFromInt(helpers.Range(0, df.length, 1))
+	df.Index = series.NewSeries("index", indices...)
 
 	// Populate the dataframe and the columns
 	for i, s := range data {
@@ -33,13 +39,24 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 	return df
 }
 
-// Copy will create a new dataframe and will return a pointer to the new dataframe.
+// DeepCopy will create a new dataframe and will return a pointer to the new dataframe.
 //
 // As the underlying data is also copied, can cause memory leak in large dataframes.
-func (df *DataFrame) Copy() *DataFrame {
+func (df *DataFrame) DeepCopy() *DataFrame {
 	copiedSeriesArr := make([]*series.Series, 0, len(df.columns))
 	for _, col := range df.columns {
 		copiedSeriesArr = append(copiedSeriesArr, df.Data[col.Name].Copy())
 	}
 	return NewDataFrame(copiedSeriesArr...)
+}
+
+// ShallowCopy will create a new dataframe and will return a pointer to the new dataframe.
+//
+// Underlying series objects will be kept the same.
+func (df *DataFrame) ShallowCopy() *DataFrame {
+	seriesArr := make([]*series.Series, 0, len(df.columns))
+	for _, col := range df.columns {
+		seriesArr = append(seriesArr, df.Data[col.Name])
+	}
+	return NewDataFrame(seriesArr...)
 }
