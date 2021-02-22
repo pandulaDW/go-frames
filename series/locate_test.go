@@ -18,6 +18,6 @@ func TestSeries_Loc(t *testing.T) {
 		s.Loc([]int{1, 5, -2, 4})
 	})
 
-	// assert that the function returns a data slice correctly
-	assert.Equal(t, []interface{}{2.34, 2.4, 10}, s.Loc([]int{2, 4, 7}))
+	// assert that the function returns a series correctly
+	assert.Equal(t, NewSeries("col", 2.34, 2.4, 10), s.Loc([]int{2, 4, 7}))
 }

@@ -12,4 +12,5 @@ func main() {
 	}
 
 	fmt.Println(df.Info())
+	fmt.Println(df.Tail(5))
 }
