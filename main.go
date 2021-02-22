@@ -11,6 +11,7 @@ func main() {
 		return
 	}
 
-	fmt.Println(df.Info())
-	fmt.Println(df.Tail(5))
+	df = df.ShallowCopy().AddColumn(df.Index, true)
+	_ = df.RenameColumn("index", "#")
+	fmt.Println(df.Head(5))
 }

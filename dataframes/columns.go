@@ -1,7 +1,7 @@
 package dataframes
 
 import (
-	"errors"
+	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/series"
 )
 
@@ -18,7 +18,7 @@ func (df *DataFrame) Columns() []string {
 // Panics if the length of the column name array is lower than the number of columns in the dataframe
 func (df *DataFrame) SetColumnNames(cols []string) {
 	if len(cols) != len(df.columns) {
-		panic(errors.New("mismatched number of columns provided"))
+		panic(errors.CustomError("mismatched number of columns provided"))
 	}
 
 	// creating a new dataframe and assigning it to the df
@@ -30,4 +30,22 @@ func (df *DataFrame) SetColumnNames(cols []string) {
 	}
 
 	*df = *NewDataFrame(newSeriesArray...)
+}
+
+// RenameColumn will rename the column provided with the new column name.
+//
+// Return an error, if the col name is not found
+func (df *DataFrame) RenameColumn(oldName, newName string) error {
+	for _, col := range df.columns {
+		if col.Name == oldName {
+			s := df.Data[oldName]    // get underlying series
+			col.Name = newName       // changing the column list
+			delete(df.Data, oldName) // delete the dataframe map key
+			s.SetColName(newName)    // changing the series colName
+			df.Data[newName] = s     // set the new key
+			return nil               // return nil
+		}
+	}
+
+	return errors.CustomError("column name is not found")
 }
