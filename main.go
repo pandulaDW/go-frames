@@ -11,7 +11,5 @@ func main() {
 		return
 	}
 
-	fmt.Println(df.Length())
 	fmt.Println(df.Info())
-	fmt.Println(df.Describe())
 }

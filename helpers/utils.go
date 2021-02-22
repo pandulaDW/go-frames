@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
+	"github.com/pandulaDW/go-frames/errors"
 	"math"
 )
 
@@ -85,4 +86,34 @@ func ConvertToFloat(val interface{}) (*float64, bool) {
 		assertedVal = float64(intVal)
 	}
 	return &assertedVal, true
+}
+
+// Range is a helper function which generates a sequence of numbers starting from
+// the given start integer to the stop integer by the increment of the step integer.
+//
+// Panics if the step value is incorrectly specified.
+func Range(low, high, step int) []int {
+	rangeSlice := make([]int, 0)
+
+	if high < low && step > 0 {
+		panic(errors.CustomError("step should be a negative value when high is lower than low"))
+	}
+
+	if high > low && step < 0 {
+		panic(errors.CustomError("step should be a positive value when high is higher than low"))
+	}
+
+	if high > low {
+		for i := low; i < high; i += step {
+			rangeSlice = append(rangeSlice, i)
+		}
+	}
+
+	if high < low {
+		for i := low; i > high; i += step {
+			rangeSlice = append(rangeSlice, i)
+		}
+	}
+
+	return rangeSlice
 }

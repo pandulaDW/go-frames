@@ -76,3 +76,23 @@ func TestConvertToFloat(t *testing.T) {
 	assert.Nil(t, v)
 	assert.Equal(t, ok, false)
 }
+
+func TestRange(t *testing.T) {
+	// assert that the function panics when step is set as negative incorrectly
+	assert.PanicsWithError(t, "step should be a negative value when high is lower than low", func() {
+		Range(1, -100, 1)
+	})
+
+	// assert that the function panics when step is set as positive incorrectly
+	assert.PanicsWithError(t, "step should be a positive value when high is higher than low", func() {
+		Range(1, 100, -1)
+	})
+
+	// assert that the function returns a positive int slice
+	expected := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	assert.Equal(t, expected, Range(1, 11, 1))
+
+	// assert that the function returns a negative int slice
+	expected = []int{-1, -2, -3, -4, -5, -6, -7, -8, -9, -10}
+	assert.Equal(t, expected, Range(-1, -11, -1))
+}
