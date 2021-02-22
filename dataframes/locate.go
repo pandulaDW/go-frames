@@ -45,5 +45,8 @@ func (df *DataFrame) Tail(n int) *DataFrame {
 	if n > df.Length() {
 		panic(errors.CustomError("n cannot be higher than the length of the dataframe"))
 	}
-	return df.Loc(helpers.Range(df.length-1, df.length-n-1, -1), df.Columns())
+
+	indices := helpers.Range(df.length-1, df.length-n-1, -1)
+	reversedIndices := helpers.ReverseArray(helpers.ToInterfaceFromInt(indices))
+	return df.Loc(helpers.ToIntArray(reversedIndices), df.Columns())
 }

@@ -35,20 +35,6 @@ func TestConvertSizeToString(t *testing.T) {
 	assert.Equal(t, "23.51 GB", ConvertSizeToString(25_240_000_000))
 }
 
-func TestValueCounts(t *testing.T) {
-	arr := []interface{}{"foo", "bar", "bar", "baz", "foo", "foo", "dar"}
-	expected := map[interface{}]int{"foo": 3, "bar": 2, "baz": 1, "dar": 1}
-
-	// assert that the function returns correct value counts
-	assert.Equal(t, expected, ValueCounts(arr))
-}
-
-func TestMaxIntSlice(t *testing.T) {
-	arr := []int{12, 45, 65, 56, 90, 81, 22}
-	// assert that the function returns the correct max value
-	assert.Equal(t, 90, MaxIntSlice(arr))
-}
-
 func TestRepeatStringSlice(t *testing.T) {
 	expected := []interface{}{"foo", "foo", "foo", "foo", "foo", "foo"}
 	// assert that the function correctly returns a slice with correct number of repeated strings
