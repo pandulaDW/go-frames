@@ -29,14 +29,14 @@ func (suite *definitionTestSuite) TestSeries_GetColumn() {
 }
 
 func (suite *definitionTestSuite) TestSeries_SetColName() {
-	copiedSeries := suite.S.Copy()
+	copiedSeries := suite.S.DeepCopy()
 	copiedSeries.SetColName("newColName")
 	// assert that Column name set correctly
 	assert.Equal(suite.T(), "newColName", copiedSeries.column.Name)
 }
 
 func (suite *definitionTestSuite) TestSeries_SetColIndex() {
-	copiedSeries := suite.S.Copy()
+	copiedSeries := suite.S.DeepCopy()
 	copiedSeries.SetColIndex(3)
 	// assert that Column index set correctly
 	assert.Equal(suite.T(), 3, copiedSeries.column.ColIndex)

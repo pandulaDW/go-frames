@@ -53,14 +53,14 @@ func (suite *aggregationTestSuite) TestSeries_Max() {
 	})
 
 	// assert that function panics when an invalid value is there for int dtype
-	invalidIntSeries := suite.SInt.Copy()
+	invalidIntSeries := suite.SInt.DeepCopy()
 	invalidIntSeries.Data[2] = "foo"
 	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidIntSeries.Max()
 	})
 
 	// assert that function panics when an invalid value is there for float dtype
-	invalidFloatSeries := suite.SFloat.Copy()
+	invalidFloatSeries := suite.SFloat.DeepCopy()
 	invalidFloatSeries.Data[2] = "foo"
 	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidFloatSeries.Max()
@@ -98,14 +98,14 @@ func (suite *aggregationTestSuite) TestSeries_Min() {
 	})
 
 	// assert that function panics when an invalid value is there for int dtype
-	invalidIntSeries := suite.SInt.Copy()
+	invalidIntSeries := suite.SInt.DeepCopy()
 	invalidIntSeries.Data[2] = "foo"
 	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidIntSeries.Min()
 	})
 
 	// assert that function panics when an invalid value is there for float dtype
-	invalidFloatSeries := suite.SFloat.Copy()
+	invalidFloatSeries := suite.SFloat.DeepCopy()
 	invalidFloatSeries.Data[2] = "foo"
 	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidFloatSeries.Min()
@@ -131,14 +131,14 @@ func (suite *aggregationTestSuite) TestSeries_Sum() {
 	})
 
 	// assert that function panics when an invalid value is there for int dtype
-	invalidIntSeries := suite.SInt.Copy()
+	invalidIntSeries := suite.SInt.DeepCopy()
 	invalidIntSeries.Data[2] = "foo"
 	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidIntSeries.Sum()
 	})
 
 	// assert that function panics when an invalid value is there for float dtype
-	invalidFloatSeries := suite.SFloat.Copy()
+	invalidFloatSeries := suite.SFloat.DeepCopy()
 	invalidFloatSeries.Data[2] = "foo"
 	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
 		invalidFloatSeries.Sum()

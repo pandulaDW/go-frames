@@ -12,7 +12,7 @@ import (
 // helpers.Range() function can be used to return an indices range.
 func (s *Series) Loc(indices []int) *Series {
 	dataSlice := make([]interface{}, 0, len(indices))
-	sCopy := s.Copy()
+	sCopy := s.ShallowCopy()
 
 	for _, index := range indices {
 		if index < 0 || index > s.Len() {

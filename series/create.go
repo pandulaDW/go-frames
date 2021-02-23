@@ -83,9 +83,18 @@ func convertStringToTypedValue(val string) interface{} {
 	return val
 }
 
-// Copy will create and return a NewSeries which is a deep copy of on the content of
+// ShallowCopy will create and return a NewSeries which is a shallow copy of on the content of
+// the current series. Underlying data source will be the same in both series.
+func (s *Series) ShallowCopy() *Series {
+	newColumn := base.Column{Name: s.column.Name, Dtype: s.column.Dtype, ColIndex: s.column.ColIndex}
+
+	// create and return the new series
+	return &Series{column: newColumn, Data: s.Data}
+}
+
+// DeepCopy will create and return a NewSeries which is a deep copy of on the content of
 // the current series
-func (s *Series) Copy() *Series {
+func (s *Series) DeepCopy() *Series {
 	newColumn := base.Column{Name: s.column.Name, Dtype: s.column.Dtype, ColIndex: s.column.ColIndex}
 	newDataSlice := make([]interface{}, s.Len())
 

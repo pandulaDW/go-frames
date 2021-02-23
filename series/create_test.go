@@ -63,12 +63,29 @@ func (suite *createTestSuite) TestNewSeries() {
 	suite.Equal(*expected, actual)
 }
 
-func (suite *createTestSuite) TestSeries_Copy() {
+func (suite *createTestSuite) TestSeries_ShallowCopy() {
 	s := NewSeries("newCol", 23, 43, 90, 87)
-	copied := s.Copy()
+	copied := s.ShallowCopy()
 
 	// assert that two object references are different
 	suite.NotEqual(fmt.Sprintf("%p", s), fmt.Sprintf("%p", copied))
+
+	// assert that two slice references are same
+	suite.Equal(fmt.Sprintf("%p", s.Data), fmt.Sprintf("%p", copied.Data))
+
+	// assert that the series objects are equal
+	suite.Equal(*s, *copied)
+}
+
+func (suite *createTestSuite) TestSeries_DeepCopy() {
+	s := NewSeries("newCol", 23, 43, 90, 87)
+	copied := s.DeepCopy()
+
+	// assert that two object references are different
+	suite.NotEqual(fmt.Sprintf("%p", s), fmt.Sprintf("%p", copied))
+
+	// assert that two slice references are different
+	suite.NotEqual(fmt.Sprintf("%p", s.Data), fmt.Sprintf("%p", copied.Data))
 
 	// assert that the series objects are equal
 	suite.Equal(*s, *copied)

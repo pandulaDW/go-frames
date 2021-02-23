@@ -48,7 +48,7 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 func (df *DataFrame) DeepCopy() *DataFrame {
 	copiedSeriesArr := make([]*series.Series, 0, len(df.columns))
 	for _, col := range df.columns {
-		copiedSeriesArr = append(copiedSeriesArr, df.Data[col.Name].Copy())
+		copiedSeriesArr = append(copiedSeriesArr, df.Data[col.Name].DeepCopy())
 	}
 	return NewDataFrame(copiedSeriesArr...)
 }

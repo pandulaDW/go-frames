@@ -12,7 +12,7 @@ func TestSeries_Round(t *testing.T) {
 	expected := NewSeries("col", 12.35, 56.23, 1.20, 1.23, 4.60, 1.34)
 
 	// assert that the function will mutate the the series data correctly if inplace is true
-	assert.Equal(t, s.Copy().Round(2, true), expected)
+	assert.Equal(t, s.DeepCopy().Round(2, true), expected)
 
 	// assert that the function will return a new series if inplace is false
 	assert.Equal(t, s.Round(2, false), expected)

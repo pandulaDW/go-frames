@@ -14,7 +14,7 @@ func TestSeries_CastAsTime(t *testing.T) {
 	layout := "2006-01-02 15:04:05"
 	sCorrect := NewSeries("col", "2016-02-06 13:11:24", "2017-12-26 03:11:22", "2015-05-05 16:17:32",
 		"2016-02-06 06:23:24", "2018-01-03 12:10:24", "1996-01-06 08:12:22", "2011-07-08 12:14:45")
-	sIncorrect := sCorrect.Copy()
+	sIncorrect := sCorrect.DeepCopy()
 	sInt := NewSeries("col", 12, 34, 54, 66)
 
 	// assert that the function will throw an error if non object type is given
