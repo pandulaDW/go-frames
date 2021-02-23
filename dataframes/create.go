@@ -23,7 +23,10 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 
 	// set the index
 	indices := helpers.ToInterfaceFromInt(helpers.Range(0, df.length, 1))
-	df.Index = series.NewSeries("index", indices...)
+	df.Index = Index{
+		Data:     series.NewSeries("#", indices...),
+		IsCustom: false,
+	}
 
 	// Populate the dataframe and the columns
 	for i, s := range data {

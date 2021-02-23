@@ -8,10 +8,16 @@ import (
 // DataFrameData describes the shape of data stored in dataframe
 type DataFrameData map[string]*series.Series
 
+// Index describes the index of a dataframe
+type Index struct {
+	Data     *series.Series
+	IsCustom bool
+}
+
 // DataFrame includes the fields that describes a dataframe
 type DataFrame struct {
 	Data    DataFrameData
-	Index   *series.Series
+	Index   Index
 	length  int
 	columns []*base.Column
 }

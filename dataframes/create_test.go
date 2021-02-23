@@ -27,7 +27,10 @@ func TestNewDataFrame(t *testing.T) {
 			{Name: "col4", Dtype: base.Bool, ColIndex: 3},
 			{Name: "col5", Dtype: base.Float, ColIndex: 4},
 			{Name: "col6", Dtype: base.Int, ColIndex: 5}},
-		Index: series.NewSeries("index", 0, 1, 2, 3, 4),
+		Index: Index{
+			Data:     series.NewSeries("#", 0, 1, 2, 3, 4),
+			IsCustom: false,
+		},
 	}
 
 	// assert that the dataframe is created successfully

@@ -39,10 +39,10 @@ func (df *DataFrame) Head(n int) *DataFrame {
 	cols := append([]string{"#"}, df.Columns()...)
 
 	// add new column as index
-	copiedDF := df.ShallowCopy().AddColumn(df.Index, true)
+	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data, true)
 
-	// rename and reset the columns
-	copiedDF.RenameColumn("index", "#").ResetColumns(cols)
+	// reset the columns
+	copiedDF.ResetColumns(cols)
 	return copiedDF.Loc(helpers.Range(0, n, 1), copiedDF.Columns())
 }
 
@@ -59,10 +59,10 @@ func (df *DataFrame) Tail(n int) *DataFrame {
 	cols := append([]string{"#"}, df.Columns()...)
 
 	// add new column as index
-	copiedDF := df.ShallowCopy().AddColumn(df.Index, true)
+	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data, true)
 
-	// rename and reset the columns
-	copiedDF.RenameColumn("index", "#").ResetColumns(cols)
+	// reset the columns
+	copiedDF.ResetColumns(cols)
 
 	indices := helpers.Range(df.length-1, df.length-n-1, -1)
 	reversedIndices := helpers.ReverseArray(helpers.ToInterfaceFromInt(indices))
