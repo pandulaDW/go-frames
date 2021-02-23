@@ -36,7 +36,8 @@ func (df *DataFrame) Head(n int) *DataFrame {
 	}
 
 	// column order
-	cols := append([]string{"#"}, df.Columns()...)
+	indexColName := df.Index.Data.GetColumn().Name
+	cols := append([]string{indexColName}, df.Columns()...)
 
 	// add new column as index
 	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data, true)
@@ -56,7 +57,8 @@ func (df *DataFrame) Tail(n int) *DataFrame {
 	}
 
 	// column order
-	cols := append([]string{"#"}, df.Columns()...)
+	indexColName := df.Index.Data.GetColumn().Name
+	cols := append([]string{indexColName}, df.Columns()...)
 
 	// add new column as index
 	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data, true)

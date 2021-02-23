@@ -11,5 +11,5 @@ func main() {
 		return
 	}
 
-	fmt.Println(df.Tail(5))
+	fmt.Println(df.Head(5))
 }
