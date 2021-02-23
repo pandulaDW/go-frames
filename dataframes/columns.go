@@ -58,6 +58,10 @@ func (df *DataFrame) RenameColumn(oldName, newName string) *DataFrame {
 func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
 	currentColumns := helpers.ToInterfaceFromString(df.Columns())
 
+	if len(columns) != len(currentColumns) {
+		panic(errors.CustomError("incorrect number of columns are provided"))
+	}
+
 	// modify the ColIndex of the columns
 	for i, col := range columns {
 		if index := helpers.LinearSearch(col, currentColumns); index != -1 {
@@ -75,6 +79,4 @@ func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
 	return df
 }
 
-// TODO - complete above function
-// TODO - add binary search
 // TODO - change methods to return a dataframe

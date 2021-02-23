@@ -16,3 +16,9 @@ func TestToInterfaceFromInt(t *testing.T) {
 	data := []int{1, 5, 10, 4}
 	assert.Equal(t, []interface{}{1, 5, 10, 4}, ToInterfaceFromInt(data))
 }
+
+func TestToInterfaceFromString(t *testing.T) {
+	// assert that int array is converted to an interface array successfully
+	data := []string{"foo", "bar", "baz"}
+	assert.Equal(t, []interface{}{"foo", "bar", "baz"}, ToInterfaceFromString(data))
+}

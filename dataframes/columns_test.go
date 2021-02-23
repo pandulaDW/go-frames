@@ -41,7 +41,7 @@ func (suite *columnsTestSuite) TestDataFrame_SetColumnNames() {
 }
 
 func (suite *columnsTestSuite) TestDataFrame_RenameColumn() {
-	// assert that function returns an error when column name is not found
+	// assert that function panics when column name is not found
 	suite.PanicsWithError("column name is not found", func() {
 		suite.df.RenameColumn("test", "newTest")
 	})
@@ -51,6 +51,22 @@ func (suite *columnsTestSuite) TestDataFrame_RenameColumn() {
 	testCol := series.NewSeries("testCol", suite.col3.Data...)
 	expected := NewDataFrame(suite.col1, suite.col2, testCol)
 	suite.Equal(expected, df)
+}
+
+func (suite *columnsTestSuite) TestDataFrame_ResetColumns() {
+	// assert that function panics when incorrect number of column names are provided
+	suite.PanicsWithError("incorrect number of columns are provided", func() {
+		suite.df.ResetColumns([]string{"col1", "col2"})
+	})
+
+	// assert that function panics when column name is not found
+	suite.PanicsWithError("test column is not found", func() {
+		suite.df.ResetColumns([]string{"test", "col1", "col2"})
+	})
+
+	// assert that function correctly reorders the columns
+	expected := NewDataFrame(suite.col2, suite.col3, suite.col1)
+	suite.Equal(expected, suite.df.ShallowCopy().ResetColumns([]string{"col2", "col3", "col1"}))
 }
 
 func TestColumnsTestSuite(t *testing.T) {
