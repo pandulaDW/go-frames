@@ -42,12 +42,12 @@ func (suite *columnsTestSuite) TestDataFrame_SetColumnNames() {
 
 func (suite *columnsTestSuite) TestDataFrame_RenameColumn() {
 	// assert that function returns an error when column name is not found
-	err := suite.df.RenameColumn("test", "newTest")
-	suite.EqualError(err, "column name is not found")
+	suite.PanicsWithError("column name is not found", func() {
+		suite.df.RenameColumn("test", "newTest")
+	})
 
 	// assert that function correctly rename the column
-	df := suite.df.DeepCopy()
-	_ = df.RenameColumn("col3", "testCol")
+	df := suite.df.DeepCopy().RenameColumn("col3", "testCol")
 	testCol := series.NewSeries("testCol", suite.col3.Data...)
 	expected := NewDataFrame(suite.col1, suite.col2, testCol)
 	suite.Equal(expected, df)

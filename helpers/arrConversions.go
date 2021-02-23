@@ -21,3 +21,14 @@ func ToInterfaceFromInt(arr []int) []interface{} {
 
 	return interfaceArray
 }
+
+// ToInterfaceFromString converts an array of string array to an empty interface array
+func ToInterfaceFromString(arr []string) []interface{} {
+	interfaceArray := make([]interface{}, 0, len(arr))
+
+	for _, val := range arr {
+		interfaceArray = append(interfaceArray, val)
+	}
+
+	return interfaceArray
+}

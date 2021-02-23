@@ -34,7 +34,16 @@ func (df *DataFrame) Head(n int) *DataFrame {
 	if n > df.length {
 		panic(errors.CustomError("n cannot be higher than the length of the dataframe"))
 	}
-	return df.Loc(helpers.Range(0, n, 1), df.Columns())
+
+	// column order
+	cols := append([]string{"#"}, df.Columns()...)
+
+	// add new column as index
+	copiedDF := df.ShallowCopy().AddColumn(df.Index, true)
+
+	// rename and reset the columns
+	copiedDF.RenameColumn("index", "#").ResetColumns(cols)
+	return copiedDF.Loc(helpers.Range(0, n, 1), copiedDF.Columns())
 }
 
 // Tail function returns last n rows from the object based on position. It is useful
@@ -46,7 +55,16 @@ func (df *DataFrame) Tail(n int) *DataFrame {
 		panic(errors.CustomError("n cannot be higher than the length of the dataframe"))
 	}
 
+	// column order
+	cols := append([]string{"#"}, df.Columns()...)
+
+	// add new column as index
+	copiedDF := df.ShallowCopy().AddColumn(df.Index, true)
+
+	// rename and reset the columns
+	copiedDF.RenameColumn("index", "#").ResetColumns(cols)
+
 	indices := helpers.Range(df.length-1, df.length-n-1, -1)
 	reversedIndices := helpers.ReverseArray(helpers.ToInterfaceFromInt(indices))
-	return df.Loc(helpers.ToIntArray(reversedIndices), df.Columns())
+	return copiedDF.Loc(helpers.ToIntArray(reversedIndices), copiedDF.Columns())
 }

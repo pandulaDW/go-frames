@@ -2,7 +2,9 @@ package dataframes
 
 import (
 	"github.com/pandulaDW/go-frames/errors"
+	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/series"
+	"sort"
 )
 
 // Columns returns the column names of the dataframe
@@ -32,10 +34,11 @@ func (df *DataFrame) SetColumnNames(cols []string) {
 	*df = *NewDataFrame(newSeriesArray...)
 }
 
-// RenameColumn will rename the column provided with the new column name.
+// RenameColumn will rename the column provided with the new column name and returns
+// the modified dataframe.
 //
-// Return an error, if the col name is not found
-func (df *DataFrame) RenameColumn(oldName, newName string) error {
+// Panics if the col name is not found
+func (df *DataFrame) RenameColumn(oldName, newName string) *DataFrame {
 	for _, col := range df.columns {
 		if col.Name == oldName {
 			s := df.Data[oldName]    // get underlying series
@@ -43,9 +46,35 @@ func (df *DataFrame) RenameColumn(oldName, newName string) error {
 			delete(df.Data, oldName) // delete the dataframe map key
 			s.SetColName(newName)    // changing the series colName
 			df.Data[newName] = s     // set the new key
-			return nil               // return nil
+			return df                // return from the function
 		}
 	}
 
-	return errors.CustomError("column name is not found")
+	panic(errors.CustomError("column name is not found"))
 }
+
+// ResetColumns resets the column order of the dataframe. All the columns should be present
+// and the function panics if a column is not found in the column list.
+func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
+	currentColumns := helpers.ToInterfaceFromString(df.Columns())
+
+	// modify the ColIndex of the columns
+	for i, col := range columns {
+		if index := helpers.LinearSearch(col, currentColumns); index != -1 {
+			df.columns[index].ColIndex = i
+		} else {
+			panic(errors.CustomError(col + " column is not found"))
+		}
+	}
+
+	// modify the df.columns slice
+	sort.SliceStable(df.columns, func(i, j int) bool {
+		return df.columns[i].ColIndex < df.columns[j].ColIndex
+	})
+
+	return df
+}
+
+// TODO - complete above function
+// TODO - add binary search
+// TODO - change methods to return a dataframe
