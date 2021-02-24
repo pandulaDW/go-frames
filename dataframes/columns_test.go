@@ -69,6 +69,17 @@ func (suite *columnsTestSuite) TestDataFrame_ResetColumns() {
 	suite.Equal(expected, suite.df.ShallowCopy().ResetColumns([]string{"col2", "col3", "col1"}))
 }
 
+func (suite *columnsTestSuite) TestDataFrame_Drop() {
+	// assert that function panics when incorrect column names are provided
+	suite.PanicsWithError("testCol column is not found", func() {
+		suite.df.ShallowCopy().Drop("col1", "testCol")
+	})
+
+	// assert that function correctly drops the columns
+	expected := NewDataFrame(suite.col3)
+	suite.Equal(expected, suite.df.ShallowCopy().Drop("col1", "col2"))
+}
+
 func TestColumnsTestSuite(t *testing.T) {
 	suite.Run(t, new(columnsTestSuite))
 }

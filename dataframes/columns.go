@@ -1,6 +1,7 @@
 package dataframes
 
 import (
+	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/series"
@@ -76,6 +77,31 @@ func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
 		return df.columns[i].ColIndex < df.columns[j].ColIndex
 	})
 
+	return df
+}
+
+// Drop will drop the given columns from the dataframe. Column names can be specified
+// as variadic arguments.
+//
+// Panics if any of the column name is not found
+func (df *DataFrame) Drop(colNames ...string) *DataFrame {
+	droppedCols := make([]string, 0)
+
+	for _, colName := range colNames {
+		if _, ok := df.Data[colName]; ok {
+			delete(df.Data, colName)
+			droppedCols = append(droppedCols, colName)
+		} else {
+			panic(errors.CustomError(colName + " column is not found"))
+		}
+	}
+
+	filteredCols := make([]*base.Column, 0)
+	for colName := range df.Data {
+		filteredCols = append(filteredCols, df.Data[colName].GetColumn())
+	}
+
+	df.columns = filteredCols
 	return df
 }
 
