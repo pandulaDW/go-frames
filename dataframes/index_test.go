@@ -22,7 +22,7 @@ func (suite *indexTestSuite) SetupTest() {
 
 func (suite *indexTestSuite) TestDataFrame_SetIndex() {
 	// assert that the function panics if column is not found
-	suite.PanicsWithError("column not found", func() {
+	suite.PanicsWithError("testCol column not found in the dataframe", func() {
 		suite.df.SetIndex("testCol")
 	})
 
@@ -32,7 +32,8 @@ func (suite *indexTestSuite) TestDataFrame_SetIndex() {
 		Data:     suite.col1,
 		IsCustom: true,
 	}
-	suite.Equal(expected, suite.df.SetIndex("col1"))
+	actual := suite.df.ShallowCopy().SetIndex("col1")
+	suite.Equal(expected, actual)
 }
 
 func TestIndexTestSuite(t *testing.T) {

@@ -9,17 +9,18 @@ import (
 type locateTestSuite struct {
 	suite.Suite
 	df, dfLocExpected *DataFrame
+	col1, col2, col3  *series.Series
 }
 
 // Setting up the data for the test suite
 func (suite *locateTestSuite) SetupTest() {
-	col1 := series.NewSeries("col1", 12, 34, 54, 65, 90)
-	col2 := series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
-	col3 := series.NewSeries("col3", 54.31, 1.23, 45.6, 23.12, 23.2)
-	suite.df = NewDataFrame(col1, col2, col3)
+	suite.col1 = series.NewSeries("col1", 12, 34, 54, 65, 90)
+	suite.col2 = series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
+	suite.col3 = series.NewSeries("col3", 54.31, 1.23, 45.6, 23.12, 23.2)
+	suite.df = NewDataFrame(suite.col1, suite.col2, suite.col3)
 
 	indices := []int{0, 1, 2}
-	suite.dfLocExpected = NewDataFrame(col1.Loc(indices), col2.Loc(indices), col3.Loc(indices))
+	suite.dfLocExpected = NewDataFrame(suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
 }
 
 func (suite *locateTestSuite) TestDataFrame_Loc() {
@@ -30,6 +31,32 @@ func (suite *locateTestSuite) TestDataFrame_Loc() {
 
 	// assert that the function returns the correct dataframe
 	suite.Equal(suite.dfLocExpected, suite.df.Loc([]int{0, 1, 2}, suite.df.Columns()))
+}
+
+func (suite *locateTestSuite) TestDataFrame_Head() {
+	// assert that function panics when n is higher
+	suite.PanicsWithError("n cannot be higher than the length of the dataframe", func() {
+		suite.df.Head(10)
+	})
+
+	// assert that the function returns the correct dataframe
+	indices := []int{0, 1, 2}
+	expected := NewDataFrame(series.NewSeries("#", 0, 1, 2),
+		suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
+	suite.Equal(expected, suite.df.Head(3))
+}
+
+func (suite *locateTestSuite) TestDataFrame_Tail() {
+	// assert that function panics when n is higher
+	suite.PanicsWithError("n cannot be higher than the length of the dataframe", func() {
+		suite.df.Tail(10)
+	})
+
+	// assert that the function returns the correct dataframe
+	indices := []int{2, 3, 4}
+	expected := NewDataFrame(series.NewSeries("#", 2, 3, 4),
+		suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
+	suite.Equal(expected, suite.df.Tail(3))
 }
 
 func TestLocateTestSuite(t *testing.T) {

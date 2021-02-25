@@ -45,6 +45,13 @@ func TestNewDataFrame(t *testing.T) {
 			newCol := series.NewSeries("col1", 12, 34, 54)
 			NewDataFrame(col1, col2, col3, col4, col5, newCol)
 		})
+
+	// assert that the function panics when duplicate column is given
+	assert.PanicsWithError(t, "col1 column is already in the dataframe",
+		func() {
+			newCol := series.NewSeries("col1", 12, 34, 54, 67, 89)
+			NewDataFrame(col1, col2, col3, col4, col5, newCol)
+		})
 }
 
 func TestDataFrame_DeepCopy(t *testing.T) {
