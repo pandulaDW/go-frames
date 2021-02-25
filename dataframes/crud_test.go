@@ -1,7 +1,6 @@
 package dataframes
 
 import (
-	"fmt"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -23,21 +22,14 @@ func (suite *crudTestSuite) SetupTest() {
 
 func (suite *crudTestSuite) TestDataFrame_AddColumn() {
 	// assert that the function panics when mismatched number of rows are added
-	suite.PanicsWithError("mismatched number of rows in the added series", func() {
-		suite.df.AddColumn(series.NewSeries("col3", true, false, true), false)
+	suite.PanicsWithError("mismatched number of rows provided. requires 5 rows, but 3 was provided", func() {
+		suite.df.AddColumn(series.NewSeries("col3", true, false, true))
 	})
 
 	// assert that the function returns a dataframe with the added column
-	testCol := series.NewSeries("col3", true, false, true, false, false)
+	testCol := series.NewSeries("col4", true, false, true, false, false)
 	expected := NewDataFrame(suite.col1, suite.col2, suite.col3, testCol)
-	suite.Equal(expected, suite.df.AddColumn(testCol, false))
-
-	// assert that the function returns a different object when inplace is false
-	suite.NotEqual(fmt.Sprintf("%p", suite.df),
-		fmt.Sprintf("%p", suite.df.AddColumn(testCol, false)))
-
-	// assert that the function returns the same object when inplace is true
-	suite.Equal(fmt.Sprintf("%p", suite.df), fmt.Sprintf("%p", suite.df.AddColumn(testCol, true)))
+	suite.Equal(expected, suite.df.ShallowCopy().AddColumn(testCol))
 }
 
 func TestCrudTestSuite(t *testing.T) {

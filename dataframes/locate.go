@@ -40,7 +40,7 @@ func (df *DataFrame) Head(n int) *DataFrame {
 	cols := append([]string{indexColName}, df.Columns()...)
 
 	// add new column as index
-	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data, true)
+	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data)
 
 	// reset the columns
 	copiedDF.ResetColumns(cols)
@@ -61,7 +61,7 @@ func (df *DataFrame) Tail(n int) *DataFrame {
 	cols := append([]string{indexColName}, df.Columns()...)
 
 	// add new column as index
-	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data, true)
+	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data)
 
 	// reset the columns
 	copiedDF.ResetColumns(cols)

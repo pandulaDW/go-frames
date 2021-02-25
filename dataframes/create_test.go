@@ -40,7 +40,7 @@ func TestNewDataFrame(t *testing.T) {
 	assert.Equal(t, new(DataFrame), NewDataFrame())
 
 	// assert that the function panics when mismatched row numbers are given
-	assert.PanicsWithError(t, "mismatched row lengths found. Dataframe can only contain equal number of rows",
+	assert.PanicsWithError(t, "mismatched number of rows provided. requires 5 rows, but 3 was provided",
 		func() {
 			newCol := series.NewSeries("col1", 12, 34, 54)
 			NewDataFrame(col1, col2, col3, col4, col5, newCol)

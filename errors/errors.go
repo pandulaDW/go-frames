@@ -20,9 +20,21 @@ func ColumnNotFound(column string) error {
 	return errors.New(fmt.Sprintf("%s column not found in the dataframe", column))
 }
 
-// ErrMismatchedNumOfColumns provides an error mentioning the mismatched number of columns
+// DuplicatedColumn returns an error to indicate the specified column is already in the dataframe
+func DuplicatedColumn(column string) error {
+	return errors.New(fmt.Sprintf("%s column is already in the dataframe", column))
+}
+
+// MismatchedNumOfColumns provides an error mentioning the mismatched number of columns
 func MismatchedNumOfColumns(expected, actual int) error {
 	err := fmt.Sprintf("mismatched number of columns provided. requires %d columns, but %d was provided",
+		expected, actual)
+	return errors.New(err)
+}
+
+// MismatchedNumOfRows provides an error mentioning the mismatched number of columns
+func MismatchedNumOfRows(expected, actual int) error {
+	err := fmt.Sprintf("mismatched number of rows provided. requires %d rows, but %d was provided",
 		expected, actual)
 	return errors.New(err)
 }

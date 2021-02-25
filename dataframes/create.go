@@ -1,14 +1,16 @@
 package dataframes
 
 import (
-	"errors"
 	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/series"
 )
 
 // NewDataFrame creates a dataframe using given parameters of series.
-// if the length of the series are mismatching, it will panic with an error
+//
+// The function panics if the length of the series are mismatching or a duplicated column name
+// is provided.
 func NewDataFrame(data ...*series.Series) *DataFrame {
 	df := new(DataFrame)
 
@@ -30,11 +32,14 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 
 	// Populate the dataframe and the columns
 	for i, s := range data {
+		colName := s.GetColumn().Name
 		if s.Len() != df.length {
-			panic(errors.New("mismatched row lengths found. " +
-				"Dataframe can only contain equal number of rows"))
+			panic(errors.MismatchedNumOfRows(df.length, s.Len()))
 		}
-		df.Data[s.GetColumn().Name] = s
+		if _, ok := df.Data[colName]; ok {
+			panic(errors.DuplicatedColumn(colName))
+		}
+		df.Data[colName] = s
 		s.SetColIndex(i)
 		df.columns = append(df.columns, s.GetColumn())
 	}
