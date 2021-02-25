@@ -1,8 +1,8 @@
 package dataframes
 
 import (
-	"errors"
 	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/errors"
 )
 
 // Agg returns the aggregated values of the columns specified with the given aggregator
@@ -13,7 +13,7 @@ func (df *DataFrame) Agg(columns []string, aggregator base.Aggregator) []interfa
 	for _, col := range columns {
 		s, ok := df.Data[col]
 		if !ok {
-			panic(errors.New(col + " not found in the dataframe"))
+			panic(errors.ColumnNotFound(col))
 		}
 
 		switch aggregator {
@@ -26,7 +26,7 @@ func (df *DataFrame) Agg(columns []string, aggregator base.Aggregator) []interfa
 		case base.AVG:
 			aggSeries = append(aggSeries, s.Avg())
 		default:
-			panic(errors.New(string(aggregator + " is not a valid aggregator identifier")))
+			panic(errors.CustomError(string(aggregator) + " is not a valid aggregator identifier"))
 		}
 	}
 

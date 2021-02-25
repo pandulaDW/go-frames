@@ -19,9 +19,9 @@ func (df *DataFrame) Columns() []string {
 
 // SetColumnNames will rename the columns based on the column list provided in the given order.
 // Panics if the length of the column name array is lower than the number of columns in the dataframe
-func (df *DataFrame) SetColumnNames(cols []string) {
+func (df *DataFrame) SetColumnNames(cols []string) *DataFrame {
 	if len(cols) != len(df.columns) {
-		panic(errors.CustomError("mismatched number of columns provided"))
+		panic(errors.MismatchedNumOfColumns(len(cols), len(df.columns)))
 	}
 
 	// creating a new dataframe and assigning it to the df
@@ -33,6 +33,7 @@ func (df *DataFrame) SetColumnNames(cols []string) {
 	}
 
 	*df = *NewDataFrame(newSeriesArray...)
+	return df
 }
 
 // RenameColumn will rename the column provided with the new column name and returns
@@ -51,7 +52,7 @@ func (df *DataFrame) RenameColumn(oldName, newName string) *DataFrame {
 		}
 	}
 
-	panic(errors.CustomError("column name is not found"))
+	panic(errors.ColumnNotFound(oldName))
 }
 
 // ResetColumns resets the column order of the dataframe. All the columns should be present
@@ -60,7 +61,7 @@ func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
 	currentColumns := helpers.ToInterfaceFromString(df.Columns())
 
 	if len(columns) != len(currentColumns) {
-		panic(errors.CustomError("incorrect number of columns are provided"))
+		panic(errors.MismatchedNumOfColumns(len(columns), len(currentColumns)))
 	}
 
 	// modify the ColIndex of the columns
@@ -68,7 +69,7 @@ func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
 		if index := helpers.LinearSearch(col, currentColumns); index != -1 {
 			df.columns[index].ColIndex = i
 		} else {
-			panic(errors.CustomError(col + " column is not found"))
+			panic(errors.ColumnNotFound(col))
 		}
 	}
 
@@ -85,14 +86,12 @@ func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
 //
 // Panics if any of the column name is not found
 func (df *DataFrame) Drop(colNames ...string) *DataFrame {
-	droppedCols := make([]string, 0)
 
 	for _, colName := range colNames {
 		if _, ok := df.Data[colName]; ok {
 			delete(df.Data, colName)
-			droppedCols = append(droppedCols, colName)
 		} else {
-			panic(errors.CustomError(colName + " column is not found"))
+			panic(errors.ColumnNotFound(colName))
 		}
 	}
 

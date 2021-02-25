@@ -2,6 +2,7 @@ package dataframes
 
 import (
 	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -14,7 +15,7 @@ func TestDataFrame_Agg(t *testing.T) {
 	df := NewDataFrame(col1, col2, col3)
 
 	// assert that the function panics if an unknown column name is given
-	assert.PanicsWithError(t, "test not found in the dataframe", func() {
+	assert.PanicsWithError(t, errors.ColumnNotFound("test").Error(), func() {
 		df.Agg([]string{"col1", "test"}, base.AVG)
 	})
 

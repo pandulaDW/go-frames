@@ -35,14 +35,15 @@ func (suite *columnsTestSuite) TestDataFrame_SetColumnNames() {
 	suite.Equal(copiedDF.Columns(), newColumnNames)
 
 	// assert that the function will panic if mismatched number of column names are given
-	suite.PanicsWithError("mismatched number of columns provided", func() {
-		copiedDF.SetColumnNames(newColumnNames[0:2])
-	})
+	suite.PanicsWithError("mismatched number of columns provided. requires 2 columns, but 3 was provided",
+		func() {
+			copiedDF.SetColumnNames(newColumnNames[0:2])
+		})
 }
 
 func (suite *columnsTestSuite) TestDataFrame_RenameColumn() {
 	// assert that function panics when column name is not found
-	suite.PanicsWithError("column name is not found", func() {
+	suite.PanicsWithError("test column not found in the dataframe", func() {
 		suite.df.RenameColumn("test", "newTest")
 	})
 
@@ -55,12 +56,13 @@ func (suite *columnsTestSuite) TestDataFrame_RenameColumn() {
 
 func (suite *columnsTestSuite) TestDataFrame_ResetColumns() {
 	// assert that function panics when incorrect number of column names are provided
-	suite.PanicsWithError("incorrect number of columns are provided", func() {
-		suite.df.ResetColumns([]string{"col1", "col2"})
-	})
+	suite.PanicsWithError("mismatched number of columns provided. requires 2 columns, but 3 was provided",
+		func() {
+			suite.df.ResetColumns([]string{"col1", "col2"})
+		})
 
 	// assert that function panics when column name is not found
-	suite.PanicsWithError("test column is not found", func() {
+	suite.PanicsWithError("test column not found in the dataframe", func() {
 		suite.df.ResetColumns([]string{"test", "col1", "col2"})
 	})
 
@@ -71,7 +73,7 @@ func (suite *columnsTestSuite) TestDataFrame_ResetColumns() {
 
 func (suite *columnsTestSuite) TestDataFrame_Drop() {
 	// assert that function panics when incorrect column names are provided
-	suite.PanicsWithError("testCol column is not found", func() {
+	suite.PanicsWithError("testCol column not found in the dataframe", func() {
 		suite.df.ShallowCopy().Drop("col1", "testCol")
 	})
 
