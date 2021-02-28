@@ -1,6 +1,7 @@
 package dataframes
 
 import (
+	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -33,6 +34,33 @@ func (suite *indexTestSuite) TestDataFrame_SetIndex() {
 		IsCustom: true,
 	}
 	actual := suite.df.ShallowCopy().SetIndex("col1")
+	suite.Equal(expected, actual)
+}
+
+func (suite *indexTestSuite) TestDataFrame_SetIndexBySeries() {
+	// assert that the function panics if the lengths are different
+	s := series.NewSeries("col4", 42, 56, 12, 90)
+	suite.PanicsWithError(errors.MismatchedNumOfRows(5, 4).Error(), func() {
+		suite.df.SetIndexBySeries(s)
+	})
+
+	// assert that the function sets the index properly
+	s = series.NewSeries("col4", 42, 56, 12, 90, 45)
+	suite.Equal(Index{Data: s, IsCustom: true}, suite.df.ShallowCopy().SetIndexBySeries(s).Index)
+}
+
+func (suite *indexTestSuite) TestDataFrame_ResetIndex() {
+	// assert that the function returns the dataframe if index is default
+	suite.Equal(suite.df, suite.df.ResetIndex(true))
+
+	// assert that the function adds a new column if drop is false
+	df := suite.df.ShallowCopy().SetIndex("col3")
+	suite.Equal(suite.df, df.ResetIndex(false))
+
+	// assert that the function drops the index column if drop is true
+	df = suite.df.ShallowCopy().SetIndex("col3")
+	expected := suite.df.ShallowCopy().Drop("col3")
+	actual := df.ResetIndex(true)
 	suite.Equal(expected, actual)
 }
 

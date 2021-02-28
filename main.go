@@ -11,5 +11,7 @@ func main() {
 		return
 	}
 
+	df.SetIndex("species")
+	df.ResetIndex(true)
 	fmt.Println(df.Head(5))
 }
