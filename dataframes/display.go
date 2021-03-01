@@ -21,8 +21,25 @@ func (df *DataFrame) createHeader(colLengths []int) (string, string) {
 
 	// adding col names content
 	for i, col := range df.Columns() {
+		if i == 0 {
+			spaces := strings.Repeat(" ", colLengths[i])
+			sb.WriteString("|" + spaces)
+			continue
+		}
 		extraSpaces := strings.Repeat(" ", colLengths[i]-len(col))
 		sb.WriteString("|" + extraSpaces + col)
+	}
+	sb.WriteString("|\n")
+
+	// adding index col header
+	for i, col := range df.Columns() {
+		if i == 0 {
+			extraSpaces := strings.Repeat(" ", colLengths[i]-len(col))
+			sb.WriteString("|" + extraSpaces + col)
+			continue
+		}
+		spaces := strings.Repeat(" ", colLengths[i])
+		sb.WriteString("|" + spaces)
 	}
 	sb.WriteString("|\n")
 

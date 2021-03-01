@@ -23,6 +23,10 @@ func (df *DataFrame) ILoc(indices []int, columns []string) *DataFrame {
 	}
 
 	newDF := NewDataFrame(seriesArray...)
+	newDF.Index = Index{
+		Data:     df.Index.Data.Loc(indices),
+		IsCustom: df.Index.IsCustom,
+	}
 	return newDF
 }
 

@@ -54,6 +54,7 @@ func (suite *locateTestSuite) TestDataFrame_Tail() {
 	// assert that the function returns the correct dataframe
 	indices := []int{2, 3, 4}
 	expected := NewDataFrame(suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
+	expected.Index.Data = series.NewSeries("#", 2, 3, 4)
 	suite.Equal(expected, suite.df.Tail(3))
 }
 
