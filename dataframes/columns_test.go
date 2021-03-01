@@ -82,6 +82,17 @@ func (suite *columnsTestSuite) TestDataFrame_Drop() {
 	suite.Equal(expected, suite.df.ShallowCopy().Drop("col1", "col2"))
 }
 
+func (suite *columnsTestSuite) TestDataFrame_IsColumnIncluded() {
+	// assert that function returns -1 when column is empty
+	suite.Equal(-1, suite.df.IsColumnIncluded(""))
+
+	// assert that function returns -1 when column is not found
+	suite.Equal(-1, suite.df.IsColumnIncluded("col5"))
+
+	// assert that function returns correct index when column is found
+	suite.Equal(1, suite.df.IsColumnIncluded("col2"))
+}
+
 func TestColumnsTestSuite(t *testing.T) {
 	suite.Run(t, new(columnsTestSuite))
 }

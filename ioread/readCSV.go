@@ -9,6 +9,13 @@ import (
 	"strings"
 )
 
+//CsvOptions describes the read options specific to only csv format
+type CsvOptions struct {
+	Path      string
+	Delimiter string
+	IndexCol  string
+}
+
 // ReadCSV reads a csv file using the given option arguments. Returns the created dataframe
 // with an error, if any.
 //
@@ -49,5 +56,12 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 		isHeader = false
 	}
 
-	return convertRowContentToDF(colNames, content), nil
+	df := convertRowContentToDF(colNames, content)
+
+	// set the index, if provided
+	if df.IsColumnIncluded(options.IndexCol) != -1 {
+
+	}
+
+	return df, nil
 }

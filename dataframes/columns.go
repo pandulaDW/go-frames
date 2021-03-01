@@ -104,4 +104,13 @@ func (df *DataFrame) Drop(colNames ...string) *DataFrame {
 	return df
 }
 
-// TODO - change methods to return a dataframe
+// IsColumnIncluded returns the index position of the column name provided.
+// If the column is not found, the function will return -1.
+func (df *DataFrame) IsColumnIncluded(colName string) int {
+	for _, col := range df.columns {
+		if col.Name == colName {
+			return col.ColIndex
+		}
+	}
+	return -1
+}
