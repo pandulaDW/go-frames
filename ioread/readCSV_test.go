@@ -23,6 +23,12 @@ func TestReadCSV(t *testing.T) {
 	actual, _ := ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisSample.csv"), Delimiter: ","})
 	assert.Equal(t, expected, actual)
 
+	// assert that index col is set correctly
+	expected = expected.ShallowCopy().SetIndex("petal_length")
+	actual, _ = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisSample.csv"), Delimiter: ",",
+		IndexCol: "petal_length"})
+	assert.Equal(t, expected, actual)
+
 	// assert that an error will be produced for mismatched samples
 	actual, err := ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisIncorrect.csv"), Delimiter: ","})
 	assert.Nil(t, actual)
