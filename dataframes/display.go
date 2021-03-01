@@ -50,16 +50,22 @@ func (df *DataFrame) createBody(colLengths []int) string {
 
 func (df *DataFrame) String() string {
 	sb := strings.Builder{}
-	colLengths := make([]int, 0, len(df.columns))
+
+	// adding index column as the first column
+	indexColName := df.Index.Data.GetColumn().Name
+	cols := append([]string{indexColName}, df.Columns()...)
+	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data).ResetColumns(cols)
+
+	colLengths := make([]int, 0, len(copiedDF.columns))
 
 	// calculating header lengths
-	for _, col := range df.Columns() {
-		colLength := df.Data[col].GetMaxLength()
+	for _, col := range copiedDF.Columns() {
+		colLength := copiedDF.Data[col].GetMaxLength()
 		colLengths = append(colLengths, colLength)
 	}
 
-	header, band := df.createHeader(colLengths)
-	body := df.createBody(colLengths)
+	header, band := copiedDF.createHeader(colLengths)
+	body := copiedDF.createBody(colLengths)
 	sb.WriteString(header)
 	sb.WriteString(body)
 	sb.WriteString(band)

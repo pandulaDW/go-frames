@@ -23,14 +23,14 @@ func (suite *locateTestSuite) SetupTest() {
 	suite.dfLocExpected = NewDataFrame(suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
 }
 
-func (suite *locateTestSuite) TestDataFrame_Loc() {
+func (suite *locateTestSuite) TestDataFrame_ILoc() {
 	// assert that function panics when a wrong column name is given
 	suite.PanicsWithError("testCol column is not found", func() {
-		suite.df.Loc([]int{1, 2, 3}, []string{"testCol"})
+		suite.df.ILoc([]int{1, 2, 3}, []string{"testCol"})
 	})
 
 	// assert that the function returns the correct dataframe
-	suite.Equal(suite.dfLocExpected, suite.df.Loc([]int{0, 1, 2}, suite.df.Columns()))
+	suite.Equal(suite.dfLocExpected, suite.df.ILoc([]int{0, 1, 2}, suite.df.Columns()))
 }
 
 func (suite *locateTestSuite) TestDataFrame_Head() {
@@ -41,8 +41,7 @@ func (suite *locateTestSuite) TestDataFrame_Head() {
 
 	// assert that the function returns the correct dataframe
 	indices := []int{0, 1, 2}
-	expected := NewDataFrame(series.NewSeries("#", 0, 1, 2),
-		suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
+	expected := NewDataFrame(suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
 	suite.Equal(expected, suite.df.Head(3))
 }
 
@@ -54,8 +53,7 @@ func (suite *locateTestSuite) TestDataFrame_Tail() {
 
 	// assert that the function returns the correct dataframe
 	indices := []int{2, 3, 4}
-	expected := NewDataFrame(series.NewSeries("#", 2, 3, 4),
-		suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
+	expected := NewDataFrame(suite.col1.Loc(indices), suite.col2.Loc(indices), suite.col3.Loc(indices))
 	suite.Equal(expected, suite.df.Tail(3))
 }
 

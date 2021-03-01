@@ -23,15 +23,15 @@ func (suite *displayTestSuite) SetupTest() {
 
 func (suite *displayTestSuite) TestString() {
 	expected := `
-+----+------+-----+-----+
-|col1|  col2| col3| col4|
-+----+------+-----+-----+
-|  12|   foo|54.31| true|
-|  34|   bar| 1.23|false|
-|  54|   raz| 45.6| true|
-|  65| apple|23.12| true|
-|  90|orange| 23.2|false|
-+----+------+-----+-----+
++-+----+------+-----+-----+
+|#|col1|  col2| col3| col4|
++-+----+------+-----+-----+
+|0|  12|   foo|54.31| true|
+|1|  34|   bar| 1.23|false|
+|2|  54|   raz| 45.6| true|
+|3|  65| apple|23.12| true|
+|4|  90|orange| 23.2|false|
++-+----+------+-----+-----+
 `
 	expected = strings.TrimSpace(expected)
 	// assert that string representation matches

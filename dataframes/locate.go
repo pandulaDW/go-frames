@@ -6,11 +6,11 @@ import (
 	"github.com/pandulaDW/go-frames/series"
 )
 
-// Loc will access a group of rows by an integer array and and columns by an string array.
+// ILoc will access a group of rows by an integer array and and columns by an string array.
 // Panics if out of range indices are found or an undefined column is given.
 //
-// To return all the columns, use df.Loc([row_indices], df.Columns())
-func (df *DataFrame) Loc(indices []int, columns []string) *DataFrame {
+// To return all the columns, use df.ILoc([row_indices], df.Columns())
+func (df *DataFrame) ILoc(indices []int, columns []string) *DataFrame {
 	seriesArray := make([]*series.Series, 0)
 
 	for _, col := range columns {
@@ -35,16 +35,7 @@ func (df *DataFrame) Head(n int) *DataFrame {
 		panic(errors.CustomError("n cannot be higher than the length of the dataframe"))
 	}
 
-	// column order
-	indexColName := df.Index.Data.GetColumn().Name
-	cols := append([]string{indexColName}, df.Columns()...)
-
-	// add new column as index
-	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data)
-
-	// reset the columns
-	copiedDF.ResetColumns(cols)
-	return copiedDF.Loc(helpers.Range(0, n, 1), copiedDF.Columns())
+	return df.ILoc(helpers.Range(0, n, 1), df.Columns())
 }
 
 // Tail function returns last n rows from the object based on position. It is useful
@@ -56,17 +47,7 @@ func (df *DataFrame) Tail(n int) *DataFrame {
 		panic(errors.CustomError("n cannot be higher than the length of the dataframe"))
 	}
 
-	// column order
-	indexColName := df.Index.Data.GetColumn().Name
-	cols := append([]string{indexColName}, df.Columns()...)
-
-	// add new column as index
-	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data)
-
-	// reset the columns
-	copiedDF.ResetColumns(cols)
-
 	indices := helpers.Range(df.length-1, df.length-n-1, -1)
 	reversedIndices := helpers.ReverseArray(helpers.ToInterfaceFromInt(indices))
-	return copiedDF.Loc(helpers.ToIntArray(reversedIndices), copiedDF.Columns())
+	return df.ILoc(helpers.ToIntArray(reversedIndices), df.Columns())
 }
