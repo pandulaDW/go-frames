@@ -19,6 +19,11 @@ func TestReadCSV(t *testing.T) {
 		series.NewSeries("petal_width", 0.2, 0.2, 0.2, 0.2),
 		series.NewSeries("species", "setosa", "setosa", "setosa", "setosa"))
 
+	// assert that an error is returned if there's an error in reading the file
+	file, err := ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "testFile.csv")})
+	assert.NotNil(t, err)
+	assert.Nil(t, file)
+
 	// assert that a dataframe is created correctly
 	actual, _ := ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisSample.csv"), Delimiter: ","})
 	assert.Equal(t, expected, actual)
@@ -30,7 +35,7 @@ func TestReadCSV(t *testing.T) {
 	assert.Equal(t, expected, actual)
 
 	// assert that an error will be produced for mismatched samples
-	actual, err := ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisIncorrect.csv"), Delimiter: ","})
+	actual, err = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisIncorrect.csv"), Delimiter: ","})
 	assert.Nil(t, actual)
 	assert.EqualError(t, err, "mismatched number of columns in row 3")
 }
