@@ -8,13 +8,13 @@ import (
 )
 
 //fileHandling will handle the file and will return the file
-func fileHandling(path string) *os.File {
+func fileHandling(path string) (*os.File, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		panic(errors.CustomWithStandardError("error in reading the file", err))
+		return nil, errors.CustomWithStandardError("error in reading the file", err)
 	}
 
-	return file
+	return file, nil
 }
 
 //convertRowContentToDF will convert the row based content to a dataframe

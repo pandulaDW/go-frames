@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/iris.csv", Delimiter: ",", IndexCol: "species"})
+	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/iris.csv"})
 	if err != nil {
 		return
 	}

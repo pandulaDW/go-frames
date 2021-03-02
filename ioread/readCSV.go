@@ -11,9 +11,17 @@ import (
 
 //CsvOptions describes the read options specific to only csv format
 type CsvOptions struct {
-	Path      string
-	Delimiter string
-	IndexCol  string
+	Path      string // Any valid string path is acceptable
+	Delimiter string // Delimiter to use. Default will be a ","
+	IndexCol  string // Column to use as the index of the DataFrame. Default index will be used if unspecified
+}
+
+// injectCustomOptions will take in an csv options object and will return it with
+// default options set if parameters were not provided.
+func injectCustomOptions(options *CsvOptions) {
+	if options.Delimiter == "" {
+		options.Delimiter = ","
+	}
 }
 
 // ReadCSV reads a csv file using the given option arguments. Returns the created dataframe
@@ -21,7 +29,14 @@ type CsvOptions struct {
 //
 // Refer the CsvOptions struct to get more information on read arguments.
 func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
-	file := fileHandling(options.Path)
+	// inject the defaults
+	injectCustomOptions(&options)
+
+	// open the file
+	file, err := fileHandling(options.Path)
+	if err != nil {
+		return nil, err
+	}
 	defer file.Close()
 
 	// helper variables
@@ -52,7 +67,6 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 			}
 			content = append(content, rowData)
 		}
-
 		isHeader = false
 	}
 
