@@ -70,7 +70,7 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 		isHeader = false
 	}
 
-	df := convertRowContentToDF(colNames, content)
+	df := dataframes.ConvertRowContentToDF(colNames, content)
 
 	// set the index, if provided
 	if df.IsColumnIncluded(options.IndexCol) != -1 {

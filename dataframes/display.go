@@ -6,7 +6,7 @@ import (
 )
 
 // creates the header portion of the dataframe with columns
-func (df *DataFrame) createHeader(colLengths []int) (string, string) {
+func (df *DataFrame) createHeader(colLengths []int, isCustomIndex bool) (string, string) {
 	sb := strings.Builder{}
 
 	// creating the upper and lower bands
@@ -31,17 +31,19 @@ func (df *DataFrame) createHeader(colLengths []int) (string, string) {
 	}
 	sb.WriteString("|\n")
 
-	// adding index col header
-	for i, col := range df.Columns() {
-		if i == 0 {
-			extraSpaces := strings.Repeat(" ", colLengths[i]-len(col))
-			sb.WriteString("|" + extraSpaces + col)
-			continue
+	// adding index col header if index is custom
+	if isCustomIndex {
+		for i, col := range df.Columns() {
+			if i == 0 {
+				extraSpaces := strings.Repeat(" ", colLengths[i]-len(col))
+				sb.WriteString("|" + extraSpaces + col)
+				continue
+			}
+			spaces := strings.Repeat(" ", colLengths[i])
+			sb.WriteString("|" + spaces)
 		}
-		spaces := strings.Repeat(" ", colLengths[i])
-		sb.WriteString("|" + spaces)
+		sb.WriteString("|\n")
 	}
-	sb.WriteString("|\n")
 
 	// adding lower band
 	sb.WriteString(band.String() + "\n")
@@ -81,7 +83,7 @@ func (df *DataFrame) String() string {
 		colLengths = append(colLengths, colLength)
 	}
 
-	header, band := copiedDF.createHeader(colLengths)
+	header, band := copiedDF.createHeader(colLengths, df.Index.IsCustom)
 	body := copiedDF.createBody(colLengths)
 	sb.WriteString(header)
 	sb.WriteString(body)
