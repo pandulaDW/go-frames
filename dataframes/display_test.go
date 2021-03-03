@@ -25,7 +25,6 @@ func (suite *displayTestSuite) TestString() {
 	expected := `
 +-+----+------+-----+-----+
 | |col1|  col2| col3| col4|
-|#|    |      |     |     |
 +-+----+------+-----+-----+
 |0|  12|   foo|54.31| true|
 |1|  34|   bar| 1.23|false|
@@ -37,6 +36,22 @@ func (suite *displayTestSuite) TestString() {
 	expected = strings.TrimSpace(expected)
 	// assert that string representation matches
 	suite.Equal(expected, suite.df.String())
+
+	// assert that the index is correctly represented when displaying
+	expected = `
++------+----+-----+-----+
+|      |col1| col3| col4|
+|  col2|    |     |     |
++------+----+-----+-----+
+|   foo|  12|54.31| true|
+|   bar|  34| 1.23|false|
+|   raz|  54| 45.6| true|
+| apple|  65|23.12| true|
+|orange|  90| 23.2|false|
++------+----+-----+-----+
+`
+	expected = strings.TrimSpace(expected)
+	suite.Equal(expected, suite.df.ShallowCopy().SetIndex("col2").String())
 }
 
 func TestDisplayTestSuite(t *testing.T) {
