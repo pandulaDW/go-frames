@@ -46,6 +46,9 @@ func TestNewDataFrame(t *testing.T) {
 			NewDataFrame(col1, col2, col3, col4, col5, newCol)
 		})
 
+	// assert that the function converts int values to floats in mixed type series
+	assert.Equal(t, []interface{}{float64(14), 12.23, 32.5, float64(64), 34.1}, col5.Data)
+
 	// assert that the function panics when duplicate column is given
 	assert.PanicsWithError(t, "col1 column is already in the dataframe",
 		func() {

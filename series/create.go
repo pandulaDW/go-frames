@@ -30,14 +30,14 @@ func NewSeries(colName string, data ...interface{}) *Series {
 // InferType will assert the type of the series based on its data.
 //
 // If the column contains a mix of int types and float types, then that column will
-// be considered as a float column.
+// be considered as a float column and the value will be converted to a float type.
 //
 // Date columns will be initiated as an object value and can be later cased as datetime.
 //
 // blank cells are considered as NA and if they are present in a numerical or boolean columns,
 // column dtype will not be considered as an object.
 func (s *Series) InferType() {
-	for _, val := range s.Data {
+	for i, val := range s.Data {
 		// if at least one value is object, the column will be set as object
 		if s.column.Dtype == base.Object {
 			break
@@ -45,10 +45,23 @@ func (s *Series) InferType() {
 		switch val.(type) {
 		case int:
 			if s.column.Dtype == base.Float {
+				s.Data[i] = float64(val.(int))
 				continue
 			}
 			s.column.Dtype = base.Int
 		case float64:
+			// if int is already set, traverse back and cast every int to float
+			if s.column.Dtype == base.Int {
+				for j, intVal := range s.Data {
+					value, ok := intVal.(int)
+					if ok {
+						s.Data[j] = float64(value)
+					}
+					if j == i-1 {
+						break
+					}
+				}
+			}
 			s.column.Dtype = base.Float
 		case bool:
 			s.column.Dtype = base.Bool

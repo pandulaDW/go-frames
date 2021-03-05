@@ -39,7 +39,7 @@ func (suite *applyTestSuite) TestDataFrame_ApplyToRows() {
 	suite.EqualError(err, suite.err.Error())
 
 	// assert that function returns a dataframe with nil if no error
-	df = NewDataFrame(suite.col2, suite.col3)
+	df = NewDataFrame(suite.col2)
 	actual, err := df.ApplyToRows(suite.fun)
 	suite.Nil(err)
 	suite.NotNil(actual)

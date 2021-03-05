@@ -56,7 +56,7 @@ func (suite *infoTestSuite) TestDescribe() {
 		series.NewSeries("", "max", "min", "sum", "avg"),
 		series.NewSeries("col1", 90, 12, float64(255), float64(51)),
 		series.NewSeries("col3", 54.31, 1.23, 147.46, 29.49),
-		series.NewSeries("col5", 124, 14, float64(268), 53.6),
+		series.NewSeries("col5", float64(124), float64(14), float64(268), 53.6),
 		series.NewSeries("col6", 78.3, 5.63, 173.67, 34.73),
 	)
 
