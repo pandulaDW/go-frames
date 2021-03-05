@@ -1,31 +1,20 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"github.com/pandulaDW/go-frames/ioread"
-	"math"
+	"log"
 )
 
 func main() {
-	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/iris.csv"})
+	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/constituents_csv.csv"})
 	if err != nil {
+		log.Fatal(err)
 		return
 	}
 
-	//df.Drop("species")
-	roundTo2 := func(val interface{}) (interface{}, error) {
-		floatVal, ok := val.(float64)
-		if !ok {
-			return nil, errors.New("not a good value")
-		}
-		return math.Round(floatVal), nil
-	}
-
-	df, err = df.ApplyToRows(roundTo2)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(df.Head(5))
+	m := df.Data["Sector"].ValueCounts()
+	for key, val := range m {
+		fmt.Printf("%v: %v\n", key, val)
 	}
 }
