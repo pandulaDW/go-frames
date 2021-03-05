@@ -2,7 +2,10 @@ package dataframes
 
 import (
 	"fmt"
+	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/helpers"
 	"strings"
+	"time"
 )
 
 // creates the header portion of the dataframe with columns
@@ -56,9 +59,15 @@ func (df *DataFrame) createBody(colLengths []int) string {
 	sb := strings.Builder{}
 
 	for i := 0; i < df.length; i++ {
-		for colIndex, col := range df.Columns() {
-			strRepr := fmt.Sprintf("%v", df.Data[col].Data[i])
-			extraSpaces := strings.Repeat(" ", colLengths[colIndex]-len(strRepr))
+		for _, col := range df.columns {
+			var strRepr string
+			val := df.Data[col.Name].Data[i]
+			if col.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
+				strRepr = val.(time.Time).Format("2006-01-02")
+			} else {
+				strRepr = fmt.Sprintf("%v", val)
+			}
+			extraSpaces := strings.Repeat(" ", colLengths[col.ColIndex]-len(strRepr))
 			sb.WriteString("|" + extraSpaces + strRepr)
 		}
 		sb.WriteString("|\n")

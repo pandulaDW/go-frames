@@ -40,7 +40,8 @@ func (s *Series) InferType() {
 	for i, val := range s.Data {
 		// if at least one value is object, the column will be set as object
 		if s.column.Dtype == base.Object {
-			break
+			s.Data[i] = fmt.Sprintf("%v", val)
+			continue
 		}
 		switch val.(type) {
 		case int:
@@ -70,6 +71,7 @@ func (s *Series) InferType() {
 				continue
 			}
 			s.column.Dtype = base.Object
+			s.Data[i] = fmt.Sprintf("%v", val)
 		}
 	}
 }
