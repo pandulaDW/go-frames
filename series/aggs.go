@@ -3,7 +3,6 @@ package series
 import (
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
-	"github.com/pandulaDW/go-frames/helpers"
 	"math"
 	"time"
 )
@@ -28,12 +27,12 @@ func (s *Series) Max() interface{} {
 		return maxInt
 	case base.Float:
 		for i, val := range s.Data {
-			assertedVal, ok := helpers.ConvertToFloat(val)
+			floatVal, ok := val.(float64)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
-			if *assertedVal > maxFloat {
-				maxFloat = *assertedVal
+			if floatVal > maxFloat {
+				maxFloat = floatVal
 			}
 		}
 		return maxFloat
@@ -77,12 +76,12 @@ func (s *Series) Min() interface{} {
 		return minInt
 	case base.Float:
 		for i, val := range s.Data {
-			assertedVal, ok := helpers.ConvertToFloat(val)
+			floatVal, ok := val.(float64)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
-			if *assertedVal < minFloat {
-				minFloat = *assertedVal
+			if floatVal < minFloat {
+				minFloat = floatVal
 			}
 		}
 		return minFloat
@@ -124,11 +123,11 @@ func (s *Series) Sum() float64 {
 		return float64(sumInt)
 	case base.Float:
 		for i, val := range s.Data {
-			assertedVal, ok := helpers.ConvertToFloat(val)
+			floatVal, ok := val.(float64)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 			}
-			sumFloat += *assertedVal
+			sumFloat += floatVal
 		}
 		return sumFloat
 	default:

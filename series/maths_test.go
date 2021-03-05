@@ -19,7 +19,7 @@ func TestSeries_Round(t *testing.T) {
 	assert.NotEqual(t, s.Round(2, false), s)
 
 	// assert that the function will panic if a wrong type series is given
-	assert.PanicsWithError(t, "only series with float type can be rounded", func() {
+	assert.PanicsWithError(t, "only a series with float type can be rounded", func() {
 		NewSeries("col", "foo", "bar").Round(2, true)
 	})
 
