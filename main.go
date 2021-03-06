@@ -17,7 +17,6 @@ func main() {
 	fmt.Println(df.Tail(5))
 }
 
-// TODO - modify string conversion in inference
 // TODO - check to see how to run series creation in different go-frames
 // TODO - add display tests
 // TODO - adjust display when number of rows are high

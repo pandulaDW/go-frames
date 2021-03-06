@@ -35,6 +35,7 @@ func (suite *createTestSuite) TestSeries_InferType() {
 	// assert that values such as slices and maps will be converted to strings
 	s = NewSeries("col", 21, "bar", []int{12, 4}, map[string]int{"foo": 1})
 	suite.Equal(base.Object, s.column.Dtype)
+	suite.Equal([]interface{}{"21", "bar", "[12 4]", "map[foo:1]"}, s.Data)
 
 	// assert that mix types of floats and int will be treated as float
 	s = NewSeries("col", 12, 23.43, 54.32, 43.54, 23, 34.54, 5.6, 90)

@@ -72,6 +72,13 @@ func (s *Series) InferType() {
 			}
 			s.column.Dtype = base.Object
 			s.Data[i] = fmt.Sprintf("%v", val)
+			// traverse back and change all previous values to string
+			for j, otherVal := range s.Data {
+				s.Data[j] = fmt.Sprintf("%v", otherVal)
+				if j == i-1 {
+					break
+				}
+			}
 		}
 	}
 }
