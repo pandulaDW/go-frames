@@ -96,8 +96,8 @@ func (df *DataFrame) Drop(colNames ...string) *DataFrame {
 	}
 
 	filteredCols := make([]*base.Column, 0)
-	for colName := range df.Data {
-		filteredCols = append(filteredCols, df.Data[colName].GetColumn())
+	for _, column := range df.columns {
+		filteredCols = append(filteredCols, column)
 	}
 
 	df.columns = filteredCols
