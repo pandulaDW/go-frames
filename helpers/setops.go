@@ -12,6 +12,8 @@ func Difference(a, b []interface{}) []interface{} {
 			_, ok := m[val]
 			if !ok {
 				m[val] = 0
+			} else {
+				m[val]++
 			}
 		}
 	}
@@ -19,8 +21,10 @@ func Difference(a, b []interface{}) []interface{} {
 	populateMap(a)
 	populateMap(b)
 
-	for key := range m {
-		diff = append(diff, key)
+	for key, val := range m {
+		if val == 0 {
+			diff = append(diff, key)
+		}
 	}
 
 	return diff

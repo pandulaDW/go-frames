@@ -95,9 +95,14 @@ func (df *DataFrame) Drop(colNames ...string) *DataFrame {
 		}
 	}
 
+	diffCols := helpers.Difference(helpers.ToInterfaceFromString(colNames),
+		helpers.ToInterfaceFromString(df.Columns()))
+
 	filteredCols := make([]*base.Column, 0)
 	for _, column := range df.columns {
-		filteredCols = append(filteredCols, column)
+		if helpers.LinearSearch(column.Name, diffCols) != -1 {
+			filteredCols = append(filteredCols, column)
+		}
 	}
 
 	df.columns = filteredCols
