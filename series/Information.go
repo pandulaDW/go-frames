@@ -17,7 +17,7 @@ func (s *Series) ValueCounts() map[interface{}]int {
 	for _, val := range s.Data {
 		_, ok := countMap[val]
 		if !ok {
-			countMap[val] = 0
+			countMap[val] = 1
 		} else {
 			countMap[val]++
 		}
