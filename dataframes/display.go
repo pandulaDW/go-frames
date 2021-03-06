@@ -54,22 +54,51 @@ func (df *DataFrame) createHeader(colLengths []int, isCustomIndex bool) (string,
 	return sb.String(), band.String()
 }
 
+// createRowString creates a string representation of a row
+func (df *DataFrame) createRowString(i int, colLengths []int, sb *strings.Builder) {
+	for _, col := range df.columns {
+		var strRepr string
+		val := df.Data[col.Name].Data[i]
+		if col.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
+			strRepr = val.(time.Time).Format("2006-01-02")
+		} else {
+			strRepr = fmt.Sprintf("%v", val)
+		}
+		extraSpaces := strings.Repeat(" ", colLengths[col.ColIndex]-len(strRepr))
+		sb.WriteString("|" + extraSpaces + strRepr)
+	}
+}
+
 // creates the body portion of the dataframe
 func (df *DataFrame) createBody(colLengths []int) string {
 	sb := strings.Builder{}
 
 	for i := 0; i < df.length; i++ {
-		for _, col := range df.columns {
-			var strRepr string
-			val := df.Data[col.Name].Data[i]
-			if col.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
-				strRepr = val.(time.Time).Format("2006-01-02")
-			} else {
-				strRepr = fmt.Sprintf("%v", val)
-			}
-			extraSpaces := strings.Repeat(" ", colLengths[col.ColIndex]-len(strRepr))
-			sb.WriteString("|" + extraSpaces + strRepr)
-		}
+		df.createRowString(i, colLengths, &sb)
+		sb.WriteString("|\n")
+	}
+
+	return sb.String()
+}
+
+// creates the body portion for large dataframes
+func (df *DataFrame) createBodyLarge(colLengths []int) string {
+	sb := strings.Builder{}
+
+	for i := 0; i < 5; i++ {
+		df.createRowString(i, colLengths, &sb)
+		sb.WriteString("|\n")
+	}
+
+	for _, col := range df.columns {
+		strRepr := "..."
+		extraSpaces := strings.Repeat(" ", colLengths[col.ColIndex]-len(strRepr))
+		sb.WriteString("|" + extraSpaces + strRepr)
+	}
+	sb.WriteString("|\n")
+
+	for i := df.length - 5; i < df.length; i++ {
+		df.createRowString(i, colLengths, &sb)
 		sb.WriteString("|\n")
 	}
 
@@ -93,7 +122,12 @@ func (df *DataFrame) String() string {
 	}
 
 	header, band := copiedDF.createHeader(colLengths, df.Index.IsCustom)
-	body := copiedDF.createBody(colLengths)
+	var body string
+	if df.length < 100 {
+		body = copiedDF.createBody(colLengths)
+	} else {
+		body = copiedDF.createBodyLarge(colLengths)
+	}
 	sb.WriteString(header)
 	sb.WriteString(body)
 	sb.WriteString(band)
