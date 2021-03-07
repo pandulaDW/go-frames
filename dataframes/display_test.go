@@ -52,7 +52,6 @@ func (suite *displayTestSuite) TestString() {
 |orange|  90| 23.2|false| 2011-02-01|
 +------+----+-----+-----+-----------+
 `
-
 	expected = strings.TrimSpace(expected)
 	suite.Equal(expected, suite.df.ShallowCopy().SetIndex("col2").String())
 }
