@@ -18,8 +18,9 @@ func (df *DataFrame) createInfoFooter() string {
 	}
 
 	valueCounts := helpers.ValueCounts(dtypes)
-	dtypeStr := fmt.Sprintf("dtypes: float(%d), int(%d), object(%d), bool(%d)\n",
-		valueCounts[base.Float], valueCounts[base.Int], valueCounts[base.Object], valueCounts[base.Bool])
+	dtypeStr := fmt.Sprintf("dtypes: float(%d), int(%d), object(%d), datetime(%d), bool(%d)\n",
+		valueCounts[base.Float], valueCounts[base.Int], valueCounts[base.Object], valueCounts[base.DateTime],
+		valueCounts[base.Bool])
 
 	memSizeStr := fmt.Sprintf("memory usage: %s", helpers.ConvertSizeToString(memSize))
 	return dtypeStr + memSizeStr
@@ -35,12 +36,11 @@ func (df *DataFrame) createInfoDF() *DataFrame {
 		dTypes = append(dTypes, df.columns[i].Dtype)
 	}
 
-	col0 := series.NewSeries("#", indices...)
 	col1 := series.NewSeries("Column", columnNames...)
 	col2 := series.NewSeries("Non-Null Count", nonNulls...)
 	col3 := series.NewSeries("Dtype", dTypes...)
 
-	info := NewDataFrame(col0, col1, col2, col3)
+	info := NewDataFrame(col1, col2, col3)
 	return info
 }
 

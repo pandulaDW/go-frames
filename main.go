@@ -10,9 +10,8 @@ func main() {
 	_ = df.Data["date"].CastAsTime("2006-01-02")
 
 	fmt.Println(df.Data["date"].Max())
-	fmt.Println(df)
+	fmt.Println(df.Info())
 }
 
 // TODO - check to see how to run series creation in different go-frames
-// TODO - adjust display when number of rows are high
 // TODO - add series display

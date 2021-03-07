@@ -5,11 +5,13 @@ import (
 	"encoding/gob"
 	"fmt"
 	"github.com/pandulaDW/go-frames/errors"
+	"time"
 )
 
 //GetRealSizeOf returns the number of bytes occupied by a given interface
 func GetRealSizeOf(v interface{}) int {
 	b := new(bytes.Buffer)
+	gob.Register(time.Time{})
 	err := gob.NewEncoder(b).Encode(v)
 	if err != nil {
 		panic(err)
