@@ -1,6 +1,7 @@
 package dataframes
 
 import (
+	"fmt"
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/helpers"
@@ -106,6 +107,24 @@ func (df *DataFrame) Drop(colNames ...string) *DataFrame {
 	}
 
 	df.columns = filteredCols
+	return df
+}
+
+// Select returns the dataframe instance with the specified columns.
+// Column names can be specified as a variadic argument.
+//
+// The function panics if any of the given columns are not found in the dataframe.
+func (df *DataFrame) Select(cols ...string) *DataFrame {
+	diffCols := helpers.Difference(helpers.ToInterfaceFromString(cols),
+		helpers.ToInterfaceFromString(df.Columns()))
+
+	droppedCols := make([]string, 0, len(diffCols))
+	for _, col := range diffCols {
+		droppedCols = append(droppedCols, fmt.Sprintf("%v", col))
+	}
+
+	// will panic here, if the column is not found
+	df.Drop(droppedCols...)
 	return df
 }
 
