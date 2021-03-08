@@ -24,8 +24,9 @@ type CsvOptions struct {
 	// A map of date columns and their respected formats. This is useful if multiple date columns exists
 	// with different formats.
 	//
-	// Format can be specified as the map key and list of column names
-	// can be given as map values.
+	// Format can be specified as the map key and list of column names can be given as map values.
+	//
+	// If both DateCols and ParseDates fields are present, DateCols field will be disregarded.
 	ParseDates map[string][]string
 }
 
@@ -88,6 +89,12 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 	// set the index, if provided
 	if df.IsColumnIncluded(options.IndexCol) != -1 {
 		df.SetIndex(options.IndexCol)
+	}
+
+	// parse the dates
+	err = dateParsing(&options, df)
+	if err != nil {
+		return nil, err
 	}
 
 	return df, nil
