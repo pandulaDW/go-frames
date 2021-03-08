@@ -11,9 +11,22 @@ import (
 
 //CsvOptions describes the read options specific to only csv format
 type CsvOptions struct {
-	Path      string // Any valid string path is acceptable
-	Delimiter string // Delimiter to use. Default will be a ","
-	IndexCol  string // Column to use as the index of the DataFrame. Default index will be used if unspecified
+	// Any valid string path is acceptable
+	Path string
+	// Delimiter to use. Default will be a ","
+	Delimiter string
+	// Column to use as the index of the DataFrame. Default index will be used if unspecified
+	IndexCol string
+	// A list of columns, which should be casted as dates
+	DateCols []string
+	// The default date format to be used. This field is mandatory if the date cols field is specified
+	DateFormatCommon string
+	// A map of date columns and their respected formats. This is useful if multiple date columns exists
+	// with different formats.
+	//
+	// Format can be specified as the map key and list of column names
+	// can be given as map values.
+	ParseDates map[string][]string
 }
 
 // injectCustomOptions will take in an csv options object and will return it with

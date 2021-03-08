@@ -82,6 +82,17 @@ func (suite *columnsTestSuite) TestDataFrame_Drop() {
 	suite.Equal(expected, suite.df.ShallowCopy().Drop("col1", "col2"))
 }
 
+func (suite *columnsTestSuite) TestDataFrame_Select() {
+	// assert that function panics when incorrect column names are provided
+	suite.PanicsWithError("testCol column not found in the dataframe", func() {
+		suite.df.ShallowCopy().Drop("col1", "testCol")
+	})
+
+	// assert that function correctly selects the columns
+	expected := NewDataFrame(suite.col1, suite.col2)
+	suite.Equal(expected, suite.df.ShallowCopy().Select("col1", "col2"))
+}
+
 func (suite *columnsTestSuite) TestDataFrame_IsColumnIncluded() {
 	// assert that function returns -1 when column is empty
 	suite.Equal(-1, suite.df.IsColumnIncluded(""))
