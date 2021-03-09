@@ -1,6 +1,7 @@
 package ioread
 
 import (
+	"fmt"
 	"github.com/pandulaDW/go-frames/dataframes"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/assert"
@@ -25,17 +26,23 @@ func TestReadCSV(t *testing.T) {
 	assert.Nil(t, file)
 
 	// assert that a dataframe is created correctly
-	actual, _ := ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisSample.csv"), Delimiter: ","})
+	actual, _ := ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisSample.csv")})
 	assert.Equal(t, expected, actual)
 
 	// assert that index col is set correctly
 	expected = expected.ShallowCopy().SetIndex("petal_length")
-	actual, _ = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisSample.csv"), Delimiter: ",",
-		IndexCol: "petal_length"})
+	actual, _ = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisSample.csv"), IndexCol: "petal_length"})
 	assert.Equal(t, expected, actual)
 
-	// assert that an error will be produced for mismatched samples
-	actual, err = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisIncorrect.csv"), Delimiter: ","})
+	// assert that an error will be produced for erroneous data
+	actual, err = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisIncorrect.csv")})
 	assert.Nil(t, actual)
-	assert.EqualError(t, err, "mismatched number of columns in row 3")
+	assert.EqualError(t, err, "record on line 4: wrong number of fields")
+
+	// assert that error will be returned for malformed dates
+	actual, err = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "dateIncorrectSample.csv"),
+		DateCols: []string{"date"}, DateFormat: "2006-01-02"})
+	assert.Nil(t, actual)
+	fmt.Println(err)
+	assert.NotNil(t, err)
 }

@@ -30,7 +30,7 @@ func (s *Series) CastAsTime(layout string) error {
 
 		t, err := time.Parse(layout, strValue)
 		if err != nil {
-			return errors.New(fmt.Sprintf("invalid value at row %d. %s", i, err.Error()))
+			return errors.New(fmt.Sprintf("invalid value at line %d. %s", i+1, err.Error()))
 		}
 
 		sData = append(sData, t)

@@ -55,9 +55,11 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 	isHeader := true
 	content := make([][]string, 0)
 
-	// reading the file
+	// create the reader
 	reader := csv.NewReader(file)
 	reader.Comma = options.Delimiter
+
+	// reading the file
 	for {
 		row, err := reader.Read()
 		if err == io.EOF {
@@ -73,6 +75,7 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 		isHeader = false
 	}
 
+	// convert the content to a dataframe
 	df := dataframes.ConvertRowContentToDF(colNames, content)
 
 	// set the index, if provided
