@@ -33,18 +33,18 @@ func TestDateParsing(t *testing.T) {
 	// assert that function returns an error if cols are given and format is not given
 	options = &CsvOptions{DateCols: []string{"col"}}
 	assert.EqualError(t,
-		dateParsing(options, df), "DateFormatCommon field should not be empty if DateCols field is present")
+		dateParsing(options, df), "DateFormat field should not be empty if DateCols field is present")
 
 	// assert that function returns an error if column is not included
-	options = &CsvOptions{DateCols: []string{"col3"}, DateFormatCommon: format}
+	options = &CsvOptions{DateCols: []string{"col3"}, DateFormat: format}
 	assert.EqualError(t, dateParsing(options, df), errors.ColumnNotFound("col3").Error())
 
 	// assert that function returns a cast error for a parsing issue
-	options = &CsvOptions{DateCols: []string{"col1", "col2"}, DateFormatCommon: format}
+	options = &CsvOptions{DateCols: []string{"col1", "col2"}, DateFormat: format}
 	assert.EqualError(t, dateParsing(options, df),
 		"only a series with object type can be inferred as a datetime series")
 
 	// assert that function returns nil if no errors are found
-	options = &CsvOptions{DateCols: []string{"col2"}, DateFormatCommon: format}
+	options = &CsvOptions{DateCols: []string{"col2"}, DateFormat: format}
 	assert.Nil(t, dateParsing(options, df))
 }

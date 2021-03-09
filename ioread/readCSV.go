@@ -1,26 +1,23 @@
 package ioread
 
 import (
-	"bufio"
+	"encoding/csv"
 	"github.com/pandulaDW/go-frames/dataframes"
-	"github.com/pandulaDW/go-frames/errors"
 	"io"
-	"strconv"
-	"strings"
 )
 
 //CsvOptions describes the read options specific to only csv format
 type CsvOptions struct {
 	// Any valid string path is acceptable
 	Path string
-	// Delimiter to use. Default will be a ","
-	Delimiter string
+	// Delimiter to use. Default will be a ','. Must be a valid rune and must not be \r, \n
+	Delimiter rune
 	// Column to use as the index of the DataFrame. Default index will be used if unspecified
 	IndexCol string
 	// A list of columns, which should be casted as dates
 	DateCols []string
 	// The default date format to be used. This field is mandatory if the date cols field is specified
-	DateFormatCommon string
+	DateFormat string
 	// A map of date columns and their respected formats. This is useful if multiple date columns exists
 	// with different formats.
 	//
@@ -33,8 +30,8 @@ type CsvOptions struct {
 // injectCustomOptions will take in an csv options object and will return it with
 // default options set if parameters were not provided.
 func injectCustomOptions(options *CsvOptions) {
-	if options.Delimiter == "" {
-		options.Delimiter = ","
+	if options.Delimiter == 0 {
+		options.Delimiter = ','
 	}
 }
 
@@ -56,30 +53,22 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 	// helper variables
 	var colNames []string
 	isHeader := true
-	columnCount := 0
 	content := make([][]string, 0)
 
 	// reading the file
-	reader := bufio.NewReader(file)
-	rowNumber := 0
+	reader := csv.NewReader(file)
+	reader.Comma = options.Delimiter
 	for {
-		row, err := reader.ReadString('\n')
-		rowNumber++
+		row, err := reader.Read()
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			return nil, errors.CustomWithStandardError("error in reading line "+strconv.Itoa(rowNumber), err)
+			return nil, err
 		}
-
 		if isHeader {
-			colNames = strings.Split(strings.TrimSpace(row), options.Delimiter)
-			columnCount = len(colNames)
+			colNames = row
 		} else {
-			rowData := strings.Split(strings.TrimSpace(row), options.Delimiter)
-			if len(rowData) != columnCount {
-				return nil, errors.CustomError("mismatched number of columns in row " + strconv.Itoa(rowNumber-1))
-			}
-			content = append(content, rowData)
+			content = append(content, row)
 		}
 		isHeader = false
 	}

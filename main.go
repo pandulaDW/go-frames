@@ -3,13 +3,20 @@ package main
 import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/ioread"
+	"log"
 )
 
 func main() {
-	df, _ := ioread.ReadCSV(ioread.CsvOptions{Path: "data/A_data.csv"})
-	_ = df.Data["date"].CastAsTime("2006-01-02")
+	df, err := ioread.ReadCSV(ioread.CsvOptions{
+		Path:       "data/A_data.csv",
+		DateCols:   []string{"date"},
+		DateFormat: "2006-01-02"})
 
-	fmt.Println(df.Select("open", "high"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(df)
 }
 
 // TODO - check to see how to run series creation in different go-frames
