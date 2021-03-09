@@ -38,5 +38,19 @@ func dateParsing(options *CsvOptions, df *dataframes.DataFrame) error {
 		}
 	}
 
+	if options.ParseDates != nil {
+		for format, cols := range options.ParseDates {
+			for _, col := range cols {
+				if _, ok := df.Data[col]; !ok {
+					return errors.ColumnNotFound(col)
+				}
+				err := df.Data[col].CastAsTime(format)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
 	return nil
 }
