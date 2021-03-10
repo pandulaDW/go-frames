@@ -23,7 +23,7 @@ func (suite *definitionTestSuite) TestSeries_Len() {
 }
 
 func (suite *definitionTestSuite) TestSeries_GetColumn() {
-	column := base.Column{Name: "col", Dtype: base.Float64}
+	column := base.Column{Name: "col", Dtype: base.Float}
 	// assert that Column returned correctly
 	assert.Equal(suite.T(), column, *suite.S.GetColumn())
 }
