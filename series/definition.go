@@ -2,7 +2,6 @@ package series
 
 import (
 	"github.com/pandulaDW/go-frames/base"
-	"time"
 )
 
 type column interface {
@@ -20,27 +19,27 @@ type Series interface {
 }
 
 type IntSeries struct {
-	Data []int64
+	Data []base.Int
 	Column
 }
 
 type FloatSeries struct {
-	Data []float64
+	Data []base.Float
 	Column
 }
 
 type BoolSeries struct {
-	Data []bool
+	Data []base.Bool
 	Column
 }
 
 type TimeSeries struct {
-	Data []time.Time
+	Data []base.Time
 	Column
 }
 
 type StringSeries struct {
-	Data []string
+	Data []base.String
 	Column
 }
 

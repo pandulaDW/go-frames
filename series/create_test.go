@@ -14,11 +14,11 @@ type createTestSuite struct {
 func (suite *createTestSuite) TestSeries_InferType() {
 	// assert that an integer type will be asserted correctly
 	s := NewSeries("col", 12, 43, 54, 65, 76)
-	suite.Equal(base.Int, s.column.Dtype)
+	suite.Equal(base.Int64, s.column.Dtype)
 
 	// assert that a float type will be asserted correctly
 	s = NewSeries("col", 1.23, 4.46, 6.45, 7.34, 8.4)
-	suite.Equal(base.Float, s.column.Dtype)
+	suite.Equal(base.Float64, s.column.Dtype)
 
 	// assert that an bool type will be asserted correctly
 	s = NewSeries("col", true, false, false, true, false)
@@ -26,24 +26,24 @@ func (suite *createTestSuite) TestSeries_InferType() {
 
 	// assert that an string type will be asserted correctly
 	s = NewSeries("col", "foo", "bar", "miz")
-	suite.Equal(base.String, s.column.Dtype)
+	suite.Equal(base.StringType, s.column.Dtype)
 
 	// assert that a mixed type will be asserted as object
 	s = NewSeries("col", 12, "foo", 54.21, "bar", true)
-	suite.Equal(base.String, s.column.Dtype)
+	suite.Equal(base.StringType, s.column.Dtype)
 
 	// assert that values such as slices and maps will be converted to strings
 	s = NewSeries("col", 21, "bar", []int{12, 4}, map[string]int{"foo": 1})
-	suite.Equal(base.String, s.column.Dtype)
+	suite.Equal(base.StringType, s.column.Dtype)
 	suite.Equal([]interface{}{"21", "bar", "[12 4]", "map[foo:1]"}, s.Data)
 
 	// assert that mix types of floats and int will be treated as float
 	s = NewSeries("col", 12, 23.43, 54.32, 43.54, 23, 34.54, 5.6, 90)
-	suite.Equal(base.Float, s.column.Dtype)
+	suite.Equal(base.Float64, s.column.Dtype)
 
 	// assert that blanks in types other than string will not be treated as string
 	s = NewSeries("col", "12", "23.43", "54.32", "", "43.54", "23", "34.54")
-	suite.Equal(base.Float, s.column.Dtype)
+	suite.Equal(base.Float64, s.column.Dtype)
 }
 
 func (suite *createTestSuite) TestConvertStringToTypedValue() {
@@ -63,7 +63,7 @@ func (suite *createTestSuite) TestConvertStringToTypedValue() {
 func (suite *createTestSuite) TestNewSeries() {
 	// assert that a new series object will be created
 	expected := NewSeries("newCol", 23, 43, 90, 87)
-	expectedCol := base.Column{Name: "newCol", Dtype: base.Int, ColIndex: 0}
+	expectedCol := base.Column{Name: "newCol", Dtype: base.Int64, ColIndex: 0}
 	actual := Series{column: expectedCol, Data: []interface{}{23, 43, 90, 87}}
 	suite.Equal(*expected, actual)
 }

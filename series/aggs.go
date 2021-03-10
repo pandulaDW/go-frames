@@ -14,7 +14,7 @@ func (s *Series) Max() interface{} {
 	maxFloat := float64(math.MinInt64)
 
 	switch s.column.Dtype {
-	case base.Int:
+	case base.Int64:
 		for i, val := range s.Data {
 			intVal, ok := val.(int)
 			if !ok {
@@ -25,7 +25,7 @@ func (s *Series) Max() interface{} {
 			}
 		}
 		return maxInt
-	case base.Float:
+	case base.Float64:
 		for i, val := range s.Data {
 			floatVal, ok := val.(float64)
 			if !ok {
@@ -63,7 +63,7 @@ func (s *Series) Min() interface{} {
 	minFloat := float64(math.MaxInt64)
 
 	switch s.column.Dtype {
-	case base.Int:
+	case base.Int64:
 		for i, val := range s.Data {
 			intVal, ok := val.(int)
 			if !ok {
@@ -74,7 +74,7 @@ func (s *Series) Min() interface{} {
 			}
 		}
 		return minInt
-	case base.Float:
+	case base.Float64:
 		for i, val := range s.Data {
 			floatVal, ok := val.(float64)
 			if !ok {
@@ -112,7 +112,7 @@ func (s *Series) Sum() float64 {
 	var sumFloat float64
 
 	switch s.column.Dtype {
-	case base.Int:
+	case base.Int64:
 		for i, val := range s.Data {
 			intVal, ok := val.(int)
 			if !ok {
@@ -121,7 +121,7 @@ func (s *Series) Sum() float64 {
 			sumInt += intVal
 		}
 		return float64(sumInt)
-	case base.Float:
+	case base.Float64:
 		for i, val := range s.Data {
 			floatVal, ok := val.(float64)
 			if !ok {
