@@ -19,7 +19,7 @@ func (df *DataFrame) createInfoFooter() string {
 
 	valueCounts := helpers.ValueCounts(dtypes)
 	dtypeStr := fmt.Sprintf("dtypes: float(%d), int(%d), object(%d), datetime(%d), bool(%d)\n",
-		valueCounts[base.Float64], valueCounts[base.Int64], valueCounts[base.StringType], valueCounts[base.DateTime],
+		valueCounts[base.Float], valueCounts[base.Int], valueCounts[base.String], valueCounts[base.DateTime],
 		valueCounts[base.Boolean])
 
 	memSizeStr := fmt.Sprintf("memory usage: %s", helpers.ConvertSizeToString(memSize))
@@ -59,7 +59,7 @@ func (df *DataFrame) Describe() *DataFrame {
 
 	// extract only the numerical columns
 	for _, val := range df.columns {
-		if val.Dtype == base.Int64 || val.Dtype == base.Float64 {
+		if val.Dtype == base.Int || val.Dtype == base.Float {
 			colNames = append(colNames, val.Name)
 		}
 	}

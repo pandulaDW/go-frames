@@ -18,7 +18,7 @@ import (
 func (s *Series) CastAsTime(layout string) error {
 	sData := make([]interface{}, 0, s.Len())
 
-	if s.column.Dtype != base.StringType {
+	if s.column.Dtype != base.String {
 		return errors.New("only a series with object type can be inferred as a datetime series")
 	}
 

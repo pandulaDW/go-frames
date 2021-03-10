@@ -8,11 +8,11 @@ import (
 )
 
 // Round will round the values of the series to the number of decimal places given.
-// It will only work for a Float64 series, and will panic if a series with mismatched type is given
+// It will only work for a Float series, and will panic if a series with mismatched type is given
 //
 // Setting inplace to true will overwrite the current series and will return a new series otherwise
 func (s *Series) Round(n int, inplace bool) *Series {
-	if s.column.Dtype != base.Float64 {
+	if s.column.Dtype != base.Float {
 		panic(errors.New("only a series with float type can be rounded"))
 	}
 	newData := make([]interface{}, 0, s.Len())

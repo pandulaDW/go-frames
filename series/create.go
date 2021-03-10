@@ -6,9 +6,9 @@ import (
 	"strconv"
 )
 
-//NewSeries will create a new series based on the column name and the
+// NewIntSeries will create a new Int series based on the column name and the
 // variadic arguments given
-func NewSeries(colName string, data ...interface{}) *Series {
+func NewIntSeries(colName string, data ...int64) *Series {
 	column := base.Column{Name: colName}
 	seriesData := make([]interface{}, 0, len(data))
 
@@ -39,20 +39,20 @@ func NewSeries(colName string, data ...interface{}) *Series {
 func (s *Series) InferType() {
 	for i, val := range s.Data {
 		// if at least one value is object, the column will be set as object
-		if s.column.Dtype == base.StringType {
+		if s.column.Dtype == base.String {
 			s.Data[i] = fmt.Sprintf("%v", val)
 			continue
 		}
 		switch val.(type) {
 		case int:
-			if s.column.Dtype == base.Float64 {
+			if s.column.Dtype == base.Float {
 				s.Data[i] = float64(val.(int))
 				continue
 			}
-			s.column.Dtype = base.Int64
+			s.column.Dtype = base.Int
 		case float64:
 			// if int is already set, traverse back and cast every int to float
-			if s.column.Dtype == base.Int64 {
+			if s.column.Dtype == base.Int {
 				for j, intVal := range s.Data {
 					value, ok := intVal.(int)
 					if ok {
@@ -63,14 +63,14 @@ func (s *Series) InferType() {
 					}
 				}
 			}
-			s.column.Dtype = base.Float64
+			s.column.Dtype = base.Float
 		case bool:
 			s.column.Dtype = base.Boolean
 		default:
-			if val == "" && s.column.Dtype != base.StringType {
+			if val == "" && s.column.Dtype != base.String {
 				continue
 			}
-			s.column.Dtype = base.StringType
+			s.column.Dtype = base.String
 			s.Data[i] = fmt.Sprintf("%v", val)
 			// traverse back and change all previous values to string
 			for j, otherVal := range s.Data {
