@@ -39,20 +39,20 @@ func NewSeries(colName string, data ...interface{}) *Series {
 func (s *Series) InferType() {
 	for i, val := range s.Data {
 		// if at least one value is object, the column will be set as object
-		if s.column.Dtype == base.Object {
+		if s.column.Dtype == base.StringType {
 			s.Data[i] = fmt.Sprintf("%v", val)
 			continue
 		}
 		switch val.(type) {
 		case int:
-			if s.column.Dtype == base.Float {
+			if s.column.Dtype == base.Float64 {
 				s.Data[i] = float64(val.(int))
 				continue
 			}
-			s.column.Dtype = base.Int
+			s.column.Dtype = base.Int64
 		case float64:
 			// if int is already set, traverse back and cast every int to float
-			if s.column.Dtype == base.Int {
+			if s.column.Dtype == base.Int64 {
 				for j, intVal := range s.Data {
 					value, ok := intVal.(int)
 					if ok {
@@ -63,14 +63,14 @@ func (s *Series) InferType() {
 					}
 				}
 			}
-			s.column.Dtype = base.Float
+			s.column.Dtype = base.Float64
 		case bool:
-			s.column.Dtype = base.Bool
+			s.column.Dtype = base.Boolean
 		default:
-			if val == "" && s.column.Dtype != base.Object {
+			if val == "" && s.column.Dtype != base.StringType {
 				continue
 			}
-			s.column.Dtype = base.Object
+			s.column.Dtype = base.StringType
 			s.Data[i] = fmt.Sprintf("%v", val)
 			// traverse back and change all previous values to string
 			for j, otherVal := range s.Data {

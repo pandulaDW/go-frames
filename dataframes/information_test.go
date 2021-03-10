@@ -42,7 +42,7 @@ func (suite *infoTestSuite) TestCreateInfoDF() {
 		series.NewSeries("Column", "col1", "col2", "col3", "col4", "col5", "col6", "col7"),
 		series.NewSeries("Non-Null Count", helpers.RepeatIntoSlice("5 non-null", 7)...),
 		series.NewSeries("Dtype",
-			base.Int, base.Object, base.Float, base.Bool, base.Int, base.Float, base.DateTime))
+			base.Int64, base.StringType, base.Float64, base.Boolean, base.Int64, base.Float64, base.DateTime))
 	actual := suite.df.createInfoDF()
 	// assert that the info body dataframe is created successfully
 	suite.Equal(expected, actual)
