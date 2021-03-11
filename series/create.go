@@ -6,9 +6,9 @@ import (
 	"strconv"
 )
 
-// NewIntSeries will create a new Int series based on the column name and the
+//NewSeries will create a new series based on the column name and the
 // variadic arguments given
-func NewIntSeries(colName string, data ...int64) *Series {
+func NewSeries(colName string, data ...interface{}) *Series {
 	column := base.Column{Name: colName}
 	seriesData := make([]interface{}, 0, len(data))
 
@@ -39,7 +39,7 @@ func NewIntSeries(colName string, data ...int64) *Series {
 func (s *Series) InferType() {
 	for i, val := range s.Data {
 		// if at least one value is object, the column will be set as object
-		if s.column.Dtype == base.String {
+		if s.column.Dtype == base.Object {
 			s.Data[i] = fmt.Sprintf("%v", val)
 			continue
 		}
@@ -65,12 +65,12 @@ func (s *Series) InferType() {
 			}
 			s.column.Dtype = base.Float
 		case bool:
-			s.column.Dtype = base.Boolean
+			s.column.Dtype = base.Bool
 		default:
-			if val == "" && s.column.Dtype != base.String {
+			if val == "" && s.column.Dtype != base.Object {
 				continue
 			}
-			s.column.Dtype = base.String
+			s.column.Dtype = base.Object
 			s.Data[i] = fmt.Sprintf("%v", val)
 			// traverse back and change all previous values to string
 			for j, otherVal := range s.Data {
