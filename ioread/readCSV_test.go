@@ -4,7 +4,6 @@ import (
 	"github.com/pandulaDW/go-frames/dataframes"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -47,18 +46,7 @@ func TestReadCSV(t *testing.T) {
 
 	// assert that function skip error lines correctly
 	actual, err = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisIncorrect.csv"),
-		SkipErrorLines: true})
+		SkipErrorLines: true, WarnErrorLines: true})
 	assert.NotNil(t, actual)
 	assert.Nil(t, err)
-
-	// assert that function warns about error lines correctly
-	rescueStdOut := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
-	_, _ = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisIncorrect.csv"), SkipErrorLines: true,
-		WarnErrorLines: true})
-	w.Close()
-	out, _ := ioutil.ReadAll(r)
-	os.Stdout = rescueStdOut
-	assert.Equal(t, "record on line 4: wrong number of fields\n", string(out))
 }

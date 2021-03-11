@@ -2,7 +2,7 @@ package ioread
 
 import (
 	"encoding/csv"
-	"fmt"
+	"github.com/fatih/color"
 	"github.com/pandulaDW/go-frames/dataframes"
 	"io"
 )
@@ -75,7 +75,7 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 		} else if err != nil {
 			if options.SkipErrorLines {
 				if options.WarnErrorLines {
-					fmt.Println(err)
+					color.Red("%v", err)
 				}
 				continue
 			}
