@@ -2,6 +2,7 @@ package ioread
 
 import (
 	"encoding/csv"
+	"fmt"
 	"github.com/pandulaDW/go-frames/dataframes"
 	"io"
 )
@@ -25,6 +26,12 @@ type CsvOptions struct {
 	//
 	// If both DateCols and ParseDates fields are present, DateCols field will be disregarded.
 	ParseDates map[string][]string
+	// If an encountered when parsing lines (e.g. a csv line with too many commas) will by default return an error
+	// and no DataFrame will be returned. If true, then these “bad lines” will dropped from the DataFrame that is
+	// returned.
+	SkipErrorLines bool
+	// WarnErrorLines prints a warning for each “error line” to the standard output. Default is set to false.
+	WarnErrorLines bool
 }
 
 // injectCustomOptions will take in an csv options object and will return it with
@@ -58,6 +65,7 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 	// create the reader
 	reader := csv.NewReader(file)
 	reader.Comma = options.Delimiter
+	reader.LazyQuotes = true
 
 	// reading the file
 	for {
@@ -65,6 +73,12 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 		if err == io.EOF {
 			break
 		} else if err != nil {
+			if options.SkipErrorLines {
+				if options.WarnErrorLines {
+					fmt.Println(err)
+				}
+				continue
+			}
 			return nil, err
 		}
 		if isHeader {
