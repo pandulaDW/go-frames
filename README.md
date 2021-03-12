@@ -18,10 +18,10 @@ code bases to Go for improved performances.
 go get github.com/pandulaDW/go-frames
 ```
 
-### Create a Series
+### Creating a Series
 
 A series is the building block of DataFrames. Only a column name and variadic amount of empty interface values are
-needed to create a series. Internally the series will be type inferred to be one of Int, Float, Bool, DateTime and
+needed to create a series. Internally, the series will be type inferred to be one of Int, Float, Bool, DateTime and
 Object(text) types.
 
 ```go
@@ -42,49 +42,9 @@ func main() {
 }
 ```
 
-### Reading spreadsheet
+### Creating a DataFrame
 
-The following constitutes the bare to read a spreadsheet document.
-
-```go
-package main
-
-import (
-	"fmt"
-
-	"github.com/360EntSecGroup-Skylar/excelize/v2"
-)
-
-func main() {
-	f, err := excelize.OpenFile("Book1.xlsx")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	// Get value from cell by given worksheet name and axis.
-	cell, err := f.GetCellValue("Sheet1", "B2")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(cell)
-	// Get all the rows in the Sheet1.
-	rows, err := f.GetRows("Sheet1")
-	for _, row := range rows {
-		for _, colCell := range row {
-			fmt.Print(colCell, "\t")
-		}
-		fmt.Println()
-	}
-}
-```
-
-### Add chart to spreadsheet file
-
-With Excelize chart generation and management is as easy as a few lines of code. You can build charts based on data in
-your worksheet or generate charts without any data in your worksheet at all.
-
-<p align="center"><img width="650" src="./test/images/chart.png" alt="Excelize"></p>
+A dataframe can be created using a list of series objects provided as variadic parameters to the dataframe constructor.
 
 ```go
 package main
@@ -92,100 +52,118 @@ package main
 import (
 	"fmt"
 
-	"github.com/360EntSecGroup-Skylar/excelize/v2"
+	"github.com/pandulaDW/go-frames/series"
+	"github.com/pandulaDW/go-frames/dataframes"
 )
 
 func main() {
-	categories := map[string]string{
-		"A2": "Small", "A3": "Normal", "A4": "Large",
-		"B1": "Apple", "C1": "Orange", "D1": "Pear"}
-	values := map[string]int{
-		"B2": 2, "C2": 3, "D2": 3, "B3": 5, "C3": 2, "D3": 4, "B4": 6, "C4": 7, "D4": 8}
-	f := excelize.NewFile()
-	for k, v := range categories {
-		f.SetCellValue("Sheet1", k, v)
-	}
-	for k, v := range values {
-		f.SetCellValue("Sheet1", k, v)
-	}
-	if err := f.AddChart("Sheet1", "E1", `{
-        "type": "col3DClustered",
-        "series": [
-        {
-            "name": "Sheet1!$A$2",
-            "categories": "Sheet1!$B$1:$D$1",
-            "values": "Sheet1!$B$2:$D$2"
-        },
-        {
-            "name": "Sheet1!$A$3",
-            "categories": "Sheet1!$B$1:$D$1",
-            "values": "Sheet1!$B$3:$D$3"
-        },
-        {
-            "name": "Sheet1!$A$4",
-            "categories": "Sheet1!$B$1:$D$1",
-            "values": "Sheet1!$B$4:$D$4"
-        }],
-        "title":
-        {
-            "name": "Fruit 3D Clustered Column Chart"
-        }
-    }`); err != nil {
-		fmt.Println(err)
-		return
-	}
-	// Save spreadsheet by the given path.
-	if err := f.SaveAs("Book1.xlsx"); err != nil {
-		fmt.Println(err)
-	}
+	col1 := series.NewSeries("col1", 12, 34, 54, 65, 90)
+	col2 := series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
+	col3 := series.NewSeries("col3", 54.31, 1.23, 45.6, 23.12, 23.2)
+	col4 := series.NewSeries("col4", true, false, true, true, false)
+	col5 := series.NewSeries("col5", "2013/04/05", "2023/03/01", "2013/01/05", "2009/07/15", "2011/02/01")
+	_ = col5.CastAsTime("2006/01/02")
+
+	df := dataframes.NewDataFrame(col1, col2, col3, col4, col5)
+	fmt.Println(df)
 }
 ```
 
-### Add picture to spreadsheet file
+The above snippet will display the below output.
+
+````shell
++-+----+------+-----+-----+-----------+
+| |col1|  col2| col3| col4|       col5|
++-+----+------+-----+-----+-----------+
+|0|  12|   foo|54.31| true| 2013-04-05|
+|1|  34|   bar| 1.23|false| 2023-03-01|
+|2|  54|   raz| 45.6| true| 2013-01-05|
+|3|  65| apple|23.12| true| 2009-07-15|
+|4|  90|orange| 23.2|false| 2011-02-01|
++-+----+------+-----+-----+-----------+
+````
+
+### Calling methods
+
+DataFrame's methods can be chained together to mutate the current DataFrame object. A series can be individually
+accessed using the DataFrame object and can be mutated or information can be extracted just as same.
 
 ```go
 package main
 
 import (
 	"fmt"
-	_ "image/gif"
-	_ "image/jpeg"
-	_ "image/png"
 
-	"github.com/360EntSecGroup-Skylar/excelize/v2"
+	"github.com/pandulaDW/go-frames/ioread"
 )
 
 func main() {
-	f, err := excelize.OpenFile("Book1.xlsx")
+	df, _ := ioread.ReadCSV(ioread.CsvOptions{Path: "data/youtubevideos.csv")
+
+		// calling the underlying series
+		maxViews := df.Data["views"].Max()
+
+		// mutating current dataframe
+		df.RenameColumn("title", "Title")
+
+		// creating a new dataframe without modifying underlying data
+		dfNew := df.ShallowCopy().Select("tags", "views", "likes")
+	}
+```
+
+### Reading files
+
+GoFrames allows reading and writing to files from various sources such as Csv, Excel, Json, Parquet and SQL Tables.
+Also, a rich set of options are available to reduce the post-processing. 
+
+```go
+package main
+
+import (
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/pandulaDW/go-frames/ioread"
+)
+
+func main() {
+	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/youtubevideos.csv",
+		DateCols: []string{"publish_time"}, DateFormat: time.RFC3339})
+
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Fatal(err)
 	}
-	// Insert a picture.
-	if err := f.AddPicture("Sheet1", "A2", "image.png", ""); err != nil {
-		fmt.Println(err)
-	}
-	// Insert a picture to worksheet with scaling.
-	if err := f.AddPicture("Sheet1", "D2", "image.jpg",
-		`{"x_scale": 0.5, "y_scale": 0.5}`); err != nil {
-		fmt.Println(err)
-	}
-	// Insert a picture offset in the cell with printing support.
-	if err := f.AddPicture("Sheet1", "H2", "image.gif", `{
-        "x_offset": 15,
-        "y_offset": 10,
-        "print_obj": true,
-        "lock_aspect_ratio": false,
-        "locked": false
-    }`); err != nil {
-		fmt.Println(err)
-	}
-	// Save the spreadsheet with the origin path.
-	if err = f.Save(); err != nil {
-		fmt.Println(err)
-	}
+
+	fmt.Println(df.Info())
 }
 ```
+The above snippet will display the below output.
+
+````shell
++--+----------------------+--------------+--------+
+|  |                Column|Non-Null Count|   Dtype|
++--+----------------------+--------------+--------+
+| 0|              video_id|40949 non-null|  Object|
+| 1|         trending_date|40949 non-null|  Object|
+| 2|                 title|40949 non-null|  Object|
+| 3|         channel_title|40949 non-null|  Object|
+| 4|           category_id|40949 non-null|     Int|
+| 5|          publish_time|40949 non-null|DateTime|
+| 6|                  tags|40949 non-null|  Object|
+| 7|                 views|40949 non-null|     Int|
+| 8|                 likes|40949 non-null|     Int|
+| 9|              dislikes|40949 non-null|     Int|
+|10|         comment_count|40949 non-null|     Int|
+|11|        thumbnail_link|40949 non-null|  Object|
+|12|     comments_disabled|40949 non-null|    Bool|
+|13|      ratings_disabled|40949 non-null|    Bool|
+|14|video_error_or_removed|40949 non-null|    Bool|
+|15|           description|40949 non-null|  Object|
++--+----------------------+--------------+--------+
+dtypes: float(0), int(5), object(7), datetime(1), bool(3)
+memory usage: 63.98 MB
+````
 
 ## Contributing
 
