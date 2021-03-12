@@ -98,23 +98,23 @@ import (
 )
 
 func main() {
-	df, _ := ioread.ReadCSV(ioread.CsvOptions{Path: "data/youtubevideos.csv")
+	df, _ := ioread.ReadCSV(ioread.CsvOptions{Path: "data/youtubevideos.csv"})
 
-		// calling the underlying series
-		maxViews := df.Data["views"].Max()
+	// calling the underlying series
+	maxViews := df.Data["views"].Max()
 
-		// mutating current dataframe
-		df.RenameColumn("title", "Title")
+	// mutating current dataframe
+	df.RenameColumn("title", "Title")
 
-		// creating a new dataframe without modifying underlying data
-		dfNew := df.ShallowCopy().Select("tags", "views", "likes")
-	}
+	// creating a new dataframe without modifying underlying data
+	dfNew := df.ShallowCopy().Select("tags", "views", "likes")
+}
 ```
 
 ### Reading files
 
 GoFrames allows reading and writing to files from various sources such as Csv, Excel, Json, Parquet and SQL Tables.
-Also, a rich set of options are available to reduce the post-processing. 
+Also, a rich set of options are available to reduce the post-processing.
 
 ```go
 package main
@@ -138,6 +138,7 @@ func main() {
 	fmt.Println(df.Info())
 }
 ```
+
 The above snippet will display the below output.
 
 ````shell
