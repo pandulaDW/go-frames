@@ -8,8 +8,14 @@ import (
 )
 
 func main() {
-	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/youtubevideos.csv",
-		DateCols: []string{"publish_time"}, DateFormat: time.RFC3339})
+	df, err := ioread.ReadCSV(ioread.CsvOptions{
+		Path:           "data/youtubevideos.csv",
+		Delimiter:      ',',
+		DateCols:       []string{"publish_time"},
+		DateFormat:     time.RFC3339,
+		SkipErrorLines: true,
+		WarnErrorLines: false,
+	})
 
 	if err != nil {
 		log.Fatal(err)
