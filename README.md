@@ -174,18 +174,14 @@ memory usage: 63.98 MB
 
 ## Contributing
 
-Contributions are welcome! Open a pull request to fix a bug, or open an issue to discuss a new feature or change. XML is
-compliant
-with [part 1 of the 5th edition of the ECMA-376 Standard for Office Open XML](http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+Contributions are welcome! Open a pull request to fix a bug, or open an issue to discuss a new feature or change.
 .
 
 ## Licenses
 
-This program is under the terms of the BSD 3-Clause License.
-See [https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause).
+This program is under the terms of the MIT License.
+See [https://opensource.org/licenses/MIT](https://opensource.org/licenses/BSD-3-Clause).
 
-The Excel logo is a trademark of [Microsoft Corporation](https://aka.ms/trademarks-usage). This artwork is an
-adaptation.
 
 gopher.{ai,svg,png} was created by [Takuya Ueda](https://twitter.com/tenntenn). Licensed under
 the [Creative Commons 3.0 Attributions license](http://creativecommons.org/licenses/by/3.0/).
