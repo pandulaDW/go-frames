@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestSeries_Map(t *testing.T) {
+func TestSeries_Apply(t *testing.T) {
 	mapper := func(a interface{}) (interface{}, error) {
 		floatVal, ok := a.(float64)
 		if !ok {
@@ -21,13 +21,13 @@ func TestSeries_Map(t *testing.T) {
 	expected := NewSeries("col", 149.5729, 534.0721, 214.6225, 40.0689, 141.61)
 
 	// assert that the squared function mapper works for an float series
-	actual, err := s1.Map(mapper)
+	actual, err := s1.Apply(mapper)
 
 	// assert that mapper returns correct values
 	assert.Equal(t, expected, actual)
 	assert.Nil(t, err)
 
-	actual, err = s2.Map(mapper)
+	actual, err = s2.Apply(mapper)
 	// assert that the squared function mapper doesn't work for a float series
 	assert.Nil(t, actual)
 	assert.EqualError(t, err, "only float values can be included")

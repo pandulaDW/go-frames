@@ -2,16 +2,15 @@ package dataframes
 
 import (
 	"fmt"
+	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/errors"
 )
-
-// ApplyFunc takes in any value and return another value alongside an error if encountered
-type ApplyFunc func(val interface{}) (interface{}, error)
 
 // ApplyToRows applies a function along the rows of the DataFrame.
 //
 // The function returns the current DataFrame object and if an error encountered,
 // it will return nil with the error.
-func (df *DataFrame) ApplyToRows(fun ApplyFunc) (*DataFrame, error) {
+func (df *DataFrame) ApplyToRows(fun base.ApplyFunc) (*DataFrame, error) {
 	rowContent := make([][]string, 0)
 
 	for i := 0; i < df.length; i++ {
@@ -30,4 +29,24 @@ func (df *DataFrame) ApplyToRows(fun ApplyFunc) (*DataFrame, error) {
 
 	modifiedDF := ConvertRowContentToDF(df.Columns(), rowContent)
 	return modifiedDF, nil
+}
+
+// ApplyToColumns applies a function along the given set of columns of the DataFrame.
+//
+// The function returns the current DataFrame object and if an error encountered,
+// it will return nil with the error.
+func (df *DataFrame) ApplyToColumns(cols []string, fun base.ApplyFunc) (*DataFrame, error) {
+	for _, col := range cols {
+		s, ok := df.Data[col]
+		if !ok {
+			return nil, errors.ColumnNotFound(col)
+		}
+		result, err := s.Apply(fun)
+		if err != nil {
+			return nil, err
+		}
+		df.Data[col] = result
+	}
+
+	return df, nil
 }
