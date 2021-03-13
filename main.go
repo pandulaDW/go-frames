@@ -29,10 +29,25 @@ func main() {
 		return strVal[0:30] + "...", nil
 	}
 
+	avgViews := df.Data["views"].Avg()
+	diffSeries, err := df.Data["views"].Apply(func(val interface{}) (interface{}, error) {
+		intVal, ok := val.(int)
+		if !ok {
+			return nil, errors.New("not an int")
+		}
+		return (intVal - int(avgViews)) / int(avgViews), nil
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	df.AddColumn(diffSeries)
+
 	df, err = df.ApplyToColumns([]string{"title", "tags", "description"}, truncate)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println(df.Head(4))
+	fmt.Println(df.Data["trending_date"].Max())
 }

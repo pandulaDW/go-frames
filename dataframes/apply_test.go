@@ -2,6 +2,8 @@ package dataframes
 
 import (
 	"errors"
+	"github.com/pandulaDW/go-frames/base"
+	errors2 "github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/suite"
 	"math"
@@ -11,7 +13,7 @@ import (
 type applyTestSuite struct {
 	suite.Suite
 	df               *DataFrame
-	fun              ApplyFunc
+	fun1, fun2       base.ApplyFunc
 	err              error
 	col1, col2, col3 *series.Series
 }
@@ -23,26 +25,50 @@ func (suite *applyTestSuite) SetupTest() {
 	suite.col3 = series.NewSeries("col3", 14, 124.23, 32, 64.65, 34)
 	suite.df = NewDataFrame(suite.col1, suite.col2, suite.col3)
 	suite.err = errors.New("not a float")
-	suite.fun = func(val interface{}) (interface{}, error) {
+	suite.fun1 = func(val interface{}) (interface{}, error) {
 		floatVal, ok := val.(float64)
 		if !ok {
 			return nil, suite.err
 		}
 		return math.Round(floatVal), nil
 	}
+	suite.fun2 = func(val interface{}) (interface{}, error) {
+		num, ok := val.(float64)
+		if !ok {
+			return nil, errors.New("not a float")
+		}
+		return math.Sqrt(num), nil
+	}
 }
 
 func (suite *applyTestSuite) TestDataFrame_ApplyToRows() {
 	// assert that function returns an error if encountered
-	df, err := suite.df.ApplyToRows(suite.fun)
+	df, err := suite.df.ApplyToRows(suite.fun1)
 	suite.Nil(df)
 	suite.EqualError(err, suite.err.Error())
 
 	// assert that function returns a dataframe with nil if no error
 	df = NewDataFrame(suite.col2)
-	actual, err := df.ApplyToRows(suite.fun)
+	actual, err := df.ApplyToRows(suite.fun1)
 	suite.Nil(err)
 	suite.NotNil(actual)
+}
+
+func (suite *applyTestSuite) TestDataFrame_ApplyToColumns() {
+	// assert that function returns an error if a column is not found
+	df, err := suite.df.ApplyToColumns([]string{"col5"}, suite.fun2)
+	suite.Nil(df)
+	suite.EqualError(err, errors2.ColumnNotFound("col5").Error())
+
+	// assert that function returns an error if found
+	df, err = suite.df.ApplyToColumns([]string{"col1"}, suite.fun2)
+	suite.Nil(df)
+	suite.NotNil(err)
+
+	// assert that function returns a dataframe with nil if no error
+	df, err = suite.df.ApplyToColumns([]string{"col2"}, suite.fun2)
+	suite.NotNil(df)
+	suite.Nil(err)
 }
 
 func TestApplyTestSuite(t *testing.T) {
