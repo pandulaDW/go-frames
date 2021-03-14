@@ -1,10 +1,12 @@
 package dataframes
 
 import (
+	"fmt"
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/series"
+	"reflect"
 )
 
 // NewDataFrame creates a dataframe using given parameters of series.
@@ -67,4 +69,16 @@ func (df *DataFrame) ShallowCopy() *DataFrame {
 		seriesArr = append(seriesArr, df.Data[col.Name])
 	}
 	return NewDataFrame(seriesArr...)
+}
+
+// IsEqual returns true if the passed DataFrame pointer is pointing to another DataFrame instance.
+//
+// To check if the two DataFrames are not equal elementwise, use IsDeepEqual
+func (df *DataFrame) IsEqual(otherDF *DataFrame) bool {
+	return fmt.Sprintf("%p", df) == fmt.Sprintf("%p", otherDF)
+}
+
+// IsDeepEqual returns true if the passed DataFrame is element wise equal to the current DataFrame.
+func (df *DataFrame) IsDeepEqual(otherDF *DataFrame) bool {
+	return reflect.DeepEqual(*df, *otherDF)
 }

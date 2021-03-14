@@ -94,3 +94,33 @@ func TestDataFrame_ShallowCopy(t *testing.T) {
 	assert.Equal(t, fmt.Sprintf("%p", col2), fmt.Sprintf("%p", copied.Data["col2"]))
 	assert.Equal(t, fmt.Sprintf("%p", col3), fmt.Sprintf("%p", copied.Data["col3"]))
 }
+
+func TestDataFrame_IsEqual(t *testing.T) {
+	col1 := series.NewSeries("col1", 12, 34, 54, 65, 90)
+	col2 := series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
+
+	df := NewDataFrame(col1, col2)
+	df2 := df
+
+	// assert that function returns true if, both dataframes pointers are same
+	assert.Equal(t, true, df.IsEqual(df2))
+
+	// assert that function returns false if, both dataframes pointers are not the same
+	assert.Equal(t, false, df.IsEqual(NewDataFrame(col1, col2)))
+}
+
+func TestDataFrame_IsDeepEqual(t *testing.T) {
+	col1 := series.NewSeries("col1", 12, 34, 54, 65, 90)
+	col2 := series.NewSeries("col2", "foo", "bar", "raz", "apple", "orange")
+
+	df1 := NewDataFrame(col1, col2)
+	df2 := NewDataFrame(col1, col2)
+
+	// assert that function returns true if both dataframes are same
+	assert.Equal(t, true, df1.IsDeepEqual(df2))
+
+	// assert that function returns false if both dataframes are not equal
+	col2 = series.NewSeries("col2", "foo", "bar", "raz", "apple", "mangoes")
+	df3 := NewDataFrame(col1, col2)
+	assert.Equal(t, false, df1.IsDeepEqual(df3))
+}
