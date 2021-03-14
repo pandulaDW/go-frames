@@ -5,6 +5,9 @@ import (
 	"encoding/gob"
 	"fmt"
 	"github.com/pandulaDW/go-frames/errors"
+	"reflect"
+	"runtime"
+	"strings"
 	"time"
 )
 
@@ -89,4 +92,11 @@ func Range(low, high, step int) []int {
 	}
 
 	return rangeSlice
+}
+
+// GetFunctionName will return the function name of the provided function
+func GetFunctionName(i interface{}) string {
+	name := runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
+	split := strings.Split(name, ".")
+	return split[len(split)-1]
 }

@@ -33,11 +33,13 @@ func (df *DataFrame) ApplyToRows(fun base.ApplyFunc) (*DataFrame, error) {
 
 // ApplyToColumns applies a function along the given set of columns of the DataFrame.
 //
-// The function returns the current DataFrame object and if an error encountered,
+// The function returns a new DataFrame object and if an error encountered,
 // it will return nil with the error.
 func (df *DataFrame) ApplyToColumns(cols []string, fun base.ApplyFunc) (*DataFrame, error) {
+	copiedDF := df.ShallowCopy()
+
 	for _, col := range cols {
-		s, ok := df.Data[col]
+		s, ok := copiedDF.Data[col]
 		if !ok {
 			return nil, errors.ColumnNotFound(col)
 		}
@@ -45,8 +47,9 @@ func (df *DataFrame) ApplyToColumns(cols []string, fun base.ApplyFunc) (*DataFra
 		if err != nil {
 			return nil, err
 		}
-		df.Data[col] = result
+		result.SetColName(col)
+		copiedDF.Data[col] = result
 	}
 
-	return df, nil
+	return copiedDF, nil
 }

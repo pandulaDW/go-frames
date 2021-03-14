@@ -1,9 +1,12 @@
 package series
 
-import "github.com/pandulaDW/go-frames/base"
+import (
+	"github.com/pandulaDW/go-frames/base"
+	"github.com/pandulaDW/go-frames/helpers"
+)
 
 // Apply will map each element of the series to the given function and
-// will return a new series
+// will return a new series with a new column name "functionName_colName"
 func (s *Series) Apply(mapper base.ApplyFunc) (*Series, error) {
 	seriesData := make([]interface{}, 0, s.Len())
 	for _, val := range s.Data {
@@ -14,6 +17,7 @@ func (s *Series) Apply(mapper base.ApplyFunc) (*Series, error) {
 		seriesData = append(seriesData, mappedVal)
 	}
 
-	newSeries := Series{column: s.column, Data: seriesData}
-	return &newSeries, nil
+	colName := helpers.GetFunctionName(mapper) + "_" + s.column.Name
+	newSeries := NewSeries(colName, seriesData...)
+	return newSeries, nil
 }
