@@ -18,8 +18,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	df = df.Select("video_id", "trending_date", "title")
+	df = df.Select("video_id", "trending_date", "title", "publish_time")
 	df.Data["title"] = df.Data["title"].Lower().Capitalized()
+
+	year := df.Data["publish_time"].Year()
+	year.SetColName("year")
+
+	df = df.AddColumn(year)
 
 	fmt.Println(df.Head(4))
 	fmt.Println(time.Since(start))
