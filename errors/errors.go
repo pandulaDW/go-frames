@@ -3,6 +3,7 @@ package errors
 import (
 	"errors"
 	"fmt"
+	"github.com/pandulaDW/go-frames/base"
 )
 
 // CustomError will return a custom error based on the message provided
@@ -37,6 +38,11 @@ func MismatchedNumOfRows(expected, actual int) error {
 	err := fmt.Sprintf("mismatched number of rows provided. requires %d rows, but %d was provided",
 		expected, actual)
 	return errors.New(err)
+}
+
+//IncorrectDataType returns an error mentioning the expected type
+func IncorrectDataType(dtype base.DType) error {
+	return errors.New(fmt.Sprintf("expected a %s type Series", dtype))
 }
 
 //InvalidSeriesValError return an error based an error specifying the index and column name

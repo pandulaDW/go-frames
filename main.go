@@ -18,6 +18,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(df.Info())
+	df = df.Select("video_id", "trending_date", "title")
+	df.Data["title"] = df.Data["title"].Lower().Capitalized()
+
+	fmt.Println(df.Head(4))
 	fmt.Println(time.Since(start))
 }
