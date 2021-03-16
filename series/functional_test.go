@@ -18,7 +18,7 @@ func TestSeries_Apply(t *testing.T) {
 
 	s1 := NewSeries("col", 12.23, 23.11, 14.65, 6.33, 11.90)
 	s2 := NewSeries("col", 12, 23, 14, 6, 11)
-	expected := NewSeries("func1_col", 149.5729, 534.0721, 214.6225, 40.0689, 141.61)
+	expected := NewSeries("func1(col)", 149.5729, 534.0721, 214.6225, 40.0689, 141.61)
 
 	// assert that the squared function mapper works for an float series
 	actual, err := s1.Apply(mapper)

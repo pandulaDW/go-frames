@@ -111,7 +111,7 @@ func (df *DataFrame) String() string {
 	// adding index column as the first column
 	indexColName := df.Index.Data.GetColumn().Name
 	cols := append([]string{indexColName}, df.Columns()...)
-	copiedDF := df.ShallowCopy().AddColumn(df.Index.Data).ResetColumns(cols)
+	copiedDF := df.ShallowCopy().WithColumn(df.Index.Data).ResetColumns(cols)
 
 	colLengths := make([]int, 0, len(copiedDF.columns))
 

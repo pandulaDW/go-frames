@@ -3,6 +3,7 @@ package series
 import (
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
+	"github.com/pandulaDW/go-frames/helpers"
 	"time"
 )
 
@@ -29,7 +30,7 @@ func helperTimeMethods(s *Series, _type string) *Series {
 		}
 	}
 
-	return NewSeries("test", data...)
+	return NewSeries("placeholder", data...)
 }
 
 // Year returns the year in which the value occurs in the Series.
@@ -38,6 +39,7 @@ func helperTimeMethods(s *Series, _type string) *Series {
 func (s *Series) Year() *Series {
 	year := helperTimeMethods(s, "YEAR")
 	year.column.Dtype = base.Int
+	year.column.Name = helpers.FunctionNameWrapper("year", s.column.Name)
 	return year
 }
 

@@ -41,7 +41,7 @@ func (df *DataFrame) ResetIndex(drop bool) *DataFrame {
 
 	if !drop {
 		currentIndex := df.Index.Data
-		df.AddColumn(currentIndex)
+		df.WithColumn(currentIndex)
 	}
 
 	indices := helpers.ToInterfaceFromInt(helpers.Range(0, df.length, 1))

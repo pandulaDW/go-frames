@@ -24,11 +24,8 @@ func main() {
 	df = df.WithColumnRenamed("title", capitalized)
 
 	year := df.Col("publish_time").Year()
-	df = df.WithColumnRenamed("year", year)
+	df = df.WithColumn(year)
 
 	fmt.Println(df.Head(4))
-	sum := func() int { return 1 + 2 }
-
-	fmt.Printf("%v", sum)
 	fmt.Println(time.Since(start))
 }

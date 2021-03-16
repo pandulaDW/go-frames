@@ -5,21 +5,23 @@ import (
 	"github.com/pandulaDW/go-frames/series"
 )
 
-// AddColumn adds a new column to a new DataFrame object and returns that DataFrame.
+// WithColumn adds a new column to a new DataFrame object and returns that DataFrame.
 //
-// Panics if the length of the series is not equal to the length of the dataframe.
-func (df *DataFrame) AddColumn(s *series.Series) *DataFrame {
-	if s.Len() != df.Length() {
-		panic(errors.MismatchedNumOfRows(df.length, s.Len()))
+// Panics if the column name of the series already exists or if
+// length of the series is not equal to the length of the dataframe.
+func (df *DataFrame) WithColumn(s *series.Series) *DataFrame {
+	copiedDF := df.ShallowCopy()
+	if s.Len() != copiedDF.Length() {
+		panic(errors.MismatchedNumOfRows(copiedDF.length, s.Len()))
 	}
 
 	// append column
-	df.columns = append(df.columns, s.GetColumn())
+	copiedDF.columns = append(copiedDF.columns, s.GetColumn())
 
 	// add the data
-	df.data[s.GetColumn().Name] = s
+	copiedDF.data[s.GetColumn().Name] = s
 
-	return df
+	return copiedDF
 }
 
 // WithColumnRenamed either modifies an existing column with the provided Series or create a new Series

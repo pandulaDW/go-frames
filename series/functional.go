@@ -17,7 +17,7 @@ func (s *Series) Apply(mapper base.ApplyFunc) (*Series, error) {
 		seriesData = append(seriesData, mappedVal)
 	}
 
-	colName := helpers.GetFunctionName(mapper) + "_" + s.column.Name
+	colName := helpers.FunctionNameWrapper(helpers.GetFunctionName(mapper), s.column.Name)
 	newSeries := NewSeries(colName, seriesData...)
 	return newSeries, nil
 }
