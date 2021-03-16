@@ -100,3 +100,7 @@ func GetFunctionName(i interface{}) string {
 	split := strings.Split(name, ".")
 	return split[len(split)-1]
 }
+
+func FunctionNameWrapper() {
+
+}

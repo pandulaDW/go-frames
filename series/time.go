@@ -12,7 +12,7 @@ func helperTimeMethods(s *Series, _type string) *Series {
 		panic(errors.IncorrectDataType(base.DateTime))
 	}
 
-	newS := s.ShallowCopy()
+	data := make([]interface{}, s.Len())
 
 	for i, val := range s.Data {
 		t, ok := val.(time.Time)
@@ -21,22 +21,24 @@ func helperTimeMethods(s *Series, _type string) *Series {
 		}
 		switch _type {
 		case "YEAR":
-			newS.Data[i] = t.Year()
+			data[i] = t.Year()
 		case "MONTH":
-			newS.Data[i] = t.Month()
+			data[i] = t.Month()
 		case "DAY":
-			newS.Data[i] = t.Day()
+			data[i] = t.Day()
 		}
 	}
 
-	return newS
+	return NewSeries("test", data...)
 }
 
 // Year returns the year in which the value occurs in the Series.
 //
 // The function panics if the series type is not base.DateTime
 func (s *Series) Year() *Series {
-	return helperTimeMethods(s, "YEAR")
+	year := helperTimeMethods(s, "YEAR")
+	year.column.Dtype = base.Int
+	return year
 }
 
 // Month returns the month in which the value occurs in the Series.

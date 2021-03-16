@@ -19,12 +19,12 @@ func main() {
 	}
 
 	df = df.Select("video_id", "trending_date", "title", "publish_time")
-	//df.data["title"] = df.data["title"].Lower().Capitalized()
 
-	//year := df.data["publish_time"].Year()
-	//year.SetColName("year")
-	//
-	//df = df.AddColumn(year)
+	capitalized := df.Col("title").Lower().Capitalized()
+	df = df.WithColumnRenamed("title", capitalized)
+
+	year := df.Col("publish_time").Year()
+	df = df.WithColumnRenamed("year", year)
 
 	fmt.Println(df.Head(4))
 	fmt.Println(time.Since(start))

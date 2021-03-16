@@ -14,17 +14,17 @@ func helperStringMethods(s *Series, fun stringMethod) *Series {
 		panic(errors.IncorrectDataType(base.Object))
 	}
 
-	newS := s.ShallowCopy()
+	data := make([]interface{}, s.Len())
 
 	for i, val := range s.Data {
 		strVal, ok := val.(string)
 		if !ok {
 			panic(errors.InvalidSeriesValError(val, i, s.column.Name))
 		}
-		newS.Data[i] = fun(strVal)
+		data[i] = fun(strVal)
 	}
 
-	return newS
+	return NewSeries("test", data...)
 }
 
 // Lower will return a new series with the values lowercased.
