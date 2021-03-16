@@ -8,7 +8,7 @@ import (
 
 // ApplyToRows applies a function along the rows of the DataFrame.
 //
-// The function returns the current DataFrame object and if an error encountered,
+// The function returns a new DataFrame object and if an error encountered,
 // it will return nil with the error.
 func (df *DataFrame) ApplyToRows(fun base.ApplyFunc) (*DataFrame, error) {
 	rowContent := make([][]string, 0)

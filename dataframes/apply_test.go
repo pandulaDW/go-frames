@@ -52,6 +52,9 @@ func (suite *applyTestSuite) TestDataFrame_ApplyToRows() {
 	actual, err := df.ApplyToRows(suite.fun1)
 	suite.Nil(err)
 	suite.NotNil(actual)
+
+	// assert that function returns a new dataframe
+	suite.Equal(false, df.IsEqual(actual))
 }
 
 func (suite *applyTestSuite) TestDataFrame_ApplyToColumns() {

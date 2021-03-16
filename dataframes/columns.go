@@ -29,7 +29,9 @@ func (df *DataFrame) Columns() []string {
 	return names
 }
 
-// SetColumnNames will rename the columns based on the column list provided in the given order.
+// SetColumnNames will rename the columns based on the column list provided in the given order and
+// will return a new dataframe.
+//
 // Panics if the length of the column name array is lower than the number of columns in the dataframe
 func (df *DataFrame) SetColumnNames(cols []string) *DataFrame {
 	if len(cols) != len(df.columns) {
@@ -44,33 +46,37 @@ func (df *DataFrame) SetColumnNames(cols []string) *DataFrame {
 		newSeriesArray = append(newSeriesArray, newSeries)
 	}
 
-	*df = *NewDataFrame(newSeriesArray...)
-	return df
+	modifiedDF := NewDataFrame(newSeriesArray...)
+	return modifiedDF
 }
 
 // RenameColumn will rename the column provided with the new column name and returns
-// the modified dataframe.
+// a new dataframe.
 //
 // Panics if the col name is not found
 func (df *DataFrame) RenameColumn(oldName, newName string) *DataFrame {
-	for _, col := range df.columns {
+	copiedDF := df.ShallowCopy()
+
+	for _, col := range copiedDF.columns {
 		if col.Name == oldName {
-			s := df.data[oldName]    // get underlying series
-			col.Name = newName       // changing the column list
-			delete(df.data, oldName) // delete the dataframe map key
-			s.SetColName(newName)    // changing the series colName
-			df.data[newName] = s     // set the new key
-			return df                // return from the function
+			s := copiedDF.data[oldName]    // get underlying series
+			col.Name = newName             // changing the column list
+			delete(copiedDF.data, oldName) // delete the dataframe map key
+			s.SetColName(newName)          // changing the series colName
+			copiedDF.data[newName] = s     // set the new key
+			return copiedDF                // return from the function
 		}
 	}
 
 	panic(errors.ColumnNotFound(oldName))
 }
 
-// ResetColumns resets the column order of the dataframe. All the columns should be present
+// ResetColumns creates a new DataFrame and resets the column order of that DataFrame.
+// All the columns should be present
 // and the function panics if a column is not found in the column list.
 func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
-	currentColumns := helpers.ToInterfaceFromString(df.Columns())
+	copiedDF := df.ShallowCopy()
+	currentColumns := helpers.ToInterfaceFromString(copiedDF.Columns())
 
 	if len(columns) != len(currentColumns) {
 		panic(errors.MismatchedNumOfColumns(len(columns), len(currentColumns)))
@@ -79,49 +85,50 @@ func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
 	// modify the ColIndex of the columns
 	for i, col := range columns {
 		if index := helpers.LinearSearch(col, currentColumns); index != -1 {
-			df.columns[index].ColIndex = i
+			copiedDF.columns[index].ColIndex = i
 		} else {
 			panic(errors.ColumnNotFound(col))
 		}
 	}
 
-	// modify the df.columns slice
-	sort.SliceStable(df.columns, func(i, j int) bool {
-		return df.columns[i].ColIndex < df.columns[j].ColIndex
+	// modify the copiedDF.columns slice
+	sort.SliceStable(copiedDF.columns, func(i, j int) bool {
+		return copiedDF.columns[i].ColIndex < copiedDF.columns[j].ColIndex
 	})
 
-	return df
+	return copiedDF
 }
 
-// Drop will drop the given columns from the dataframe. Column names can be specified
-// as variadic arguments.
+// Drop will drop the given columns from the DataFrame and will return a new DataFrame.
+// Column names can be specified as variadic arguments.
 //
 // Panics if any of the column name is not found
 func (df *DataFrame) Drop(colNames ...string) *DataFrame {
+	copiedDF := df.ShallowCopy()
 
 	for _, colName := range colNames {
-		if _, ok := df.data[colName]; ok {
-			delete(df.data, colName)
+		if _, ok := copiedDF.data[colName]; ok {
+			delete(copiedDF.data, colName)
 		} else {
 			panic(errors.ColumnNotFound(colName))
 		}
 	}
 
 	diffCols := helpers.Difference(helpers.ToInterfaceFromString(colNames),
-		helpers.ToInterfaceFromString(df.Columns()))
+		helpers.ToInterfaceFromString(copiedDF.Columns()))
 
 	filteredCols := make([]*base.Column, 0)
-	for _, column := range df.columns {
+	for _, column := range copiedDF.columns {
 		if helpers.LinearSearch(column.Name, diffCols) != -1 {
 			filteredCols = append(filteredCols, column)
 		}
 	}
 
-	df.columns = filteredCols
-	return df
+	copiedDF.columns = filteredCols
+	return copiedDF
 }
 
-// Select returns the dataframe instance with the specified columns.
+// Select returns a new DataFrame instance with the specified columns.
 // Column names can be specified as a variadic argument.
 //
 // The function panics if any of the given columns are not found in the dataframe.
@@ -134,9 +141,8 @@ func (df *DataFrame) Select(cols ...string) *DataFrame {
 		droppedCols = append(droppedCols, fmt.Sprintf("%v", col))
 	}
 
-	// will panic here, if the column is not found
-	df.Drop(droppedCols...)
-	return df
+	modifiedDF := df.Drop(droppedCols...)
+	return modifiedDF
 }
 
 // ColumnExists returns true if the given column exists in the DataFrame. The function would

@@ -79,18 +79,26 @@ func (suite *columnsTestSuite) TestDataFrame_Drop() {
 
 	// assert that function correctly drops the columns
 	expected := NewDataFrame(suite.col3)
-	suite.Equal(expected, suite.df.ShallowCopy().Drop("col1", "col2"))
+	suite.Equal(expected, suite.df.Drop("col1", "col2"))
 }
 
 func (suite *columnsTestSuite) TestDataFrame_Select() {
 	// assert that function panics when incorrect column names are provided
 	suite.PanicsWithError("testCol column not found in the dataframe", func() {
-		suite.df.ShallowCopy().Drop("col1", "testCol")
+		suite.df.Drop("col1", "testCol")
 	})
 
 	// assert that function correctly selects the columns
 	expected := NewDataFrame(suite.col1, suite.col2)
-	suite.Equal(expected, suite.df.ShallowCopy().Select("col1", "col2"))
+	suite.Equal(expected, suite.df.Select("col1", "col2"))
+}
+
+func (suite *columnsTestSuite) TestDataFrame_ColumnExists() {
+	// assert that function returns false when column does not exits
+	suite.Equal(false, suite.df.ColumnExists("col4"))
+
+	// assert that function returns true when column exits
+	suite.Equal(true, suite.df.ColumnExists("col1"))
 }
 
 func (suite *columnsTestSuite) TestDataFrame_ColumnExistsWithIndex() {
