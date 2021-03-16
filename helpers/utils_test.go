@@ -82,3 +82,21 @@ func TestRange(t *testing.T) {
 	expected = []int{-1, -2, -3, -4, -5, -6, -7, -8, -9, -10}
 	assert.Equal(t, expected, Range(-1, -11, -1))
 }
+
+func TestGetFunctionName(t *testing.T) {
+	sum := func() int { return 2 + 3 }
+	sub := func() int { return 2 - 1 }
+
+	// assert that anonymous function names are returned as expected
+	assert.Equal(t, "func1", GetFunctionName(sum))
+	assert.Equal(t, "func2", GetFunctionName(sub))
+
+	// assert that normal function names are returned correctly
+	assert.Equal(t, "Range", GetFunctionName(Range))
+}
+
+func TestFunctionNameWrapper(t *testing.T) {
+	// assert that correct names are returned
+	assert.Equal(t, "sum(profit)", FunctionNameWrapper("sum", "profit"))
+	assert.Equal(t, "min(sum(profit))", FunctionNameWrapper("min", "sum(profit)"))
+}

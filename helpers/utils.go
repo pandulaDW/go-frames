@@ -101,6 +101,7 @@ func GetFunctionName(i interface{}) string {
 	return split[len(split)-1]
 }
 
-func FunctionNameWrapper() {
-
+// FunctionNameWrapper returns a wrapper name with a given function name and a column name
+func FunctionNameWrapper(funcName, colName string) string {
+	return fmt.Sprintf("%s(%s)", funcName, colName)
 }

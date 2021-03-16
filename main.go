@@ -27,5 +27,8 @@ func main() {
 	df = df.WithColumnRenamed("year", year)
 
 	fmt.Println(df.Head(4))
+	sum := func() int { return 1 + 2 }
+
+	fmt.Printf("%v", sum)
 	fmt.Println(time.Since(start))
 }
