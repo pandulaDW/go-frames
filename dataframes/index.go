@@ -12,7 +12,7 @@ func (df *DataFrame) SetIndex(colName string) *DataFrame {
 		panic(errors.ColumnNotFound(colName))
 	}
 
-	df.Index = Index{Data: df.Data[colName], IsCustom: true}
+	df.Index = Index{Data: df.data[colName], IsCustom: true}
 	df.Drop(colName)
 
 	return df

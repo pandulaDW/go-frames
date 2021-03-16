@@ -14,7 +14,7 @@ func (df *DataFrame) createInfoFooter() string {
 
 	for _, col := range df.columns {
 		dtypes = append(dtypes, col.Dtype)
-		memSize += df.Data[col.Name].MemSize()
+		memSize += df.data[col.Name].MemSize()
 	}
 
 	valueCounts := helpers.ValueCounts(dtypes)

@@ -29,6 +29,6 @@ func TestDisplay(t *testing.T) {
 `
 	expected = strings.TrimSpace(expected)
 	df, _ := ioread.ReadCSV(ioread.CsvOptions{Path: "data/A_data.csv"})
-	_ = df.Data["date"].CastAsTime("2006-01-02")
+	_ = df.Col("date").CastAsTime("2006-01-02")
 	assert.Equal(t, expected, df.String())
 }

@@ -24,7 +24,7 @@ func (df *DataFrame) Transpose(header bool) *DataFrame {
 	for i := 0; i < df.length; i++ {
 		colData := make([]interface{}, 0)
 		for _, col := range df.columns {
-			colData = append(colData, df.Data[col.Name].Data[i])
+			colData = append(colData, df.data[col.Name].Data[i])
 		}
 
 		newSeries := series.NewSeries(fmt.Sprintf("v%d", i+1), colData...)

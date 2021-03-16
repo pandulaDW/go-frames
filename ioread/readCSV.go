@@ -93,7 +93,7 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 	df := dataframes.ConvertRowContentToDF(colNames, content)
 
 	// set the index, if provided
-	if df.IsColumnIncluded(options.IndexCol) != -1 {
+	if df.ColumnExistsWithIndex(options.IndexCol) != -1 {
 		df.SetIndex(options.IndexCol)
 	}
 

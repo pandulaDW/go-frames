@@ -21,7 +21,7 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 	}
 
 	// set the variables
-	df.Data = make(DataFrameData)
+	df.data = make(DataFrameData)
 	df.columns = make([]*base.Column, 0)
 	df.length = data[0].Len()
 
@@ -38,10 +38,10 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 		if s.Len() != df.length {
 			panic(errors.MismatchedNumOfRows(df.length, s.Len()))
 		}
-		if _, ok := df.Data[colName]; ok {
+		if _, ok := df.data[colName]; ok {
 			panic(errors.DuplicatedColumn(colName))
 		}
-		df.Data[colName] = s
+		df.data[colName] = s
 		s.SetColIndex(i)
 		df.columns = append(df.columns, s.GetColumn())
 	}
@@ -55,7 +55,7 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 func (df *DataFrame) DeepCopy() *DataFrame {
 	copiedSeriesArr := make([]*series.Series, 0, len(df.columns))
 	for _, col := range df.columns {
-		copiedSeriesArr = append(copiedSeriesArr, df.Data[col.Name].DeepCopy())
+		copiedSeriesArr = append(copiedSeriesArr, df.data[col.Name].DeepCopy())
 	}
 	return NewDataFrame(copiedSeriesArr...)
 }
@@ -66,7 +66,7 @@ func (df *DataFrame) DeepCopy() *DataFrame {
 func (df *DataFrame) ShallowCopy() *DataFrame {
 	seriesArr := make([]*series.Series, 0, len(df.columns))
 	for _, col := range df.columns {
-		seriesArr = append(seriesArr, df.Data[col.Name])
+		seriesArr = append(seriesArr, df.data[col.Name])
 	}
 	return NewDataFrame(seriesArr...)
 }

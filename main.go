@@ -19,12 +19,12 @@ func main() {
 	}
 
 	df = df.Select("video_id", "trending_date", "title", "publish_time")
-	df.Data["title"] = df.Data["title"].Lower().Capitalized()
+	//df.data["title"] = df.data["title"].Lower().Capitalized()
 
-	year := df.Data["publish_time"].Year()
-	year.SetColName("year")
-
-	df = df.AddColumn(year)
+	//year := df.data["publish_time"].Year()
+	//year.SetColName("year")
+	//
+	//df = df.AddColumn(year)
 
 	fmt.Println(df.Head(4))
 	fmt.Println(time.Since(start))

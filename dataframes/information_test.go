@@ -29,7 +29,7 @@ func (suite *infoTestSuite) SetupTest() {
 func (suite *infoTestSuite) TestCreateInfoFooter() {
 	var memSize int
 	for _, col := range suite.df.Columns() {
-		memSize += suite.df.Data[col].MemSize()
+		memSize += suite.df.data[col].MemSize()
 	}
 	expected := fmt.Sprintf(
 		"dtypes: float(2), int(2), object(1), datetime(1), bool(1)\nmemory usage: %d bytes", memSize)

@@ -11,10 +11,7 @@ func (df *DataFrame) Agg(columns []string, aggregator base.Aggregator) []interfa
 	var aggSeries []interface{}
 
 	for _, col := range columns {
-		s, ok := df.Data[col]
-		if !ok {
-			panic(errors.ColumnNotFound(col))
-		}
+		s := df.Col(col) // panic if not found
 
 		switch aggregator {
 		case base.MAX:

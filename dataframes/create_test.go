@@ -18,7 +18,7 @@ func TestNewDataFrame(t *testing.T) {
 
 	expected := NewDataFrame(col1, col2, col3, col4, col5, col6)
 	actual := &DataFrame{
-		Data: map[string]*series.Series{"col1": col1, "col2": col2, "col3": col3,
+		data: map[string]*series.Series{"col1": col1, "col2": col2, "col3": col3,
 			"col4": col4, "col5": col5, "col6": col6},
 		length: 5,
 		columns: []*base.Column{{Name: "col1", Dtype: base.Int, ColIndex: 0},
@@ -71,9 +71,9 @@ func TestDataFrame_DeepCopy(t *testing.T) {
 	assert.Equal(t, df, copied)
 
 	// assert that series object references are not equal
-	assert.NotEqual(t, fmt.Sprintf("%p", col1), fmt.Sprintf("%p", copied.Data["col1"]))
-	assert.NotEqual(t, fmt.Sprintf("%p", col2), fmt.Sprintf("%p", copied.Data["col2"]))
-	assert.NotEqual(t, fmt.Sprintf("%p", col3), fmt.Sprintf("%p", copied.Data["col3"]))
+	assert.NotEqual(t, fmt.Sprintf("%p", col1), fmt.Sprintf("%p", copied.data["col1"]))
+	assert.NotEqual(t, fmt.Sprintf("%p", col2), fmt.Sprintf("%p", copied.data["col2"]))
+	assert.NotEqual(t, fmt.Sprintf("%p", col3), fmt.Sprintf("%p", copied.data["col3"]))
 }
 
 func TestDataFrame_ShallowCopy(t *testing.T) {
@@ -90,9 +90,9 @@ func TestDataFrame_ShallowCopy(t *testing.T) {
 	assert.Equal(t, df, copied)
 
 	// assert that series object references are not equal
-	assert.Equal(t, fmt.Sprintf("%p", col1), fmt.Sprintf("%p", copied.Data["col1"]))
-	assert.Equal(t, fmt.Sprintf("%p", col2), fmt.Sprintf("%p", copied.Data["col2"]))
-	assert.Equal(t, fmt.Sprintf("%p", col3), fmt.Sprintf("%p", copied.Data["col3"]))
+	assert.Equal(t, fmt.Sprintf("%p", col1), fmt.Sprintf("%p", copied.data["col1"]))
+	assert.Equal(t, fmt.Sprintf("%p", col2), fmt.Sprintf("%p", copied.data["col2"]))
+	assert.Equal(t, fmt.Sprintf("%p", col3), fmt.Sprintf("%p", copied.data["col3"]))
 }
 
 func TestDataFrame_IsEqual(t *testing.T) {

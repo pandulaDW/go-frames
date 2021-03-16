@@ -9,6 +9,17 @@ import (
 	"sort"
 )
 
+// Col takes in a column name of the dataframe and returns the corresponding series.
+//
+// The function panics if the column name is not available in the column list
+func (df *DataFrame) Col(colName string) *series.Series {
+	s, ok := df.data[colName]
+	if !ok {
+		panic(errors.ColumnNotFound(colName))
+	}
+	return s
+}
+
 // Columns returns the column names of the dataframe
 func (df *DataFrame) Columns() []string {
 	names := make([]string, len(df.columns))
@@ -28,7 +39,7 @@ func (df *DataFrame) SetColumnNames(cols []string) *DataFrame {
 	// creating a new dataframe and assigning it to the df
 	newSeriesArray := make([]*series.Series, 0)
 	for i, column := range df.columns {
-		newSeries := df.Data[column.Name]
+		newSeries := df.data[column.Name]
 		newSeries.SetColName(cols[i])
 		newSeriesArray = append(newSeriesArray, newSeries)
 	}
@@ -44,11 +55,11 @@ func (df *DataFrame) SetColumnNames(cols []string) *DataFrame {
 func (df *DataFrame) RenameColumn(oldName, newName string) *DataFrame {
 	for _, col := range df.columns {
 		if col.Name == oldName {
-			s := df.Data[oldName]    // get underlying series
+			s := df.data[oldName]    // get underlying series
 			col.Name = newName       // changing the column list
-			delete(df.Data, oldName) // delete the dataframe map key
+			delete(df.data, oldName) // delete the dataframe map key
 			s.SetColName(newName)    // changing the series colName
-			df.Data[newName] = s     // set the new key
+			df.data[newName] = s     // set the new key
 			return df                // return from the function
 		}
 	}
@@ -89,8 +100,8 @@ func (df *DataFrame) ResetColumns(columns []string) *DataFrame {
 func (df *DataFrame) Drop(colNames ...string) *DataFrame {
 
 	for _, colName := range colNames {
-		if _, ok := df.Data[colName]; ok {
-			delete(df.Data, colName)
+		if _, ok := df.data[colName]; ok {
+			delete(df.data, colName)
 		} else {
 			panic(errors.ColumnNotFound(colName))
 		}
@@ -128,9 +139,18 @@ func (df *DataFrame) Select(cols ...string) *DataFrame {
 	return df
 }
 
-// IsColumnIncluded returns the index position of the column name provided.
+// ColumnExists returns true if the given column exists in the DataFrame. The function would
+// return false otherwise.
+func (df *DataFrame) ColumnExists(colName string) bool {
+	if _, ok := df.data[colName]; !ok {
+		return false
+	}
+	return true
+}
+
+// ColumnExistsWithIndex returns the index position of the column name provided.
 // If the column is not found, the function will return -1.
-func (df *DataFrame) IsColumnIncluded(colName string) int {
+func (df *DataFrame) ColumnExistsWithIndex(colName string) int {
 	for _, col := range df.columns {
 		if col.Name == colName {
 			return col.ColIndex

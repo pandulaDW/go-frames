@@ -18,7 +18,7 @@ func (df *DataFrame) AddColumn(s *series.Series) *DataFrame {
 	df.columns = append(df.columns, s.GetColumn())
 
 	// add the data
-	df.Data[s.GetColumn().Name] = s
+	df.data[s.GetColumn().Name] = s
 
 	return df
 }

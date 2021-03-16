@@ -16,7 +16,7 @@ type Index struct {
 
 // DataFrame includes the fields that describes a dataframe
 type DataFrame struct {
-	Data    DataFrameData
+	data    DataFrameData
 	Index   Index
 	length  int
 	columns []*base.Column

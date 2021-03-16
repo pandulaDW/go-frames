@@ -93,15 +93,15 @@ func (suite *columnsTestSuite) TestDataFrame_Select() {
 	suite.Equal(expected, suite.df.ShallowCopy().Select("col1", "col2"))
 }
 
-func (suite *columnsTestSuite) TestDataFrame_IsColumnIncluded() {
+func (suite *columnsTestSuite) TestDataFrame_ColumnExistsWithIndex() {
 	// assert that function returns -1 when column is empty
-	suite.Equal(-1, suite.df.IsColumnIncluded(""))
+	suite.Equal(-1, suite.df.ColumnExistsWithIndex(""))
 
 	// assert that function returns -1 when column is not found
-	suite.Equal(-1, suite.df.IsColumnIncluded("col5"))
+	suite.Equal(-1, suite.df.ColumnExistsWithIndex("col5"))
 
 	// assert that function returns correct index when column is found
-	suite.Equal(1, suite.df.IsColumnIncluded("col2"))
+	suite.Equal(1, suite.df.ColumnExistsWithIndex("col2"))
 }
 
 func TestColumnsTestSuite(t *testing.T) {

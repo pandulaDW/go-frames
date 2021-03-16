@@ -58,7 +58,7 @@ func (df *DataFrame) createHeader(colLengths []int, isCustomIndex bool) (string,
 func (df *DataFrame) createRowString(i int, colLengths []int, sb *strings.Builder) {
 	for _, col := range df.columns {
 		var strRepr string
-		val := df.Data[col.Name].Data[i]
+		val := df.data[col.Name].Data[i]
 		if col.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
 			strRepr = val.(time.Time).Format("2006-01-02")
 		} else {
@@ -117,7 +117,7 @@ func (df *DataFrame) String() string {
 
 	// calculating header lengths
 	for _, col := range copiedDF.Columns() {
-		colLength := copiedDF.Data[col].GetMaxLength()
+		colLength := copiedDF.data[col].GetMaxLength()
 		colLengths = append(colLengths, colLength)
 	}
 

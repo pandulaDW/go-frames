@@ -14,7 +14,7 @@ func (df *DataFrame) ILoc(indices []int, columns []string) *DataFrame {
 	seriesArray := make([]*series.Series, 0)
 
 	for _, col := range columns {
-		s, ok := df.Data[col]
+		s, ok := df.data[col]
 		if !ok {
 			panic(errors.CustomError(col + " column is not found"))
 		}

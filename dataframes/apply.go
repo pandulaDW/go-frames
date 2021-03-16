@@ -16,7 +16,7 @@ func (df *DataFrame) ApplyToRows(fun base.ApplyFunc) (*DataFrame, error) {
 	for i := 0; i < df.length; i++ {
 		row := make([]string, 0)
 		for _, column := range df.columns {
-			currentVal := df.Data[column.Name].Data[i]
+			currentVal := df.data[column.Name].Data[i]
 			modifiedVal, err := fun(currentVal)
 			if err != nil {
 				return nil, err
@@ -39,7 +39,7 @@ func (df *DataFrame) ApplyToColumns(cols []string, fun base.ApplyFunc) (*DataFra
 	copiedDF := df.ShallowCopy()
 
 	for _, col := range cols {
-		s, ok := copiedDF.Data[col]
+		s, ok := copiedDF.data[col]
 		if !ok {
 			return nil, errors.ColumnNotFound(col)
 		}
@@ -48,7 +48,7 @@ func (df *DataFrame) ApplyToColumns(cols []string, fun base.ApplyFunc) (*DataFra
 			return nil, err
 		}
 		result.SetColName(col)
-		copiedDF.Data[col] = result
+		copiedDF.data[col] = result
 	}
 
 	return copiedDF, nil

@@ -28,10 +28,10 @@ func dateParsing(options *CsvOptions, df *dataframes.DataFrame) error {
 		}
 
 		for _, col := range options.DateCols {
-			if _, ok := df.Data[col]; !ok {
+			if ok := df.ColumnExists(col); !ok {
 				return errors.ColumnNotFound(col)
 			}
-			err := df.Data[col].CastAsTime(options.DateFormat)
+			err := df.Col(col).CastAsTime(options.DateFormat)
 			if err != nil {
 				return err
 			}
@@ -41,10 +41,10 @@ func dateParsing(options *CsvOptions, df *dataframes.DataFrame) error {
 	if options.ParseDates != nil {
 		for format, cols := range options.ParseDates {
 			for _, col := range cols {
-				if _, ok := df.Data[col]; !ok {
+				if ok := df.ColumnExists(col); !ok {
 					return errors.ColumnNotFound(col)
 				}
-				err := df.Data[col].CastAsTime(format)
+				err := df.Col(col).CastAsTime(format)
 				if err != nil {
 					return err
 				}
