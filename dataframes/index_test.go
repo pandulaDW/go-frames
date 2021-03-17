@@ -54,12 +54,12 @@ func (suite *indexTestSuite) TestDataFrame_ResetIndex() {
 	suite.Equal(suite.df, suite.df.ResetIndex(true))
 
 	// assert that the function adds a new column if drop is false
-	df := suite.df.ShallowCopy().SetIndex("col3")
+	df := suite.df.SetIndex("col3")
 	suite.Equal(suite.df, df.ResetIndex(false))
 
 	// assert that the function drops the index column if drop is true
-	df = suite.df.ShallowCopy().SetIndex("col3")
-	expected := suite.df.ShallowCopy().Drop("col3")
+	df = suite.df.SetIndex("col3")
+	expected := suite.df.Drop("col3")
 	actual := df.ResetIndex(true)
 	suite.Equal(expected, actual)
 }

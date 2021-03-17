@@ -32,22 +32,27 @@ func (df *DataFrame) SetIndexBySeries(s *series.Series) *DataFrame {
 // If the DataFrame still uses the default index, no change will be made.
 //
 // If drop is set to true, it will drop the current index column and if false, current index column column
-// will be part of the dataframe
+// will be part of the dataframe.
+//
+// The function returns a new DataFrame without modifying the current DataFrame.
 func (df *DataFrame) ResetIndex(drop bool) *DataFrame {
 	if !df.Index.IsCustom {
 		return df
 	}
 
+	var modifiedDF *DataFrame
 	if !drop {
 		currentIndex := df.Index.Data
-		df.WithColumn(currentIndex)
+		modifiedDF = df.WithColumn(currentIndex)
+	} else {
+		modifiedDF = df.ShallowCopy()
 	}
 
 	indices := helpers.ToInterfaceFromInt(helpers.Range(0, df.length, 1))
-	df.Index = Index{
+	modifiedDF.Index = Index{
 		Data:     series.NewSeries("#", indices...),
 		IsCustom: false,
 	}
 
-	return df
+	return modifiedDF
 }
