@@ -79,7 +79,7 @@ func (df *DataFrame) Describe() *DataFrame {
 	copy(colNamesDescribe[1:], colNames)
 
 	// set column names
-	transposedInfo.SetColumnNames(colNamesDescribe)
+	transposedInfo = transposedInfo.SetColumnNames(colNamesDescribe)
 
 	return transposedInfo
 }

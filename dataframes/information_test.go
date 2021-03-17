@@ -64,7 +64,6 @@ func (suite *infoTestSuite) TestDescribe() {
 	)
 
 	actual := suite.df.Describe()
-	fmt.Println("data: ", expected.Columns(), actual.Columns())
 
 	// assert that the describe body dataframe is created successfully
 	suite.Equal(expected, actual)
