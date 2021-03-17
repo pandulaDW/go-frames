@@ -6,16 +6,16 @@ import (
 	"github.com/pandulaDW/go-frames/series"
 )
 
-// SetIndex sets the given column as the index. Panics if the column name is not found
+// SetIndex sets the given column as the index and returns a new DataFrame.
+// Panics if the column name is not found
 func (df *DataFrame) SetIndex(colName string) *DataFrame {
-	if helpers.LinearSearch(colName, helpers.ToInterfaceFromString(df.Columns())) == -1 {
-		panic(errors.ColumnNotFound(colName))
-	}
+	_ = df.Col(colName) // panics here if not found
 
-	df.Index = Index{Data: df.data[colName], IsCustom: true}
-	df.Drop(colName)
+	indexCol := Index{Data: df.data[colName], IsCustom: true}
+	modifiedDF := df.Drop(colName)
+	modifiedDF.Index = indexCol
 
-	return df
+	return modifiedDF
 }
 
 // SetIndexBySeries sets the index column as the given series. The function panics if the

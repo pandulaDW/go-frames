@@ -24,7 +24,7 @@ func helperTimeMethods(s *Series, _type string) *Series {
 		case "YEAR":
 			data[i] = t.Year()
 		case "MONTH":
-			data[i] = t.Month()
+			data[i] = t.Month().String()
 		case "DAY":
 			data[i] = t.Day()
 		}
@@ -43,16 +43,22 @@ func (s *Series) Year() *Series {
 	return year
 }
 
-// Month returns the month in which the value occurs in the Series.
+// Month returns the month in which the value occurs in the Series in a string format.
 //
 // The function panics if the series type is not base.DateTime
 func (s *Series) Month() *Series {
-	return helperTimeMethods(s, "MONTH")
+	month := helperTimeMethods(s, "MONTH")
+	month.column.Dtype = base.Object
+	month.column.Name = helpers.FunctionNameWrapper("month", s.column.Name)
+	return month
 }
 
 // Day returns the day of the month in which the value occurs in the Series.
 //
 // The function panics if the series type is not base.DateTime
 func (s *Series) Day() *Series {
-	return helperTimeMethods(s, "DAY")
+	day := helperTimeMethods(s, "DAY")
+	day.column.Dtype = base.Int
+	day.column.Name = helpers.FunctionNameWrapper("day", s.column.Name)
+	return day
 }

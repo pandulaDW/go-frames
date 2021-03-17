@@ -23,8 +23,11 @@ func main() {
 	capitalized := df.Col("title").Lower().Capitalized()
 	df = df.WithColumnRenamed("title", capitalized)
 
-	year := df.Col("publish_time").Year()
-	df = df.WithColumn(year)
+	df = df.WithColumn(df.Col("publish_time").Year())
+	df = df.WithColumnRenamed("month", df.Col("publish_time").Month())
+	df = df.WithColumn(df.Col("publish_time").Day())
+
+	fmt.Println(df.Col("month").ValueCounts())
 
 	fmt.Println(df.Head(4))
 	fmt.Println(time.Since(start))

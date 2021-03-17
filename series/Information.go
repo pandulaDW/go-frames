@@ -7,7 +7,7 @@ func (s *Series) MemSize() int {
 	return helpers.GetRealSizeOf(s.Data)
 }
 
-// ValueCounts Return a map containing counts of unique values.
+// ValueCounts Returns a map containing counts of unique values.
 //
 // The resulting map can then be converted to a dataframe and sorted
 // to display the most frequently-occurring or least least-occurring element.

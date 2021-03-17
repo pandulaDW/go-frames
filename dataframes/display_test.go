@@ -53,7 +53,7 @@ func (suite *displayTestSuite) TestString() {
 +------+----+-----+-----+-----------+
 `
 	expected = strings.TrimSpace(expected)
-	suite.Equal(expected, suite.df.ShallowCopy().SetIndex("col2").String())
+	suite.Equal(expected, suite.df.SetIndex("col2").String())
 }
 
 func TestDisplayTestSuite(t *testing.T) {
