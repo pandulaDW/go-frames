@@ -68,7 +68,9 @@ func (df *DataFrame) ShallowCopy() *DataFrame {
 	for _, col := range df.columns {
 		seriesArr = append(seriesArr, df.data[col.Name])
 	}
-	return NewDataFrame(seriesArr...)
+	newDF := NewDataFrame(seriesArr...)
+	newDF.Index = df.Index
+	return newDF
 }
 
 // IsEqual returns true if the passed DataFrame pointer is pointing to another DataFrame instance.

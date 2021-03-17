@@ -29,7 +29,7 @@ func TestReadCSV(t *testing.T) {
 	assert.Equal(t, expected, actual)
 
 	// assert that index col is set correctly
-	expected = expected.ShallowCopy().SetIndex("petal_length")
+	expected = expected.SetIndex("petal_length")
 	actual, _ = ReadCSV(CsvOptions{Path: filepath.Join(dataPath, "irisSample.csv"), IndexCol: "petal_length"})
 	assert.Equal(t, expected, actual)
 

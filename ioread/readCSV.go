@@ -94,7 +94,7 @@ func ReadCSV(options CsvOptions) (*dataframes.DataFrame, error) {
 
 	// set the index, if provided
 	if df.ColumnExistsWithIndex(options.IndexCol) != -1 {
-		df.SetIndex(options.IndexCol)
+		df = df.SetIndex(options.IndexCol)
 	}
 
 	// parse the dates

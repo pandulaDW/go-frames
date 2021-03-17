@@ -11,9 +11,8 @@ import (
 func (df *DataFrame) SetIndex(colName string) *DataFrame {
 	_ = df.Col(colName) // panics here if not found
 
-	indexCol := Index{Data: df.data[colName], IsCustom: true}
 	modifiedDF := df.Drop(colName)
-	modifiedDF.Index = indexCol
+	modifiedDF.Index = Index{Data: df.data[colName], IsCustom: true}
 
 	return modifiedDF
 }
