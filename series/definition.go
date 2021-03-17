@@ -19,12 +19,17 @@ func (s *Series) GetColumn() *base.Column {
 	return &s.column
 }
 
-// SetColName will set the column name of the series
-func (s *Series) SetColName(colName string) {
-	s.column.Name = colName
+// SetColName will set the column name of the series and will return a new series
+func (s *Series) SetColName(colName string) *Series {
+	modifiedS := s.ShallowCopy()
+	modifiedS.column.Name = colName
+	return modifiedS
 }
 
 // SetColIndex will set the column index of the series
-func (s *Series) SetColIndex(colIndex int) {
-	s.column.ColIndex = colIndex
+func (s *Series) SetColIndex(colIndex int) *Series {
+	modifiedS := s.ShallowCopy()
+	modifiedS.column.ColIndex = colIndex
+	return modifiedS
+
 }

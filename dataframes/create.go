@@ -73,7 +73,7 @@ func (df *DataFrame) ShallowCopy() *DataFrame {
 	return newDF
 }
 
-// IsEqual returns true if the passed DataFrame pointer is pointing to another DataFrame instance.
+// IsEqual returns true if the passed DataFrame pointer is pointing to the same DataFrame instance.
 //
 // To check if the two DataFrames are not equal elementwise, use IsDeepEqual
 func (df *DataFrame) IsEqual(otherDF *DataFrame) bool {

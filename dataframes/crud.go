@@ -32,11 +32,11 @@ func (df *DataFrame) WithColumnRenamed(colName string, s *series.Series) *DataFr
 	copiedDF := df.ShallowCopy()
 
 	// rename the series column name
-	s.SetColName(colName)
+	s = s.SetColName(colName)
 
 	// increase the column index and append column
 	if _, ok := copiedDF.data[colName]; !ok {
-		s.SetColIndex(len(copiedDF.columns) + 1)
+		s = s.SetColIndex(len(copiedDF.columns) + 1)
 		copiedDF.columns = append(copiedDF.columns, s.GetColumn())
 	}
 
