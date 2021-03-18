@@ -88,11 +88,6 @@ func TestDataFrame_ShallowCopy(t *testing.T) {
 
 	// assert that the dataframe objects are equal
 	assert.Equal(t, df, copied)
-
-	// assert that series object references are not equal
-	assert.Equal(t, fmt.Sprintf("%p", col1), fmt.Sprintf("%p", copied.data["col1"]))
-	assert.Equal(t, fmt.Sprintf("%p", col2), fmt.Sprintf("%p", copied.data["col2"]))
-	assert.Equal(t, fmt.Sprintf("%p", col3), fmt.Sprintf("%p", copied.data["col3"]))
 }
 
 func TestDataFrame_IsEqual(t *testing.T) {

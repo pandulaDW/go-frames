@@ -15,6 +15,9 @@ func (df *DataFrame) WithColumn(s *series.Series) *DataFrame {
 		panic(errors.MismatchedNumOfRows(copiedDF.length, s.Len()))
 	}
 
+	// set column index
+	s = s.SetColIndex(len(copiedDF.columns))
+
 	// append column
 	copiedDF.columns = append(copiedDF.columns, s.GetColumn())
 
@@ -36,7 +39,7 @@ func (df *DataFrame) WithColumnRenamed(colName string, s *series.Series) *DataFr
 
 	// increase the column index and append column
 	if _, ok := copiedDF.data[colName]; !ok {
-		s = s.SetColIndex(len(copiedDF.columns) + 1)
+		s = s.SetColIndex(len(copiedDF.columns))
 		copiedDF.columns = append(copiedDF.columns, s.GetColumn())
 	}
 

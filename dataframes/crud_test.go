@@ -1,7 +1,6 @@
 package dataframes
 
 import (
-	"fmt"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -46,8 +45,6 @@ func (suite *crudTestSuite) TestDataFrame_WithColumnRenamed() {
 	renamedCol := testCol.SetColName("test")
 	expected := NewDataFrame(suite.col1, suite.col2, suite.col3, renamedCol)
 	actual := suite.df.WithColumnRenamed("test", testCol)
-	fmt.Println(actual)
-	fmt.Println(expected)
 	suite.Equal(expected, actual)
 	suite.Equal(false, suite.df.IsEqual(actual))
 }
