@@ -124,6 +124,12 @@ func (df *DataFrame) Drop(colNames ...string) *DataFrame {
 		}
 	}
 
+	// reset the indices
+	for i, column := range filteredCols {
+		column.ColIndex = i
+		copiedDF.data[column.Name].GetColumn().ColIndex = i
+	}
+
 	copiedDF.columns = filteredCols
 	return copiedDF
 }
