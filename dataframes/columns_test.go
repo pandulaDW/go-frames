@@ -28,16 +28,15 @@ func (suite *columnsTestSuite) TestDataFrame_Columns() {
 
 func (suite *columnsTestSuite) TestDataFrame_SetColumnNames() {
 	newColumnNames := []string{"newCol1", "newCol2", "newCol3"}
-	copiedDF := suite.df.DeepCopy()
-	copiedDF.SetColumnNames(newColumnNames)
+	df := suite.df.SetColumnNames(newColumnNames)
 
 	// assert that the column names are set correctly
-	suite.Equal(copiedDF.Columns(), newColumnNames)
+	suite.Equal(df.Columns(), newColumnNames)
 
 	// assert that the function will panic if mismatched number of column names are given
 	suite.PanicsWithError("mismatched number of columns provided. requires 2 columns, but 3 was provided",
 		func() {
-			copiedDF.SetColumnNames(newColumnNames[0:2])
+			df.SetColumnNames(newColumnNames[0:2])
 		})
 }
 
@@ -48,7 +47,7 @@ func (suite *columnsTestSuite) TestDataFrame_RenameColumn() {
 	})
 
 	// assert that function correctly rename the column
-	df := suite.df.DeepCopy().RenameColumn("col3", "testCol")
+	df := suite.df.RenameColumn("col3", "testCol")
 	testCol := series.NewSeries("testCol", suite.col3.Data...)
 	expected := NewDataFrame(suite.col1, suite.col2, testCol)
 	suite.Equal(expected, df)
@@ -68,18 +67,19 @@ func (suite *columnsTestSuite) TestDataFrame_ResetColumns() {
 
 	// assert that function correctly reorders the columns
 	expected := NewDataFrame(suite.col2, suite.col3, suite.col1)
-	suite.Equal(expected, suite.df.ShallowCopy().ResetColumns([]string{"col2", "col3", "col1"}))
+	suite.Equal(expected, suite.df.ResetColumns([]string{"col2", "col3", "col1"}))
 }
 
 func (suite *columnsTestSuite) TestDataFrame_Drop() {
 	// assert that function panics when incorrect column names are provided
 	suite.PanicsWithError("testCol column not found in the dataframe", func() {
-		suite.df.ShallowCopy().Drop("col1", "testCol")
+		suite.df.Drop("col1", "testCol")
 	})
 
 	// assert that function correctly drops the columns
 	expected := NewDataFrame(suite.col3)
-	suite.Equal(expected, suite.df.Drop("col1", "col2"))
+	actual := suite.df.Drop("col1", "col2")
+	suite.Equal(expected, actual)
 }
 
 func (suite *columnsTestSuite) TestDataFrame_Select() {

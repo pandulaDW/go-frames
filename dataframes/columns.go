@@ -42,7 +42,7 @@ func (df *DataFrame) SetColumnNames(cols []string) *DataFrame {
 	newSeriesArray := make([]*series.Series, 0)
 	for i, column := range df.columns {
 		newSeries := df.data[column.Name]
-		newSeries.SetColName(cols[i])
+		newSeries = newSeries.SetColName(cols[i])
 		newSeriesArray = append(newSeriesArray, newSeries)
 	}
 

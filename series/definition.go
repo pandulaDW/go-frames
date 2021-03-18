@@ -26,10 +26,9 @@ func (s *Series) SetColName(colName string) *Series {
 	return modifiedS
 }
 
-// SetColIndex will set the column index of the series
+// SetColIndex will set the column index of the series and will return a new series
 func (s *Series) SetColIndex(colIndex int) *Series {
 	modifiedS := s.ShallowCopy()
 	modifiedS.column.ColIndex = colIndex
 	return modifiedS
-
 }

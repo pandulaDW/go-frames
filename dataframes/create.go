@@ -42,7 +42,7 @@ func NewDataFrame(data ...*series.Series) *DataFrame {
 			panic(errors.DuplicatedColumn(colName))
 		}
 		df.data[colName] = s
-		s.SetColIndex(i)
+		s = s.SetColIndex(i)
 		df.columns = append(df.columns, s.GetColumn())
 	}
 
