@@ -40,9 +40,14 @@ func MismatchedNumOfRows(expected, actual int) error {
 	return errors.New(err)
 }
 
-//IncorrectDataType returns an error mentioning the expected type
+// IncorrectDataType returns an error mentioning the expected type
 func IncorrectDataType(dtype base.DType) error {
 	return errors.New(fmt.Sprintf("expected a %s type Series", dtype))
+}
+
+// InvalidRowValue returns an error if an incorrect value is found in a series at the given row number
+func InvalidRowValue(rowNum int) error {
+	return errors.New(fmt.Sprintf("invalid value at row %d", rowNum))
 }
 
 //InvalidSeriesValError return an error based an error specifying the index and column name

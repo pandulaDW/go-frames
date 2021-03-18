@@ -9,26 +9,27 @@ import (
 
 func main() {
 	start := time.Now()
-	df, err := ioread.ReadCSV(ioread.CsvOptions{
-		Path:       "data/youtubevideos.csv",
-		ParseDates: map[string][]string{time.RFC3339: {"publish_time"}, "06.02.01": {"trending_date"}},
-	})
+	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/supermarket_sales.csv",
+		DateCols: []string{"Date"}, DateFormat: "1/2/2006"})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	df = df.Select("video_id", "trending_date", "title", "publish_time")
+	df = df.WithColumnRenamed("Month", df.Col("Date").Month())
+	cols := make([]string, 2, len(df.Columns()))
+	cols[0] = "Date"
+	cols[1] = "Month"
 
-	capitalized := df.Col("title").Lower().Capitalized()
-	df = df.WithColumnRenamed("title", capitalized)
+	for _, col := range df.Columns() {
+		if col != "Date" && col != "Month" {
+			cols = append(cols, col)
+		}
+	}
 
-	df = df.WithColumn(df.Col("publish_time").Year())
-	df = df.WithColumnRenamed("month", df.Col("publish_time").Month())
-	df = df.WithColumn(df.Col("publish_time").Day())
+	df = df.ResetColumns(cols)
+	df = df.WithColumnRenamed("Range", df.Col("Rating").Round(2))
 
-	fmt.Println(df.Col("month").ValueCounts())
-
-	fmt.Println(df.Head(4))
+	fmt.Println(df.Head(5))
 	fmt.Println(time.Since(start))
 }

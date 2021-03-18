@@ -33,6 +33,10 @@ func TestNewDataFrame(t *testing.T) {
 		},
 	}
 
+	for _, column := range actual.columns {
+		actual.data[column.Name].GetColumn().ColIndex = column.ColIndex
+	}
+
 	// assert that the dataframe is created successfully
 	assert.Equal(t, expected, actual)
 

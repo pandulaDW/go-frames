@@ -31,10 +31,10 @@ func (df *DataFrame) SetIndexBySeries(s *series.Series) *DataFrame {
 // ResetIndex will Reset the index of the DataFrame, and use the default one instead.
 // If the DataFrame still uses the default index, no change will be made.
 //
-// If drop is set to true, it will drop the current index column and if false, current index column column
+// If drop is set to true, it will drop the current index column and if false, current index column
 // will be part of the dataframe.
 //
-// The function returns a new DataFrame without modifying the current DataFrame.
+// The function returns a new DataFrame without modifying the current DataFrame object.
 func (df *DataFrame) ResetIndex(drop bool) *DataFrame {
 	if !df.Index.IsCustom {
 		return df
