@@ -25,7 +25,7 @@ func (suite *locateTestSuite) SetupTest() {
 
 func (suite *locateTestSuite) TestDataFrame_ILoc() {
 	// assert that function panics when a wrong column name is given
-	suite.PanicsWithError("testCol column is not found", func() {
+	suite.PanicsWithError("testCol column not found in the dataframe", func() {
 		suite.df.ILoc([]int{1, 2, 3}, []string{"testCol"})
 	})
 

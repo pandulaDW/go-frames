@@ -37,7 +37,7 @@ func (suite *crudTestSuite) TestDataFrame_WithColumn() {
 func (suite *crudTestSuite) TestDataFrame_WithColumnRenamed() {
 	// assert that the function panics when mismatched number of rows are added
 	suite.PanicsWithError("mismatched number of rows provided. requires 5 rows, but 3 was provided", func() {
-		suite.df.WithColumn(series.NewSeries("col3", true, false, true))
+		suite.df.WithColumnRenamed("test", series.NewSeries("col3", true, false, true))
 	})
 
 	// assert that the function returns a new dataframe with the added column

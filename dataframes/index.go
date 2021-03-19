@@ -20,12 +20,13 @@ func (df *DataFrame) SetIndex(colName string) *DataFrame {
 // SetIndexBySeries sets the index column as the given series. The function panics if the
 // length of the series is different from dataframe length
 func (df *DataFrame) SetIndexBySeries(s *series.Series) *DataFrame {
-	if s.Len() != df.length {
-		panic(errors.MismatchedNumOfRows(df.length, s.Len()))
+	copiedDF := df.ShallowCopy()
+	if s.Len() != copiedDF.length {
+		panic(errors.MismatchedNumOfRows(copiedDF.length, s.Len()))
 	}
 
-	df.Index = Index{Data: s, IsCustom: true}
-	return df
+	copiedDF.Index = Index{Data: s, IsCustom: true}
+	return copiedDF
 }
 
 // ResetIndex will Reset the index of the DataFrame, and use the default one instead.

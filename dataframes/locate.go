@@ -6,7 +6,9 @@ import (
 	"github.com/pandulaDW/go-frames/series"
 )
 
-// ILoc will access a group of rows by an integer array and and columns by an string array.
+// ILoc will access a group of rows by an integer array and and columns by an string array
+// and will return a new DataFrame.
+//
 // Panics if out of range indices are found or an undefined column is given.
 //
 // To return all the columns, use df.ILoc([row_indices], df.Columns())
@@ -14,10 +16,7 @@ func (df *DataFrame) ILoc(indices []int, columns []string) *DataFrame {
 	seriesArray := make([]*series.Series, 0)
 
 	for _, col := range columns {
-		s, ok := df.data[col]
-		if !ok {
-			panic(errors.CustomError(col + " column is not found"))
-		}
+		s := df.Col(col)            // will panic here if column is not found
 		newSeries := s.Loc(indices) // will panic here if indices are out of range
 		seriesArray = append(seriesArray, newSeries)
 	}

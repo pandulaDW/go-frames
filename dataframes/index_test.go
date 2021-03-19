@@ -46,7 +46,7 @@ func (suite *indexTestSuite) TestDataFrame_SetIndexBySeries() {
 
 	// assert that the function sets the index properly
 	s = series.NewSeries("col4", 42, 56, 12, 90, 45)
-	suite.Equal(Index{Data: s, IsCustom: true}, suite.df.ShallowCopy().SetIndexBySeries(s).Index)
+	suite.Equal(Index{Data: s, IsCustom: true}, suite.df.SetIndexBySeries(s).Index)
 }
 
 func (suite *indexTestSuite) TestDataFrame_ResetIndex() {
