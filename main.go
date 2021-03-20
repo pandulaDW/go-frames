@@ -28,7 +28,10 @@ func main() {
 	}
 
 	df = df.ResetColumns(cols)
-	df = df.WithColumnRenamed("Range", df.Col("Rating").Round(2))
+	err = df.Col("Rating").CastAsInt()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	fmt.Println(df.Head(5))
 	fmt.Println(time.Since(start))

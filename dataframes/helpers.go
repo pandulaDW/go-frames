@@ -44,3 +44,7 @@ func ConvertRowContentToDF(colNames []string, content [][]string) *DataFrame {
 
 	return NewDataFrame(orderedSeriesSlice...)
 }
+
+func (df *DataFrame) ConvertMapToDataFrame() {
+
+}

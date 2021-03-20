@@ -6,7 +6,7 @@ import (
 )
 
 // Apply will map each element of the series to the given function and
-// will return a new series with a new column name "functionName_colName"
+// will return a new series with a new column name "functionName(colName)"
 func (s *Series) Apply(mapper base.ApplyFunc) (*Series, error) {
 	seriesData := make([]interface{}, 0, s.Len())
 	for _, val := range s.Data {

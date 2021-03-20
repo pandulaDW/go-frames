@@ -4,8 +4,59 @@ import (
 	"errors"
 	"fmt"
 	"github.com/pandulaDW/go-frames/base"
+	customErrors "github.com/pandulaDW/go-frames/errors"
+	"strconv"
 	"time"
 )
+
+// CastAsInt would take in a series and will return a series casted as base.Int.
+//
+// The function will cast a Series as below.
+//
+// base.Int - Return nil without modifying the Series
+//
+// base.Float - Round down the Float values to Integers.
+//
+// base.Bool - Convert true values to 1 and false values to 0.
+//
+// base.Object - Convert to integers by rounding down.
+//
+// base.DateTime - Returns an error
+func (s *Series) CastAsInt() error {
+	switch s.column.Dtype {
+	case base.Int:
+		return nil
+	case base.DateTime:
+		return customErrors.IncorrectDataType(base.DateTime)
+	}
+
+	for i, val := range s.Data {
+		switch s.column.Dtype {
+		case base.Float:
+			floatVal, ok := val.(float64)
+			if !ok {
+				return customErrors.InvalidRowValue(i)
+			}
+			s.Data[i] = int(floatVal)
+		case base.Object:
+			intVal, err := strconv.ParseInt(fmt.Sprintf("%v", val), 10, 64)
+			if err != nil {
+				return customErrors.CustomWithStandardError(customErrors.InvalidRowValue(i).Error(), err)
+			}
+			s.Data[i] = intVal
+		case base.Bool:
+			boolVal, ok := val.(bool)
+			if !ok {
+				return customErrors.InvalidRowValue(i)
+			}
+			if boolVal {
+				s.Data[i] = 1
+			}
+			s.Data[i] = 0
+		}
+	}
+	return nil
+}
 
 // CastAsTime would iterate through each element in an object series
 // and will check if all elements conform to the given layout format.
