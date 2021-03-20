@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/pandulaDW/go-frames/dataframes"
 	"github.com/pandulaDW/go-frames/ioread"
 	"log"
 	"time"
@@ -19,11 +18,9 @@ func main() {
 
 	df = df.WithColumn(df.Col("Date").Month())
 
-	fmt.Println(df.Head(2))
+	isFood := df.Col("Product line").Lower().Contains("food")
+	df = df.FilterBySeries(isFood)
 
-	df = dataframes.ConvertMapToDataFrame(df.Col("Product line").ValueCounts())
-	df = df.WithColumn(df.Col("keys").Lower().Contains("food"))
-
-	fmt.Println(df)
+	fmt.Println(df.Head(5))
 	fmt.Println("time took: ", time.Since(start))
 }
