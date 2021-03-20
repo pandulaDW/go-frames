@@ -3,6 +3,7 @@ package series
 import (
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
+	"github.com/pandulaDW/go-frames/helpers"
 	"strings"
 )
 
@@ -25,7 +26,8 @@ func helperStringMethods(s *Series, fun stringMethod) *Series {
 		data[i] = fun(strVal)
 	}
 
-	return NewSeries("test", data...)
+	funcName := helpers.FunctionNameWrapper(helpers.GetFunctionName(fun), s.column.Name)
+	return NewSeries(funcName, data...)
 }
 
 // helperStringBooleanMethods applies the function provided and returns a new Series
@@ -44,7 +46,8 @@ func helperStringBooleanMethods(s *Series, str string, fun stringBoolMethod) *Se
 		data[i] = fun(strVal, str)
 	}
 
-	return NewSeries("test", data...)
+	funcName := helpers.FunctionNameWrapper(helpers.GetFunctionName(fun), s.column.Name)
+	return NewSeries(funcName, data...)
 }
 
 // Lower will return a new Series with the values lowercased.

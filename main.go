@@ -5,7 +5,6 @@ import (
 	"github.com/pandulaDW/go-frames/dataframes"
 	"github.com/pandulaDW/go-frames/ioread"
 	"log"
-	"strconv"
 	"time"
 )
 
@@ -21,12 +20,10 @@ func main() {
 	df = df.WithColumn(df.Col("Date").Month())
 
 	fmt.Println(df.Head(2))
-	fmt.Println(dataframes.ConvertMapToDataFrame(df.Col("Payment").ValueCounts()))
 
+	df = dataframes.ConvertMapToDataFrame(df.Col("Product line").ValueCounts())
+	df = df.WithColumn(df.Col("keys").Lower().Contains("food"))
+
+	fmt.Println(df)
 	fmt.Println("time took: ", time.Since(start))
-
-	_, err = strconv.ParseInt(fmt.Sprintf("%v", "foo"), 10, 64)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
