@@ -4,10 +4,56 @@ import (
 	"errors"
 	"fmt"
 	"github.com/pandulaDW/go-frames/base"
+	customErrors "github.com/pandulaDW/go-frames/errors"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
+
+func TestSeries_CastAsInt(t *testing.T) {
+	sData := NewSeries("col", "2016-02-06", "2017-12-26", "2015-05-05")
+	_ = sData.CastAsTime("2006-01-02")
+
+	// assert that correct response returns to incorrect series
+	err := NewSeries("col", 12, 43, 64).CastAsInt()
+	assert.Nil(t, err)
+	err = sData.CastAsInt()
+	assert.EqualError(t, err, customErrors.IncorrectDataType(base.DateTime).Error())
+
+	// assert that float series will be correctly casted
+	sFloat := NewSeries("col", 1.34, 54.12, 4.23, 5.6)
+	sFloatCorrect := sFloat.DeepCopy()
+	_ = sFloatCorrect.CastAsInt()
+	assert.Equal(t, sFloatCorrect, NewSeries("col", 1, 54, 4, 5))
+
+	// assert that error will be returned for a incorrect float
+	sFloat.Data[2] = "foo"
+	err = sFloat.CastAsInt()
+	assert.NotNil(t, err)
+
+	// assert that string series will be correctly casted
+	sStr := NewSeries("col", "12", "43", "56", "21")
+	sStrCorrect := sStr.DeepCopy()
+	_ = sStrCorrect.CastAsInt()
+	assert.Equal(t, sStrCorrect, NewSeries("col", 12, 43, 56, 21))
+
+	// assert that error will be returned for a incorrect string
+	sStr.Data[2] = "foo"
+	sStr.column.Dtype = base.Object
+	err = sStr.CastAsInt()
+	assert.NotNil(t, err)
+
+	// assert that string series will be correctly casted
+	sBool := NewSeries("col", "True", "True", "False", "True")
+	sBoolCorrect := sBool.DeepCopy()
+	_ = sBoolCorrect.CastAsInt()
+	assert.Equal(t, sBoolCorrect, NewSeries("col", 1, 1, 0, 1))
+
+	// assert that error will be returned for a incorrect string
+	sBool.Data[2] = "foo"
+	err = sBool.CastAsInt()
+	assert.NotNil(t, err)
+}
 
 //goland:noinspection GoNilness
 func TestSeries_CastAsTime(t *testing.T) {

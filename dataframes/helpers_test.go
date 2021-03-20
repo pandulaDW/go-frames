@@ -21,3 +21,15 @@ func TestConvertRowContentToDF(t *testing.T) {
 	// assert that row content is converted to a dataframe successfully
 	assert.Equal(t, expected, ConvertRowContentToDF(colNames, content))
 }
+
+func TestConvertMapToDataFrame(t *testing.T) {
+	m := make(map[interface{}]interface{})
+	m["foo"] = 12
+	m["bar"] = 15
+	m["baz"] = 16
+
+	// assert that the function returns the correct dataframe
+	expected := NewDataFrame(series.NewSeries("keys", "foo", "bar", "baz"),
+		series.NewSeries("values", 12, 15, 16))
+	assert.Equal(t, expected, ConvertMapToDataFrame(m))
+}

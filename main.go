@@ -5,6 +5,7 @@ import (
 	"github.com/pandulaDW/go-frames/dataframes"
 	"github.com/pandulaDW/go-frames/ioread"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -23,4 +24,9 @@ func main() {
 	fmt.Println(dataframes.ConvertMapToDataFrame(df.Col("Payment").ValueCounts()))
 
 	fmt.Println("time took: ", time.Since(start))
+
+	_, err = strconv.ParseInt(fmt.Sprintf("%v", "foo"), 10, 64)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

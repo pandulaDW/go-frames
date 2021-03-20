@@ -51,10 +51,13 @@ func (s *Series) CastAsInt() error {
 			}
 			if boolVal {
 				s.Data[i] = 1
+			} else {
+				s.Data[i] = 0
 			}
-			s.Data[i] = 0
 		}
 	}
+
+	s.column.Dtype = base.Int
 	return nil
 }
 
