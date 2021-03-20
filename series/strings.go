@@ -27,24 +27,32 @@ func helperStringMethods(s *Series, fun stringMethod) *Series {
 	return NewSeries("test", data...)
 }
 
-// Lower will return a new series with the values lowercased.
+// Lower will return a new Series with the values lowercased.
 //
 // The function panics if the series data type of the series is not base.Object.
 func (s *Series) Lower() *Series {
 	return helperStringMethods(s, strings.ToLower)
 }
 
-// Upper will return a new series with the values uppercased.
+// Upper will return a new Series with the values uppercased.
 //
 // The function panics if the series data type of the series is not base.Object.
 func (s *Series) Upper() *Series {
 	return helperStringMethods(s, strings.ToUpper)
 }
 
-// Capitalized will return a new series Title returns a copy of the strings
-// with all Unicode letters that begin words mapped to their Unicode title case.
+// Capitalized will return a new Series where all Unicode letters that
+// begin words mapped to their Unicode title case.
 //
 // The function panics if the series data type of the series is not base.Object.
 func (s *Series) Capitalized() *Series {
 	return helperStringMethods(s, strings.Title)
+}
+
+// Trim returns a new series where for each value, all leading and trailing white
+// space removed, as defined by Unicode.
+//
+// The function panics if the series data type of the series is not base.Object.
+func (s *Series) Trim() *Series {
+	return helperStringMethods(s, strings.TrimSpace)
 }

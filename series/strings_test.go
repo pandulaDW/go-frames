@@ -38,7 +38,13 @@ func TestSeries_Upper(t *testing.T) {
 }
 
 func TestSeries_Capitalized(t *testing.T) {
-	// assert that function returns correctly upper series
+	// assert that function returns correctly capitalized series
 	s := NewSeries("test", "foo", "BAR", "BaZ")
 	assert.Equal(t, NewSeries("test", "Foo", "BAR", "BaZ"), s.Capitalized())
+}
+
+func TestSeries_Trim(t *testing.T) {
+	// assert that function returns correctly trimmed series
+	s := NewSeries("test", "foo ", " BAR", "  BaZ  ", "march")
+	assert.Equal(t, NewSeries("test", "foo", "BAR", "BaZ", "march"), s.Trim())
 }
