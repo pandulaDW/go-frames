@@ -25,6 +25,24 @@ func TestHelperStringMethods(t *testing.T) {
 	})
 }
 
+func TestHelperStringBooleanMethods(t *testing.T) {
+	// assert that function returns an error if invalid series is entered
+	s := NewSeries("test", 12, 43, 11, 10)
+	assert.PanicsWithError(t, errors.IncorrectDataType(base.Object).Error(), func() {
+		helperStringBooleanMethods(s, "test", func(val1, val2 string) bool {
+			return true
+		})
+	})
+
+	s = NewSeries("test", "foo", "bar", "baz")
+	s.Data[2] = 5
+	assert.PanicsWithError(t, errors.InvalidSeriesValError(5, 2, s.column.Name).Error(), func() {
+		helperStringBooleanMethods(s, "test", func(val1, val2 string) bool {
+			return true
+		})
+	})
+}
+
 func TestSeries_Lower(t *testing.T) {
 	// assert that function returns correctly lowered series
 	s := NewSeries("test", "foo", "BAR", "BaZ")
@@ -47,4 +65,10 @@ func TestSeries_Trim(t *testing.T) {
 	// assert that function returns correctly trimmed series
 	s := NewSeries("test", "foo ", " BAR", "  BaZ  ", "march")
 	assert.Equal(t, NewSeries("test", "foo", "BAR", "BaZ", "march"), s.Trim())
+}
+
+func TestSeries_Contains(t *testing.T) {
+	// assert that function returns correctly trimmed series
+	s := NewSeries("test", "we are", "leaving", "right now", "now now!!")
+	assert.Equal(t, NewSeries("test", false, false, true, true), s.Contains("now"))
 }
