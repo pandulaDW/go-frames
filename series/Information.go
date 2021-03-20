@@ -11,15 +11,16 @@ func (s *Series) MemSize() int {
 //
 // The resulting map can then be converted to a dataframe and sorted
 // to display the most frequently-occurring or least least-occurring element.
-func (s *Series) ValueCounts() map[interface{}]int {
-	countMap := make(map[interface{}]int)
+func (s *Series) ValueCounts() map[interface{}]interface{} {
+	countMap := make(map[interface{}]interface{})
 
 	for _, val := range s.Data {
 		_, ok := countMap[val]
 		if !ok {
 			countMap[val] = 1
 		} else {
-			countMap[val]++
+			current := countMap[val]
+			countMap[val] = current.(int) + 1
 		}
 	}
 

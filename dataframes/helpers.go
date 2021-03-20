@@ -45,6 +45,21 @@ func ConvertRowContentToDF(colNames []string, content [][]string) *DataFrame {
 	return NewDataFrame(orderedSeriesSlice...)
 }
 
-func (df *DataFrame) ConvertMapToDataFrame() {
+// ConvertMapToDataFrame will convert a Go map to a two column DataFrame by using the keys in one column and
+// the corresponding values in the other column. The map can have any type of a key and value.
+//
+// The two columns will be named as keys and values.
+func ConvertMapToDataFrame(m map[interface{}]interface{}) *DataFrame {
+	keyData := make([]interface{}, 0, len(m))
+	valueData := make([]interface{}, 0, len(m))
 
+	for key, val := range m {
+		keyData = append(keyData, key)
+		valueData = append(valueData, val)
+	}
+
+	keyS := series.NewSeries("keys", keyData...)
+	valueS := series.NewSeries("values", valueData...)
+
+	return NewDataFrame(keyS, valueS)
 }
