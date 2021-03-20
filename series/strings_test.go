@@ -68,7 +68,19 @@ func TestSeries_Trim(t *testing.T) {
 }
 
 func TestSeries_Contains(t *testing.T) {
-	// assert that function returns correctly trimmed series
+	// assert that function returns a correct bool Series
 	s := NewSeries("test", "we are", "leaving", "right now", "now now!!")
 	assert.Equal(t, NewSeries("test", false, false, true, true), s.Contains("now"))
+}
+
+func TestSeries_StartsWith(t *testing.T) {
+	// assert that function returns a correct bool Series
+	s := NewSeries("test", "foo", "bar is", "food now", "now now!!")
+	assert.Equal(t, NewSeries("test", true, false, true, false), s.StartsWith("foo"))
+}
+
+func TestSeries_EndsWith(t *testing.T) {
+	// assert that function returns a correct bool Series
+	s := NewSeries("test", "we are", "leaving now", "right now", "bar")
+	assert.Equal(t, NewSeries("test", false, true, true, false), s.EndsWith("now"))
 }

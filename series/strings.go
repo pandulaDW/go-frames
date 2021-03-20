@@ -81,6 +81,22 @@ func (s *Series) Trim() *Series {
 // value of the Series.
 //
 // The function panics if the series data type of the series is not base.Object.
-func (s *Series) Contains(val string) *Series {
-	return helperStringBooleanMethods(s, val, strings.Contains)
+func (s *Series) Contains(substr string) *Series {
+	return helperStringBooleanMethods(s, substr, strings.Contains)
+}
+
+// StartsWith returns a new Series of base.Bool type which reports whether the value begins with
+// the given prefix for each value of the Series.
+//
+// The function panics if the series data type of the series is not base.Object.
+func (s *Series) StartsWith(prefix string) *Series {
+	return helperStringBooleanMethods(s, prefix, strings.HasPrefix)
+}
+
+// EndsWith returns a new Series of base.Bool type which reports whether the value ends with
+// the given suffix for each value of the Series.
+//
+// The function panics if the series data type of the series is not base.Object.
+func (s *Series) EndsWith(prefix string) *Series {
+	return helperStringBooleanMethods(s, prefix, strings.HasSuffix)
 }
