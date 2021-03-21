@@ -27,6 +27,12 @@ func helperTimeMethods(s *Series, _type string) *Series {
 			data[i] = t.Month().String()
 		case "DAY":
 			data[i] = t.Day()
+		case "HOUR":
+			data[i] = t.Hour()
+		case "MINUTE":
+			data[i] = t.Minute()
+		case "SECONDS":
+			data[i] = t.Second()
 		}
 	}
 
@@ -61,4 +67,36 @@ func (s *Series) Day() *Series {
 	day.column.Dtype = base.Int
 	day.column.Name = helpers.FunctionNameWrapper("day", s.column.Name)
 	return day
+}
+
+// Hour returns the hour within the day specified by t, in the range [0, 23] for each value in the Series.
+//
+// The function panics if the series type is not base.DateTime
+func (s *Series) Hour() *Series {
+	hour := helperTimeMethods(s, "HOUR")
+	hour.column.Dtype = base.Int
+	hour.column.Name = helpers.FunctionNameWrapper("hour", s.column.Name)
+	return hour
+}
+
+// Minute returns the minute offset within the hour specified by t, in the range [0, 59] for each
+// value in the Series.
+//
+// The function panics if the series type is not base.DateTime
+func (s *Series) Minute() *Series {
+	minute := helperTimeMethods(s, "MINUTE")
+	minute.column.Dtype = base.Int
+	minute.column.Name = helpers.FunctionNameWrapper("minute", s.column.Name)
+	return minute
+}
+
+// Second returns the second offset within the minute specified by t, in the range [0, 59] for each
+// value in the Series.
+//
+// The function panics if the series type is not base.DateTime
+func (s *Series) Seconds() *Series {
+	seconds := helperTimeMethods(s, "SECOND")
+	seconds.column.Dtype = base.Int
+	seconds.column.Name = helpers.FunctionNameWrapper("seconds", s.column.Name)
+	return seconds
 }
