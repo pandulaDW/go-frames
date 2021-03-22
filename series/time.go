@@ -31,7 +31,7 @@ func helperTimeMethods(s *Series, _type string) *Series {
 			data[i] = t.Hour()
 		case "MINUTE":
 			data[i] = t.Minute()
-		case "SECONDS":
+		case "SECOND":
 			data[i] = t.Second()
 		}
 	}
@@ -86,7 +86,7 @@ func (s *Series) Hour() *Series {
 func (s *Series) Minute() *Series {
 	minute := helperTimeMethods(s, "MINUTE")
 	minute.column.Dtype = base.Int
-	minute.column.Name = helpers.FunctionNameWrapper("minute", s.column.Name)
+	minute.column.Name = helpers.FunctionNameWrapper("minutes", s.column.Name)
 	return minute
 }
 

@@ -37,8 +37,29 @@ func TestSeries_Month(t *testing.T) {
 }
 
 func TestSeries_Day(t *testing.T) {
-	// assert that year is extracted properly
-	s := NewSeries("test", "2016-01-02", "2017-01-03", "2021-01-24")
+	// assert that month is extracted properly
+	s := NewSeries("test", "2016-03-02", "2017-05-23", "2021-11-04")
 	_ = s.CastAsTime("2006-01-02")
-	assert.Equal(t, NewSeries("day(test)", 2, 3, 24), s.Day())
+	assert.Equal(t, NewSeries("day(test)", 2, 23, 4), s.Day())
+}
+
+func TestSeries_Hour(t *testing.T) {
+	// assert that year is extracted properly
+	s := NewSeries("test", "2013-02-04 16:24:15", "2017-09-24 05:12:35", "2011-12-07 11:54:12")
+	_ = s.CastAsTime("2006-01-02 15:04:05")
+	assert.Equal(t, NewSeries("hour(test)", 16, 5, 11), s.Hour())
+}
+
+func TestSeries_Minute(t *testing.T) {
+	// assert that year is extracted properly
+	s := NewSeries("test", "2013-02-04 16:24:15", "2017-09-24 05:12:35", "2011-12-07 11:54:12")
+	_ = s.CastAsTime("2006-01-02 15:04:05")
+	assert.Equal(t, NewSeries("minutes(test)", 24, 12, 54), s.Minute())
+}
+
+func TestSeries_Seconds(t *testing.T) {
+	// assert that year is extracted properly
+	s := NewSeries("test", "2013-02-04 16:24:15", "2017-09-24 05:12:35", "2011-12-07 11:54:12")
+	_ = s.CastAsTime("2006-01-02 15:04:05")
+	assert.Equal(t, NewSeries("seconds(test)", 15, 35, 12), s.Seconds())
 }
