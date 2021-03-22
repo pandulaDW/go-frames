@@ -90,7 +90,7 @@ func (s *Series) Minute() *Series {
 	return minute
 }
 
-// Second returns the second offset within the minute specified by t, in the range [0, 59] for each
+// Seconds returns the second offset within the minute specified by t, in the range [0, 59] for each
 // value in the Series.
 //
 // The function panics if the series type is not base.DateTime
@@ -99,4 +99,31 @@ func (s *Series) Seconds() *Series {
 	seconds.column.Dtype = base.Int
 	seconds.column.Name = helpers.FunctionNameWrapper("seconds", s.column.Name)
 	return seconds
+}
+
+// DateDiff returns the dates elapsed since the date value given for each value in the Series.
+//
+// The function panics if the series type is not base.DateTime
+func (s *Series) DateDiff(date time.Time) *Series {
+	if s.column.Dtype != base.DateTime {
+		panic(errors.IncorrectDataType(base.DateTime))
+	}
+
+	diff := s.ShallowCopy()
+	data := make([]interface{}, 0, s.Len())
+
+	for i, val := range s.Data {
+		t, ok := val.(time.Time)
+		if !ok {
+			panic(errors.InvalidSeriesValError(val, i, s.column.Name))
+		}
+		diffVal := int(t.Sub(date).Hours() / 24)
+		data = append(data, diffVal)
+	}
+
+	diff.column.Dtype = base.Int
+	diff.column.Name = helpers.FunctionNameWrapper("datediff", s.column.Name)
+	diff.Data = data
+
+	return diff
 }

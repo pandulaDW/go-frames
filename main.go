@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/ioread"
-	"github.com/pandulaDW/go-frames/series"
 	"log"
 	"time"
 )
@@ -22,22 +21,14 @@ func main() {
 	isFood := df.Col("Product line").Lower().Contains("food")
 	df = df.FilterBySeries(isFood)
 
-	middleClass, _ := df.Col("gross income").Apply(func(val interface{}) (interface{}, error) {
-		if val.(float64) > 20 {
-			return true, nil
-		}
-		return false, nil
+	t, _ := time.Parse("2006/01/02", "2019/01/01")
+	fixedDiff, _ := df.Col("Date").DateDiff(t).Apply(func(val interface{}) (interface{}, error) {
+		return val.(int) - 1, nil
 	})
 
-	df = df.FilterBySeries(middleClass)
+	df = df.WithColumnRenamed("diff", fixedDiff)
 
-	fmt.Println(df.Select("Payment", "gross income").Head(5))
-
-	s := series.NewSeries("test", "2013-02-04 16:24:15", "2017-09-24 05:12:35", "2011-12-07 11:54:12")
-	_ = s.CastAsTime("2006-01-02 15:04:05")
-
-	t, _ := time.Parse("2006-01-02 15:04:05", "2013-02-04 16:24:15")
-	fmt.Println(t.Second())
+	fmt.Println(df.Head(3))
 
 	fmt.Println("time took: ", time.Since(start))
 }
