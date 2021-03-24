@@ -29,11 +29,12 @@ func (df *DataFrame) createInfoFooter() string {
 func (df *DataFrame) createInfoDF() *DataFrame {
 	var indices, columnNames, nonNulls, dTypes []interface{}
 
-	for i := 0; i < len(df.columns); i++ {
+	for i, col := range df.columns {
 		indices = append(indices, i+1)
-		columnNames = append(columnNames, df.columns[i].Name)
-		nonNulls = append(nonNulls, fmt.Sprintf("%d non-null", df.length))
-		dTypes = append(dTypes, df.columns[i].Dtype)
+		columnNames = append(columnNames, col.Name)
+		nonNullCount := df.length - df.data[col.Name].CountOfNA()
+		nonNulls = append(nonNulls, fmt.Sprintf("%d non-null", nonNullCount))
+		dTypes = append(dTypes, col.Dtype)
 	}
 
 	col1 := series.NewSeries("Column", columnNames...)
@@ -85,4 +86,3 @@ func (df *DataFrame) Describe() *DataFrame {
 }
 
 // TODO - Add non null columns properly
-// TODO  - Refactor using series.loc later

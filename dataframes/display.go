@@ -59,10 +59,14 @@ func (df *DataFrame) createRowString(i int, colLengths []int, sb *strings.Builde
 	for _, col := range df.columns {
 		var strRepr string
 		val := df.data[col.Name].Data[i]
-		if col.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
-			strRepr = val.(time.Time).Format("2006-01-02")
+		if val == nil {
+			strRepr = "N/A"
 		} else {
-			strRepr = fmt.Sprintf("%v", val)
+			if col.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
+				strRepr = val.(time.Time).Format("2006-01-02")
+			} else {
+				strRepr = fmt.Sprintf("%v", val)
+			}
 		}
 		extraSpaces := strings.Repeat(" ", colLengths[col.ColIndex]-len(strRepr))
 		sb.WriteString("|" + extraSpaces + strRepr)

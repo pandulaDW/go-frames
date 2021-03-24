@@ -41,22 +41,6 @@ func (suite *applyTestSuite) SetupTest() {
 	}
 }
 
-func (suite *applyTestSuite) TestDataFrame_ApplyToRows() {
-	// assert that function returns an error if encountered
-	df, err := suite.df.ApplyToRows(suite.fun1)
-	suite.Nil(df)
-	suite.EqualError(err, suite.err.Error())
-
-	// assert that function returns a dataframe with nil if no error
-	df = NewDataFrame(suite.col2)
-	actual, err := df.ApplyToRows(suite.fun1)
-	suite.Nil(err)
-	suite.NotNil(actual)
-
-	// assert that function returns a new dataframe
-	suite.Equal(false, df.IsEqual(actual))
-}
-
 func (suite *applyTestSuite) TestDataFrame_ApplyToColumns() {
 	// assert that function returns an error if a column is not found
 	df, err := suite.df.ApplyToColumns([]string{"col5"}, suite.fun2)

@@ -38,6 +38,10 @@ func NewSeries(colName string, data ...interface{}) *Series {
 // column dtype will not be considered as an object.
 func (s *Series) InferType() {
 	for i, val := range s.Data {
+		if val == nil {
+			s.Data[i] = nil
+			continue
+		}
 		// if at least one value is object, the column will be set as object
 		if s.column.Dtype == base.Object {
 			s.Data[i] = fmt.Sprintf("%v", val)

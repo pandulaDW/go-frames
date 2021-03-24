@@ -13,6 +13,10 @@ func (s *Series) GetMaxLength() int {
 	strLengths := make([]int, 0, s.Len())
 
 	for _, val := range s.Data {
+		if val == nil {
+			strLengths = append(strLengths, 3) // len of 'N/A'
+			continue
+		}
 		if s.column.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
 			strLengths = append(strLengths, 11)
 			continue
