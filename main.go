@@ -18,14 +18,11 @@ func main() {
 	df = df.RenameColumn("calculated_host_listings_count", "calc_host_count")
 
 	fmt.Println(df.Head(5))
-	fmt.Println(df.Info())
 
-	x := []interface{}{2, 3, nil, "foo", 10}
-	for _, el := range x {
-		if el != nil {
-			fmt.Println(el)
-		}
-	}
+	loc, _ := time.LoadLocation("Australia/Canberra")
+	fmt.Println("time now: ", time.Now())
+	fmt.Println("time in Canberra: ", time.Now().In(loc))
+	fmt.Println("time difference")
 
 	fmt.Println("time took: ", time.Since(start))
 }

@@ -59,7 +59,7 @@ func TestSeries_CastAsInt(t *testing.T) {
 func TestSeries_CastAsTime(t *testing.T) {
 	layout := "2006-01-02 15:04:05"
 	sCorrect := NewSeries("col", "2016-02-06 13:11:24", "2017-12-26 03:11:22", "2015-05-05 16:17:32",
-		"2016-02-06 06:23:24", "2018-01-03 12:10:24", "1996-01-06 08:12:22", "2011-07-08 12:14:45")
+		"2016-02-06 06:23:24", "2018-01-03 12:10:24", "", "1996-01-06 08:12:22", "2011-07-08 12:14:45")
 	sIncorrect := sCorrect.DeepCopy()
 	sInt := NewSeries("col", 12, 34, 54, 66)
 
@@ -88,4 +88,7 @@ func TestSeries_CastAsTime(t *testing.T) {
 	// assert that a row value can be inferred to time.Time correctly
 	_, ok := sCorrect.Data[2].(time.Time)
 	assert.Equal(t, true, ok)
+
+	// assert that empty strings are converted to nils
+	assert.Nil(t, sCorrect.Data[5])
 }

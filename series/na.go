@@ -52,3 +52,14 @@ func (s *Series) NotNa() *Series {
 
 	return boolS
 }
+
+// CountOfNA returns the count of NA values in a given Series.
+func (s *Series) CountOfNA() int {
+	count := 0
+	for _, val := range s.Data {
+		if val == nil {
+			count++
+		}
+	}
+	return count
+}

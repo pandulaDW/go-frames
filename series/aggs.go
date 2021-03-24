@@ -162,6 +162,7 @@ func (s *Series) Sum() float64 {
 // Avg returns the average value of the series for integer and floating type.
 // Returns nil, when the dtype is not applicable
 func (s *Series) Avg() float64 {
-	avgVal := s.Sum() / float64(s.Len())
+	countWithoutNA := s.Len() - s.CountOfNA()
+	avgVal := s.Sum() / float64(countWithoutNA)
 	return avgVal
 }

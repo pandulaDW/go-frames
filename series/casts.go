@@ -77,6 +77,10 @@ func (s *Series) CastAsTime(layout string) error {
 	}
 
 	for i, val := range s.Data {
+		if val == "" {
+			sData = append(sData, nil)
+			continue
+		}
 		strValue, ok := val.(string)
 		if !ok {
 			return errors.New(fmt.Sprintf("value at row number %d is not a string", i))
