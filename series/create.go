@@ -68,6 +68,7 @@ func (s *Series) InferType() {
 			s.column.Dtype = base.Bool
 		default:
 			if val == "" && s.column.Dtype != base.Object {
+				s.Data[i] = nil
 				continue
 			}
 			s.column.Dtype = base.Object

@@ -16,6 +16,9 @@ func (s *Series) Max() interface{} {
 	switch s.column.Dtype {
 	case base.Int:
 		for i, val := range s.Data {
+			if val == nil {
+				continue
+			}
 			intVal, ok := val.(int)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
@@ -27,6 +30,9 @@ func (s *Series) Max() interface{} {
 		return maxInt
 	case base.Float:
 		for i, val := range s.Data {
+			if val == nil {
+				continue
+			}
 			floatVal, ok := val.(float64)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
@@ -42,6 +48,9 @@ func (s *Series) Max() interface{} {
 			panic(errors.InvalidSeriesValError(s.Data[0], 0, s.column.Name))
 		}
 		for i, val := range s.Data[1:] {
+			if val == nil {
+				continue
+			}
 			parsedVal, ok := val.(time.Time)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i+1, s.column.Name))
@@ -65,6 +74,9 @@ func (s *Series) Min() interface{} {
 	switch s.column.Dtype {
 	case base.Int:
 		for i, val := range s.Data {
+			if val == nil {
+				continue
+			}
 			intVal, ok := val.(int)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
@@ -76,6 +88,9 @@ func (s *Series) Min() interface{} {
 		return minInt
 	case base.Float:
 		for i, val := range s.Data {
+			if val == nil {
+				continue
+			}
 			floatVal, ok := val.(float64)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
@@ -91,6 +106,9 @@ func (s *Series) Min() interface{} {
 			panic(errors.InvalidSeriesValError(s.Data[0], 0, s.column.Name))
 		}
 		for i, val := range s.Data[1:] {
+			if val == nil {
+				continue
+			}
 			parsedTime, ok := val.(time.Time)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i+1, s.column.Name))
@@ -114,6 +132,9 @@ func (s *Series) Sum() float64 {
 	switch s.column.Dtype {
 	case base.Int:
 		for i, val := range s.Data {
+			if val == nil {
+				continue
+			}
 			intVal, ok := val.(int)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))
@@ -123,6 +144,9 @@ func (s *Series) Sum() float64 {
 		return float64(sumInt)
 	case base.Float:
 		for i, val := range s.Data {
+			if val == nil {
+				continue
+			}
 			floatVal, ok := val.(float64)
 			if !ok {
 				panic(errors.InvalidSeriesValError(val, i, s.column.Name))

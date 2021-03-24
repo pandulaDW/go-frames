@@ -41,8 +41,9 @@ func (suite *createTestSuite) TestSeries_InferType() {
 	s = NewSeries("col", 12, 23.43, 54.32, 43.54, 23, 34.54, 5.6, 90)
 	suite.Equal(base.Float, s.column.Dtype)
 
-	// assert that blanks in types other than string will not be treated as string
+	// assert that blanks will be skipped and set to nil
 	s = NewSeries("col", "12", "23.43", "54.32", "", "43.54", "23", "34.54")
+	suite.Nil(s.Data[3])
 	suite.Equal(base.Float, s.column.Dtype)
 }
 

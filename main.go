@@ -9,26 +9,23 @@ import (
 
 func main() {
 	start := time.Now()
-	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/supermarket_sales.csv",
-		DateCols: []string{"Date"}, DateFormat: "1/2/2006"})
+	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/nyc_air_bnb.csv"})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	df = df.WithColumn(df.Col("Date").Month())
+	df = df.RenameColumn("calculated_host_listings_count", "calc_host_count")
 
-	isFood := df.Col("Product line").Lower().Contains("food")
-	df = df.FilterBySeries(isFood)
+	fmt.Println(df.Head(5))
+	fmt.Println(df.Info())
 
-	t, _ := time.Parse("2006/01/02", "2019/01/01")
-	fixedDiff, _ := df.Col("Date").DateDiff(t).Apply(func(val interface{}) (interface{}, error) {
-		return val.(int) - 1, nil
-	})
-
-	df = df.WithColumnRenamed("diff", fixedDiff)
-
-	fmt.Println(df.Head(3))
+	x := []interface{}{2, 3, nil, "foo", 10}
+	for _, el := range x {
+		if el != nil {
+			fmt.Println(el)
+		}
+	}
 
 	fmt.Println("time took: ", time.Since(start))
 }
