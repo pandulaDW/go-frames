@@ -45,6 +45,12 @@ func (suite *createTestSuite) TestSeries_InferType() {
 	s = NewSeries("col", "12", "23.43", "54.32", "", "43.54", "23", "34.54")
 	suite.Nil(s.Data[3])
 	suite.Equal(base.Float, s.column.Dtype)
+
+	// assert that nil values will be skipped and set to nil
+	s = NewSeries("col", nil, "23.43", "54.32", nil, "43.54", "23", "34.54")
+	suite.Nil(s.Data[0])
+	suite.Nil(s.Data[3])
+	suite.Equal(base.Float, s.column.Dtype)
 }
 
 func (suite *createTestSuite) TestConvertStringToTypedValue() {

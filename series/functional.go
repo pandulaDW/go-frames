@@ -10,6 +10,10 @@ import (
 func (s *Series) Apply(mapper base.ApplyFunc) (*Series, error) {
 	seriesData := make([]interface{}, 0, s.Len())
 	for _, val := range s.Data {
+		if val == nil {
+			seriesData = append(seriesData, nil)
+			continue
+		}
 		mappedVal, err := mapper(val)
 		if err != nil {
 			return nil, err

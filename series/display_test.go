@@ -9,6 +9,7 @@ func TestSeries_GetMaxLength(t *testing.T) {
 	s1 := NewSeries("col", "foo", "bar", "baz", "food")
 	s2 := NewSeries("column", "foo", "bar", "baz", "food")
 	s3 := NewSeries("col", "2010-05-01", "2015-11-21", "2010-03-01")
+	s4 := NewSeries("column", nil, "bar", "baz", "food")
 	_ = s3.CastAsTime("2006-01-02")
 
 	// assert that column length will be returned based on the longest value
@@ -19,4 +20,7 @@ func TestSeries_GetMaxLength(t *testing.T) {
 
 	// assert that date columns are properly handled
 	assert.Equal(t, 11, s3.GetMaxLength())
+
+	// assert that nil values are properly handled
+	assert.Equal(t, 6, s4.GetMaxLength())
 }
