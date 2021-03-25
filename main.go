@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/ioread"
+	"github.com/pandulaDW/go-frames/series"
 	"log"
 	"time"
 )
@@ -16,8 +17,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	s := series.NewSeries("col", "foo", nil, "bar", "", "baz")
+	s.CountOfNA()
+
 	df = df.RenameColumn("calculated_host_listings_count", "calc_host_count")
-	fmt.Println(df.Head(5))
+	fmt.Println(df.Head(4))
 
 	fmt.Println("time took: ", time.Since(start))
 }

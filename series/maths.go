@@ -20,6 +20,10 @@ func (s *Series) Round(n int) *Series {
 	format := "%." + fmt.Sprintf("%df", n)
 
 	for i, val := range s.Data {
+		if val == nil {
+			newData = append(newData, nil)
+			continue
+		}
 		floatVal, ok := val.(float64)
 		if !ok {
 			panic(errors.InvalidRowValue(i))

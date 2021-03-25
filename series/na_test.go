@@ -18,3 +18,10 @@ func TestSeries_NotNa(t *testing.T) {
 	// assert that na values are correctly identified
 	assert.Equal(t, s.NotNa(), NewSeries("notna(col)", true, true, false, true, false, true))
 }
+
+func TestSeries_CountOfNA(t *testing.T) {
+	s := NewSeries("col", 12, 43, nil, 1.2, "", 90)
+
+	// assert that na values are correctly counted
+	assert.Equal(t, s.CountOfNA(), 2)
+}

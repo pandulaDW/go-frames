@@ -8,8 +8,8 @@ import (
 
 //goland:noinspection GoNilness
 func TestSeries_Round(t *testing.T) {
-	s := NewSeries("col", 12.346, 56.23, 1.2, 1.2335, 4.6003, 1.34)
-	expected := NewSeries("round(col)", 12.35, 56.23, 1.20, 1.23, 4.60, 1.34)
+	s := NewSeries("col", 12.346, 56.23, 1.2, 1.2335, 4.6003, nil, 1.34)
+	expected := NewSeries("round(col)", 12.35, 56.23, 1.20, 1.23, 4.60, nil, 1.34)
 
 	// assert that the function will return a rounded series
 	assert.Equal(t, s.Round(2), expected)

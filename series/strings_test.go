@@ -23,6 +23,11 @@ func TestHelperStringMethods(t *testing.T) {
 			return ""
 		})
 	})
+
+	// assert that nil values are skipped correctly
+	s = NewSeries("test", nil, "foo", "bar", "baz", "")
+	s = s.Lower()
+	assert.Nil(t, s.Data[0])
 }
 
 func TestHelperStringBooleanMethods(t *testing.T) {
@@ -69,18 +74,21 @@ func TestSeries_Trim(t *testing.T) {
 
 func TestSeries_Contains(t *testing.T) {
 	// assert that function returns a correct bool Series
-	s := NewSeries("test", "we are", "leaving", "right now", "now now!!")
-	assert.Equal(t, NewSeries("Contains(test)", false, false, true, true), s.Contains("now"))
+	s := NewSeries("test", "we are", "leaving", nil, "right now", "now now!!")
+	assert.Equal(t, NewSeries("Contains(test)", false, false, false, true, true),
+		s.Contains("now"))
 }
 
 func TestSeries_StartsWith(t *testing.T) {
 	// assert that function returns a correct bool Series
-	s := NewSeries("test", "foo", "bar is", "food now", "now now!!")
-	assert.Equal(t, NewSeries("HasPrefix(test)", true, false, true, false), s.StartsWith("foo"))
+	s := NewSeries("test", nil, "foo", "bar is", "food now", "now now!!")
+	assert.Equal(t, NewSeries("HasPrefix(test)", false, true, false, true, false),
+		s.StartsWith("foo"))
 }
 
 func TestSeries_EndsWith(t *testing.T) {
 	// assert that function returns a correct bool Series
-	s := NewSeries("test", "we are", "leaving now", "right now", "bar")
-	assert.Equal(t, NewSeries("HasSuffix(test)", false, true, true, false), s.EndsWith("now"))
+	s := NewSeries("test", "we are", "leaving now", nil, "right now", "bar")
+	assert.Equal(t, NewSeries("HasSuffix(test)", false, true, false, true, false),
+		s.EndsWith("now"))
 }

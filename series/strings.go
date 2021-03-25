@@ -19,6 +19,10 @@ func helperStringMethods(s *Series, fun stringMethod) *Series {
 	data := make([]interface{}, s.Len())
 
 	for i, val := range s.Data {
+		if val == nil {
+			data[i] = nil
+			continue
+		}
 		strVal, ok := val.(string)
 		if !ok {
 			panic(errors.InvalidSeriesValError(val, i, s.column.Name))
@@ -39,6 +43,10 @@ func helperStringBooleanMethods(s *Series, str string, fun stringBoolMethod) *Se
 	data := make([]interface{}, s.Len())
 
 	for i, val := range s.Data {
+		if val == nil {
+			data[i] = false
+			continue
+		}
 		strVal, ok := val.(string)
 		if !ok {
 			panic(errors.InvalidSeriesValError(val, i, s.column.Name))
@@ -81,7 +89,7 @@ func (s *Series) Trim() *Series {
 }
 
 // Contains returns a new Series of base.Bool type which reports whether substr is within each
-// value of the Series.
+// value of the Series. NA values will be return as false
 //
 // The function panics if the series data type of the series is not base.Object.
 func (s *Series) Contains(substr string) *Series {
@@ -89,7 +97,7 @@ func (s *Series) Contains(substr string) *Series {
 }
 
 // StartsWith returns a new Series of base.Bool type which reports whether the value begins with
-// the given prefix for each value of the Series.
+// the given prefix for each value of the Series. NA values will be return as false
 //
 // The function panics if the series data type of the series is not base.Object.
 func (s *Series) StartsWith(prefix string) *Series {
@@ -97,7 +105,7 @@ func (s *Series) StartsWith(prefix string) *Series {
 }
 
 // EndsWith returns a new Series of base.Bool type which reports whether the value ends with
-// the given suffix for each value of the Series.
+// the given suffix for each value of the Series. NA values will be return as false
 //
 // The function panics if the series data type of the series is not base.Object.
 func (s *Series) EndsWith(prefix string) *Series {
