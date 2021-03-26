@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestSeries_RegexExtract(t *testing.T) {
+func TestSeries_RegexContains(t *testing.T) {
 	re := regexp.MustCompile("foo.+")
 
 	// assert that function panics at incorrect DType
@@ -27,6 +27,34 @@ func TestSeries_RegexExtract(t *testing.T) {
 
 	// assert that function extract values correctly
 	s.Data[2] = "foodies"
-	expected := NewSeries("regex_extract(test)", false, true, true, false, true)
+	expected := NewSeries("regex_contains(test)", false, true, true, false, true)
 	assert.Equal(t, expected, s.RegexContains(re))
+}
+
+func TestSeries_RegexExtract(t *testing.T) {
+	re := regexp.MustCompile(`(\w+/\w+)`)
+
+	// assert that function panics at incorrect DType
+	s := NewSeries("test", 12, 43, 11, 10)
+	assert.PanicsWithError(t, errors.IncorrectDataType(base.Object).Error(), func() {
+		s.RegexExtract(re, 1)
+	})
+
+	s = NewSeries("test", "swede foo/bar sd", "swede", "fill/bill kill", nil, "matter na/cl size")
+
+	// assert that function panics if invalid values are given
+	s.Data[2] = 12
+	assert.PanicsWithError(t, errors.InvalidSeriesValError(12, 2, "test").Error(), func() {
+		s.RegexExtract(re, 1)
+	})
+
+	// assert that function panics if index is out of range values correctly
+	s.Data[2] = "fill/bill kill"
+	assert.PanicsWithError(t, errors.CustomError("index is out of range").Error(), func() {
+		s.RegexExtract(re, 3)
+	})
+
+	// assert that the function extract values correctly
+	expected := NewSeries("regex_extract(test)", "foo/bar", "", "fill/bill", "", "na/cl")
+	assert.Equal(t, expected, s.RegexExtract(re, 1))
 }
