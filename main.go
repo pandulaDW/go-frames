@@ -16,6 +16,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	df = df.FilterBySeries(df.Col("neighbourhood").Contains("Harlem"))
 	fmt.Println(df.Head(5))
 	fmt.Println("time took: ", time.Since(start))
 }

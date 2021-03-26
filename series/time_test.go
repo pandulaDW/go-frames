@@ -5,6 +5,7 @@ import (
 	"github.com/pandulaDW/go-frames/errors"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestHelperTimeMethods(t *testing.T) {
@@ -62,4 +63,27 @@ func TestSeries_Seconds(t *testing.T) {
 	s := NewSeries("test", "2013-02-04 16:24:15", "2017-09-24 05:12:35", "2011-12-07 11:54:12")
 	_ = s.CastAsTime("2006-01-02 15:04:05")
 	assert.Equal(t, NewSeries("seconds(test)", 15, 35, 12), s.Seconds())
+}
+
+func TestSeries_DateDiff(t *testing.T) {
+	// assert that function returns an error if invalid series is entered
+	s := NewSeries("test", 12, 43, 11, 10)
+	assert.PanicsWithError(t, errors.IncorrectDataType(base.DateTime).Error(), func() {
+		s.DateDiff(time.Now())
+	})
+
+	// assert that function panics at invalid values
+	s = NewSeries("test", "2016-01-02", "2016-01-03", "2016-01-04")
+	_ = s.CastAsTime("2006-01-02")
+	s.Data[2] = 5
+	assert.PanicsWithError(t, errors.InvalidSeriesValError(5, 2, s.column.Name).Error(), func() {
+		s.DateDiff(time.Now())
+	})
+
+	// assert that function returns the correct date difference
+	s = NewSeries("test", "2016-03-02", "2017-05-23", "2021-11-04")
+	_ = s.CastAsTime("2006-01-02")
+	expected := NewSeries("datediff(test)", -837, -390, 1236)
+	t_, _ := time.Parse("2006-01-02", "2018-06-17")
+	assert.Equal(t, expected, s.DateDiff(t_))
 }
