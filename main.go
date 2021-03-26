@@ -17,8 +17,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	re := regexp.MustCompile(`.*/.*`)
-	df = df.FilterBySeries(df.Col("name").RegexContains(re))
-	fmt.Println(df.Head(5))
+	re := regexp.MustCompile(`.* (\w+/\w+) .*`)
+	reCheck := df.Col("name").RegexExtract(re, 1)
+
+	df = df.WithColumnRenamed("extract", reCheck)
+	df = df.FilterBySeries(reCheck.NotBlank())
+
+	fmt.Println(df.Select("name", "extract").Head(5))
 	fmt.Println("time took: ", time.Since(start))
 }
