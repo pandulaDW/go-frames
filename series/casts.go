@@ -77,7 +77,7 @@ func (s *Series) CastAsTime(layout string) error {
 	}
 
 	for i, val := range s.Data {
-		if val == "" {
+		if val == "" || val == nil {
 			sData = append(sData, nil)
 			continue
 		}

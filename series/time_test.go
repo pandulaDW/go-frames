@@ -15,12 +15,17 @@ func TestHelperTimeMethods(t *testing.T) {
 		helperTimeMethods(s, "YEAR")
 	})
 
+	// assert that function returns an error if invalid values are entered
 	s = NewSeries("test", "2016-01-02", "2016-01-03", "2016-01-04")
 	_ = s.CastAsTime("2006-01-02")
 	s.Data[2] = 5
 	assert.PanicsWithError(t, errors.InvalidSeriesValError(5, 2, s.column.Name).Error(), func() {
 		helperTimeMethods(s, "YEAR")
 	})
+
+	// assert that function returns nil at nil values
+	s.Data[2] = nil
+	assert.Nil(t, s.Year().Data[2])
 }
 
 func TestSeries_Year(t *testing.T) {
@@ -81,9 +86,9 @@ func TestSeries_DateDiff(t *testing.T) {
 	})
 
 	// assert that function returns the correct date difference
-	s = NewSeries("test", "2016-03-02", "2017-05-23", "2021-11-04")
+	s = NewSeries("test", "2016-03-02", "2017-05-23", nil, "2021-11-04")
 	_ = s.CastAsTime("2006-01-02")
-	expected := NewSeries("datediff(test)", -837, -390, 1236)
+	expected := NewSeries("datediff(test)", -837, -390, nil, 1236)
 	t_, _ := time.Parse("2006-01-02", "2018-06-17")
 	assert.Equal(t, expected, s.DateDiff(t_))
 }

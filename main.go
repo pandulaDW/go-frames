@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/ioread"
 	"log"
+	"regexp"
 	"time"
 )
 
@@ -16,7 +17,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	df = df.FilterBySeries(df.Col("neighbourhood").Contains("Harlem"))
+	re := regexp.MustCompile(`.*/.*`)
+	df = df.FilterBySeries(df.Col("name").RegexContains(re))
 	fmt.Println(df.Head(5))
 	fmt.Println("time took: ", time.Since(start))
 }

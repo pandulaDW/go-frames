@@ -16,6 +16,10 @@ func helperTimeMethods(s *Series, _type string) *Series {
 	data := make([]interface{}, s.Len())
 
 	for i, val := range s.Data {
+		if val == nil {
+			data[i] = nil
+			continue
+		}
 		t, ok := val.(time.Time)
 		if !ok {
 			panic(errors.InvalidSeriesValError(val, i, s.column.Name))
@@ -113,6 +117,10 @@ func (s *Series) DateDiff(date time.Time) *Series {
 	data := make([]interface{}, 0, s.Len())
 
 	for i, val := range s.Data {
+		if val == nil {
+			data = append(data, nil)
+			continue
+		}
 		t, ok := val.(time.Time)
 		if !ok {
 			panic(errors.InvalidSeriesValError(val, i, s.column.Name))
