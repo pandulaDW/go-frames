@@ -75,7 +75,7 @@ func (s *Series) Upper() *Series {
 // Capitalized will return a new Series where all Unicode letters that
 // begin words mapped to their Unicode title case.
 //
-// The function panics if the series data type of the series is not base.Object.
+// The function panics if the data type of the series is not base.Object.
 func (s *Series) Capitalized() *Series {
 	return helperStringMethods(s, strings.Title)
 }
@@ -91,7 +91,7 @@ func (s *Series) Trim() *Series {
 // Contains returns a new Series of base.Bool type which reports whether substr is within each
 // value of the Series. NA values will be return as false
 //
-// The function panics if the series data type of the series is not base.Object.
+// The function panics if the series data type is not base.Object.
 func (s *Series) Contains(substr string) *Series {
 	return helperStringBooleanMethods(s, substr, strings.Contains)
 }
@@ -99,7 +99,7 @@ func (s *Series) Contains(substr string) *Series {
 // StartsWith returns a new Series of base.Bool type which reports whether the value begins with
 // the given prefix for each value of the Series. NA values will be return as false
 //
-// The function panics if the series data type of the series is not base.Object.
+// The function panics if the data type of the series is not base.Object.
 func (s *Series) StartsWith(prefix string) *Series {
 	return helperStringBooleanMethods(s, prefix, strings.HasPrefix)
 }
@@ -107,7 +107,7 @@ func (s *Series) StartsWith(prefix string) *Series {
 // EndsWith returns a new Series of base.Bool type which reports whether the value ends with
 // the given suffix for each value of the Series. NA values will be return as false
 //
-// The function panics if the series data type of the series is not base.Object.
+// The function panics if the data type of the series is not base.Object.
 func (s *Series) EndsWith(prefix string) *Series {
 	return helperStringBooleanMethods(s, prefix, strings.HasSuffix)
 }

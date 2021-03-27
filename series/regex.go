@@ -88,3 +88,38 @@ func (s *Series) RegexExtract(re *regexp.Regexp, index int) *Series {
 
 	return newS
 }
+
+// RegexReplace returns a Series where each returned value of the Series is a copy of it's src value,
+// replacing matches of the Regexp with the replacement string replaceStr.
+//
+// Inside replaceStr, $ signs are interpreted as in regexp.Expand, so for instance $1 represents
+// the text of the first submatch.
+//
+// The function panics if the Series datatype is not base.Object.
+func (s *Series) RegexReplace(re *regexp.Regexp, replaceStr string) *Series {
+	if s.column.Dtype != base.Object {
+		panic(errors.IncorrectDataType(base.Object))
+	}
+
+	replacedData := make([]interface{}, 0, s.Len())
+
+	for i, val := range s.Data {
+		if val == nil {
+			replacedData = append(replacedData, "")
+			continue
+		}
+		strVal, ok := val.(string)
+		if !ok {
+			panic(errors.InvalidSeriesValError(val, i, s.column.Name))
+		}
+
+		replacedVal := re.ReplaceAllString(strVal, replaceStr)
+		replacedData = append(replacedData, replacedVal)
+	}
+
+	newS := s.ShallowCopy()
+	newS.Data = replacedData
+	newS.column.Name = helpers.FunctionNameWrapper("regex_replace", s.column.Name)
+
+	return newS
+}

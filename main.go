@@ -4,25 +4,21 @@ import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/ioread"
 	"log"
-	"regexp"
 	"time"
 )
 
 func main() {
 	start := time.Now()
-	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/nyc_air_bnb.csv", DateCols: []string{"last_review"},
-		DateFormat: "2006-01-02"})
+	df, err := ioread.ReadCSV(ioread.CsvOptions{Path: "data/supermarket_sales.csv",
+		DateCols: []string{"Date"}, DateFormat: "1/2/2006"})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	re := regexp.MustCompile(`.* (\w+/\w+) .*`)
-	reCheck := df.Col("name").RegexExtract(re, 1)
+	janSales := df.Col("Date").Month().Contains("January")
+	df = df.FilterBySeries(janSales)
 
-	df = df.WithColumnRenamed("extract", reCheck)
-	df = df.FilterBySeries(reCheck.NotBlank())
-
-	fmt.Println(df.Select("name", "extract").Head(5))
+	fmt.Println(df.Head(5))
 	fmt.Println("time took: ", time.Since(start))
 }
