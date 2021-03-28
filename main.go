@@ -18,7 +18,9 @@ func main() {
 
 	janSales := df.Col("Date").Month().Contains("January")
 	df = df.FilterBySeries(janSales)
-	df = df.WithColumnRenamed("Quantity", df.Col("Quantity").Subtract(1))
+
+	df = df.WithColumn(df.Col("Total").Subtract(df.Col("Tax 5%")).Round(2))
+	df = df.WithColumnRenamed("Payment", df.Col("Payment").Add(" System"))
 
 	fmt.Println(df.Head(5))
 	fmt.Println("time took: ", time.Since(start))

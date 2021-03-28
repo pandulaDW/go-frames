@@ -44,10 +44,50 @@ func helperCrud(s *Series, val interface{}, operation string) *Series {
 				data[i] = sIntVal - intVal
 			}
 		}
+
+		if s.column.Dtype == base.Float {
+			floatVal, ok := curVal.(float64)
+			if !ok {
+				panic(errors.IncorrectTypedParameter("val", "float64"))
+			}
+			sFloatVal, ok := s.Data[i].(float64)
+			if !ok {
+				panic(errors.InvalidSeriesValError(s.Data[i], i, s.column.Name))
+			}
+			switch {
+			case operation == "ADD":
+				data[i] = floatVal + sFloatVal
+			case operation == "SUBTRACT":
+				data[i] = sFloatVal - floatVal
+			}
+		}
+
+		if s.column.Dtype == base.Object {
+			strVal, ok := curVal.(string)
+			if !ok {
+				panic(errors.IncorrectTypedParameter("val", "float64"))
+			}
+			sStringVal, ok := s.Data[i].(string)
+			if !ok {
+				panic(errors.InvalidSeriesValError(s.Data[i], i, s.column.Name))
+			}
+			switch {
+			case operation == "ADD":
+				data[i] = sStringVal + strVal
+			}
+		}
 	}
 
 	newS.Data = data
 	return newS
+}
+
+func setOpFuncName(val interface{}, prefix string, s, newS *Series) {
+	if valS, ok := val.(*Series); ok {
+		newS.column.Name = fmt.Sprintf("%s(%s, %s)", prefix, s.column.Name, valS.column.Name)
+	} else {
+		newS.column.Name = fmt.Sprintf("%s(%s, %v)", prefix, s.column.Name, val)
+	}
 }
 
 // Add will add the given value to each value in the calling Series and will return a new Series
@@ -59,7 +99,7 @@ func helperCrud(s *Series, val interface{}, operation string) *Series {
 // The function panics if incompatible values or an incompatible Series is passed.
 func (s *Series) Add(val interface{}) *Series {
 	newS := helperCrud(s, val, "ADD")
-	newS.column.Name = fmt.Sprintf("add(%s, %v)", s.column.Name, val)
+	setOpFuncName(val, "add", s, newS)
 	return newS
 }
 
@@ -72,6 +112,6 @@ func (s *Series) Add(val interface{}) *Series {
 // The function panics if incompatible values or an incompatible Series is passed.
 func (s *Series) Subtract(val interface{}) *Series {
 	newS := helperCrud(s, val, "SUBTRACT")
-	newS.column.Name = fmt.Sprintf("subtract(%s, %v)", s.column.Name, val)
+	setOpFuncName(val, "subtract", s, newS)
 	return newS
 }
