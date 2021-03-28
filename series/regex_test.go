@@ -58,3 +58,26 @@ func TestSeries_RegexExtract(t *testing.T) {
 	expected := NewSeries("regex_extract(test)", "foo/bar", "", "fill/bill", "", "na/cl")
 	assert.Equal(t, expected, s.RegexExtract(re, 1))
 }
+
+func TestSeries_RegexReplace(t *testing.T) {
+	re := regexp.MustCompile(`\d`)
+
+	// assert that function panics at incorrect DType
+	s := NewSeries("test", 12, 43, 11, 10)
+	assert.PanicsWithError(t, errors.IncorrectDataType(base.Object).Error(), func() {
+		s.RegexReplace(re, "|")
+	})
+
+	s = NewSeries("test", "foo 2 bar", "bar", nil, "23 jump street", "foo 2 bar 2")
+
+	// assert that function panics if invalid values are given
+	s.Data[2] = 12
+	assert.PanicsWithError(t, errors.InvalidSeriesValError(12, 2, "test").Error(), func() {
+		s.RegexReplace(re, "|")
+	})
+
+	// assert that the function replaces values correctly
+	s.Data[2] = nil
+	expected := NewSeries("regex_replace(test)", "foo | bar", "bar", "", "|| jump street", "foo | bar |")
+	assert.Equal(t, expected, s.RegexReplace(re, "|"))
+}
