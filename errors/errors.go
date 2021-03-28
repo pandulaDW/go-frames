@@ -45,6 +45,11 @@ func IncorrectDataType(dtype base.DType) error {
 	return errors.New(fmt.Sprintf("expected a %s type Series", dtype))
 }
 
+// IncorrectTypedParameter returns an error mentioning the expected type
+func IncorrectTypedParameter(param, expected string) error {
+	return errors.New(fmt.Sprintf("expected %s to be of type %s", param, expected))
+}
+
 // InvalidRowValue returns an error if an incorrect value is found in a series at the given row number
 func InvalidRowValue(rowNum int) error {
 	return errors.New(fmt.Sprintf("invalid value at row %d", rowNum))
