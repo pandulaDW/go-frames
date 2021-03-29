@@ -163,12 +163,10 @@ func (df *DataFrame) ColumnExists(colName string) bool {
 // ColumnExistsWithIndex returns the index position of the column name provided.
 // If the column is not found, the function will return -1.
 func (df *DataFrame) ColumnExistsWithIndex(colName string) int {
-	for _, col := range df.columns {
-		if col.Name == colName {
-			return col.ColIndex
-		}
+	if _, ok := df.data[colName]; !ok {
+		return -1
 	}
-	return -1
+	return df.data[colName].GetColumn().ColIndex
 }
 
 // MoveColumn is a helper method to move a column to the desired index position. It will place the column
@@ -193,14 +191,10 @@ func (df *DataFrame) MoveColumn(colName string, index int) *DataFrame {
 	}
 
 	// creating a new slice with the resettled column
-	resetCols := make([]string, 1, len(df.columns))
+	resetCols := make([]string, len(df.columns))
 	resetCols[index] = colName
-	if index > 0 {
-		resetCols = append(resetCols, cols[:index]...)
-	} else {
-		resetCols = append(resetCols, cols[0])
-	}
-	resetCols = append(resetCols, cols[index+1:]...)
+	copy(resetCols, cols[:index])
+	copy(resetCols[index+1:], cols[index:])
 
 	// reset the dataframe and return
 	newDf := df.ResetColumns(resetCols)
