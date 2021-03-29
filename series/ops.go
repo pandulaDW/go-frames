@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
+	"time"
 )
 
 func helperCrud(s *Series, val interface{}, operation string) *Series {
@@ -74,6 +75,21 @@ func helperCrud(s *Series, val interface{}, operation string) *Series {
 			switch {
 			case operation == "ADD":
 				data[i] = sStringVal + strVal
+			}
+		}
+
+		if s.column.Dtype == base.DateTime {
+			duration, ok := curVal.(time.Duration)
+			if !ok {
+				panic(errors.IncorrectTypedParameter("val", "time.Duration"))
+			}
+			sTVal, ok := s.Data[i].(time.Time)
+			if !ok {
+				panic(errors.InvalidSeriesValError(s.Data[i], i, s.column.Name))
+			}
+			switch {
+			case operation == "ADD":
+				data[i] = sTVal.Add(duration)
 			}
 		}
 	}

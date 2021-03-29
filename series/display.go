@@ -20,6 +20,9 @@ func (s *Series) GetMaxLength() int {
 		if s.column.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
 			strLengths = append(strLengths, 11)
 			continue
+		} else if s.column.Dtype == base.DateTime && !helpers.IsTimeSet(val.(time.Time)) {
+			strLengths = append(strLengths, 20)
+			continue
 		}
 		strRepr := fmt.Sprintf("%v", val)
 		strLengths = append(strLengths, len(strRepr))

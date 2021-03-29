@@ -64,6 +64,8 @@ func (df *DataFrame) createRowString(i int, colLengths []int, sb *strings.Builde
 		} else {
 			if col.Dtype == base.DateTime && helpers.IsTimeSet(val.(time.Time)) {
 				strRepr = val.(time.Time).Format("2006-01-02")
+			} else if col.Dtype == base.DateTime && !helpers.IsTimeSet(val.(time.Time)) {
+				strRepr = val.(time.Time).Format("2006-01-02 15:04:05")
 			} else {
 				strRepr = fmt.Sprintf("%v", val)
 			}
