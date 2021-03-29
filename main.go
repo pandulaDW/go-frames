@@ -25,13 +25,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	df = df.Drop("Date", "Time")
-
-	cols := make([]string, 0)
-	cols = append(cols, "Datetime")
-	cols = append(cols, df.Columns()...)
-
-	df = df.WithColumnRenamed("Datetime", datetime).ResetColumns(cols)
+	df = df.WithColumnRenamed("Datetime", datetime).Drop("Date", "Time")
+	df = df.MoveColumn("Datetime", 0)
 
 	fmt.Println(df.Head(5))
 	fmt.Println("time took: ", time.Since(start))

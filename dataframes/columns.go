@@ -170,3 +170,39 @@ func (df *DataFrame) ColumnExistsWithIndex(colName string) int {
 	}
 	return -1
 }
+
+// MoveColumn is a helper method to move a column to the desired index position. It will place the column
+// in the given index position and will shift the columns on the right side by one position.
+//
+// The function panics if the colName is not present or if index is out of bound
+func (df *DataFrame) MoveColumn(colName string, index int) *DataFrame {
+	if !df.ColumnExists(colName) {
+		panic(errors.ColumnNotFound(colName))
+	}
+
+	if index < 0 || index > len(df.columns) {
+		panic(errors.CustomError("index is out of bound"))
+	}
+
+	// populate slice without the given column
+	cols := make([]string, 0, len(df.columns)-1)
+	for _, column := range df.columns {
+		if column.Name != colName {
+			cols = append(cols, column.Name)
+		}
+	}
+
+	// creating a new slice with the resettled column
+	resetCols := make([]string, 1, len(df.columns))
+	resetCols[index] = colName
+	if index > 0 {
+		resetCols = append(resetCols, cols[:index]...)
+	} else {
+		resetCols = append(resetCols, cols[0])
+	}
+	resetCols = append(resetCols, cols[index+1:]...)
+
+	// reset the dataframe and return
+	newDf := df.ResetColumns(resetCols)
+	return newDf
+}
