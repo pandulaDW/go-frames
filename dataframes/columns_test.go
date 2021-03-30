@@ -1,6 +1,7 @@
 package dataframes
 
 import (
+	"github.com/pandulaDW/go-frames/errors"
 	"github.com/pandulaDW/go-frames/series"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -110,6 +111,28 @@ func (suite *columnsTestSuite) TestDataFrame_ColumnExistsWithIndex() {
 
 	// assert that function returns correct index when column is found
 	suite.Equal(1, suite.df.ColumnExistsWithIndex("col2"))
+}
+
+func (suite *columnsTestSuite) TestDataFrame_MoveColumn() {
+	// assert that the same dataframe will be returned if index is same as current index
+	suite.Equal(true, suite.df.MoveColumn("col1", 0).IsEqual(suite.df))
+
+	// assert that function panics when column is not found
+	suite.PanicsWithError(errors.ColumnNotFound("test").Error(), func() {
+		suite.df.MoveColumn("test", 2)
+	})
+
+	// assert that function panic if incorrect index is given
+	suite.PanicsWithError("index is out of bound", func() {
+		suite.df.MoveColumn("col1", 5)
+	})
+	suite.PanicsWithError("index is out of bound", func() {
+		suite.df.MoveColumn("col1", -1)
+	})
+
+	// assert that function correctly move column
+	expected := NewDataFrame(suite.col2, suite.col1, suite.col3)
+	suite.Equal(expected, suite.df.MoveColumn("col2", 0))
 }
 
 func TestColumnsTestSuite(t *testing.T) {

@@ -174,7 +174,11 @@ func (df *DataFrame) ColumnExistsWithIndex(colName string) int {
 //
 // The function panics if the colName is not present or if index is out of bound
 func (df *DataFrame) MoveColumn(colName string, index int) *DataFrame {
-	if !df.ColumnExists(colName) {
+	idx := df.ColumnExistsWithIndex(colName)
+	if idx == index {
+		return df
+	}
+	if idx == -1 {
 		panic(errors.ColumnNotFound(colName))
 	}
 
