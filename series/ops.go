@@ -60,6 +60,12 @@ func helperCrud(s *Series, val interface{}, operation string) *Series {
 				data[i] = floatVal + sFloatVal
 			case operation == "SUBTRACT":
 				data[i] = sFloatVal - floatVal
+			case operation == "GT":
+				data[i] = sFloatVal > floatVal
+			case operation == "LT":
+				data[i] = sFloatVal < floatVal
+			case operation == "EQ":
+				data[i] = sFloatVal == floatVal
 			}
 		}
 
@@ -129,5 +135,33 @@ func (s *Series) Add(val interface{}) *Series {
 func (s *Series) Subtract(val interface{}) *Series {
 	newS := helperCrud(s, val, "SUBTRACT")
 	setOpFuncName(val, "subtract", s, newS)
+	return newS
+}
+
+// Gt will compare the given value against each value in the calling Series and will return a new Series
+// of type base.Bool, which reports whether the Series values is greater than the passed val.
+//
+// If another Series is passed as the val parameter using Col method, each value of the calling
+// Series will be checked to see if they are greater than the corresponding values in the passed Series.
+//
+// The function panics if incompatible values or an incompatible Series is passed.
+func (s *Series) Gt(val interface{}) *Series {
+	newS := helperCrud(s, val, "GT")
+	setOpFuncName(val, "gt", s, newS)
+	newS.column.Dtype = base.Bool
+	return newS
+}
+
+// Lt will compare the given value against each value in the calling Series and will return a new Series
+// of type base.Bool, which reports whether the Series values is less than the passed val.
+//
+// If another Series is passed as the val parameter using Col method, each value of the calling
+// Series will be checked to see if they are lesser than the corresponding values in the passed Series.
+//
+// The function panics if incompatible values or an incompatible Series is passed.
+func (s *Series) Lt(val interface{}) *Series {
+	newS := helperCrud(s, val, "LT")
+	setOpFuncName(val, "lt", s, newS)
+	newS.column.Dtype = base.Bool
 	return newS
 }
