@@ -77,7 +77,7 @@ func helperCrud(s *Series, val interface{}, operation string, conditional bool) 
 		if s.column.Dtype == base.Object {
 			strVal, ok := curVal.(string)
 			if !ok {
-				panic(errors.IncorrectTypedParameter("val", "float64"))
+				panic(errors.IncorrectTypedParameter("val", "string"))
 			}
 			sStringVal, ok := s.Data[i].(string)
 			if !ok {

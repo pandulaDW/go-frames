@@ -23,7 +23,7 @@ func (suite *opsTestSuite) SetupTest() {
 }
 
 func (suite *opsTestSuite) TestHelperCrud() {
-	// assert that invalid series will be panicked
+	// assert that function panics for invalid series
 	suite.PanicsWithError(errors.MismatchedNumOfRows(3, 2).Error(), func() {
 		suite.SObject.Add(NewSeries("col", "foo", "bar"))
 	})
@@ -31,6 +31,45 @@ func (suite *opsTestSuite) TestHelperCrud() {
 	// assert that nil values will be skipped correctly
 	suite.Nil(suite.SInt.Add(3).Data[2])
 	suite.Equal(false, suite.SInt.Gt(3).Data[2])
+
+	// INT ---------------------------------------
+	// assert that function panics for incorrectly typed values for int
+	suite.PanicsWithError(errors.IncorrectTypedParameter("val", "int").Error(), func() {
+		suite.SInt.Add("foo")
+	})
+
+	// assert that function panics if invalid series value is encountered
+	sInt := suite.SInt.DeepCopy()
+	sInt.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
+		sInt.Add(3)
+	})
+
+	// FLOAT ---------------------------------------
+	// assert that function panics for incorrectly typed values for float
+	suite.PanicsWithError(errors.IncorrectTypedParameter("val", "float64").Error(), func() {
+		suite.SFloat.Add(5)
+	})
+
+	// assert that function panics if invalid series value is encountered
+	sFloat := suite.SFloat.DeepCopy()
+	sFloat.Data[2] = "foo"
+	suite.PanicsWithError(errors.InvalidSeriesValError("foo", 2, "col").Error(), func() {
+		sFloat.Add(3.2)
+	})
+
+	// Object ---------------------------------------
+	// assert that function panics for incorrectly typed values for object
+	suite.PanicsWithError(errors.IncorrectTypedParameter("val", "string").Error(), func() {
+		suite.SObject.Add(23)
+	})
+
+	// assert that function panics if invalid series value is encountered
+	sObject := suite.SObject.DeepCopy()
+	sObject.Data[2] = 3.5
+	suite.PanicsWithError(errors.InvalidSeriesValError(3.5, 2, "col").Error(), func() {
+		sObject.Add("foo")
+	})
 }
 
 func TestOpsTestSuite(t *testing.T) {
