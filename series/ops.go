@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func helperCrud(s *Series, val interface{}, operation string) *Series {
+func helperCrud(s *Series, val interface{}, operation string, conditional bool) *Series {
 	valS, isSeries := val.(*Series)
 	if isSeries {
 		if valS.Len() != s.Len() {
@@ -20,8 +20,13 @@ func helperCrud(s *Series, val interface{}, operation string) *Series {
 
 	var curVal interface{}
 	for i := range s.Data {
-		if s.Data[i] == nil {
+		if s.Data[i] == nil && !conditional {
 			data[i] = nil
+			continue
+		}
+		if s.Data[i] == nil && conditional {
+			data[i] = false
+			continue
 		}
 		if isSeries {
 			curVal = valS.Data[i]
@@ -120,7 +125,7 @@ func setOpFuncName(val interface{}, prefix string, s, newS *Series) {
 //
 // The function panics if incompatible values or an incompatible Series is passed.
 func (s *Series) Add(val interface{}) *Series {
-	newS := helperCrud(s, val, "ADD")
+	newS := helperCrud(s, val, "ADD", false)
 	setOpFuncName(val, "add", s, newS)
 	return newS
 }
@@ -133,7 +138,7 @@ func (s *Series) Add(val interface{}) *Series {
 //
 // The function panics if incompatible values or an incompatible Series is passed.
 func (s *Series) Subtract(val interface{}) *Series {
-	newS := helperCrud(s, val, "SUBTRACT")
+	newS := helperCrud(s, val, "SUBTRACT", false)
 	setOpFuncName(val, "subtract", s, newS)
 	return newS
 }
@@ -146,7 +151,7 @@ func (s *Series) Subtract(val interface{}) *Series {
 //
 // The function panics if incompatible values or an incompatible Series is passed.
 func (s *Series) Gt(val interface{}) *Series {
-	newS := helperCrud(s, val, "GT")
+	newS := helperCrud(s, val, "GT", true)
 	setOpFuncName(val, "gt", s, newS)
 	newS.column.Dtype = base.Bool
 	return newS
@@ -160,7 +165,7 @@ func (s *Series) Gt(val interface{}) *Series {
 //
 // The function panics if incompatible values or an incompatible Series is passed.
 func (s *Series) Lt(val interface{}) *Series {
-	newS := helperCrud(s, val, "LT")
+	newS := helperCrud(s, val, "LT", true)
 	setOpFuncName(val, "lt", s, newS)
 	newS.column.Dtype = base.Bool
 	return newS
