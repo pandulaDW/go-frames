@@ -170,3 +170,17 @@ func (s *Series) Lt(val interface{}) *Series {
 	newS.column.Dtype = base.Bool
 	return newS
 }
+
+// Eq will compare the given value against each value in the calling Series and will return a new Series
+// of type base.Bool, which reports whether the Series values is equal to the passed val.
+//
+// If another Series is passed as the val parameter using Col method, each value of the calling
+// Series will be checked to see if they are equal to the corresponding values in the passed Series.
+//
+// The function panics if incompatible values or an incompatible Series is passed.
+func (s *Series) Eq(val interface{}) *Series {
+	newS := helperCrud(s, val, "EQ", true)
+	setOpFuncName(val, "eq", s, newS)
+	newS.column.Dtype = base.Bool
+	return newS
+}

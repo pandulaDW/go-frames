@@ -108,8 +108,37 @@ func (suite *opsTestSuite) TestSeries_Add() {
 	suite.Equal(expected, suite.sDateTime.Add(24*time.Hour))
 }
 
+func (suite *opsTestSuite) TestSeries_Subtract() {
+	// assert that function correctly returns an added series for int types
+	suite.Equal(NewSeries("subtract(col, 2)", 441, 52, nil, 88, 46, 80), suite.SInt.Subtract(2))
+
+	// assert that function correctly returns an added series float types
+	suite.Equal(NewSeries("subtract(col, 1.2)", 42.33, 19.900000000000002, 31.34, 64.55, nil),
+		suite.SFloat.Subtract(1.2))
+}
+
+func (suite *opsTestSuite) TestSeries_Gt() {
+	// assert that function correctly returns an added series float types
+	suite.Equal(NewSeries("gt(col, 30.1)", true, false, true, true, false),
+		suite.SFloat.Gt(30.1))
+}
+
+func (suite *opsTestSuite) TestSeries_Lt() {
+	// assert that function correctly returns an added series float types
+	suite.Equal(NewSeries("lt(col, 30.1)", false, true, false, false, false),
+		suite.SFloat.Lt(30.1))
+}
+
+func (suite *opsTestSuite) TestSeries_Eq() {
+	// assert that function correctly returns an added series float types
+	suite.Equal(NewSeries("eq(col, 21.1)", false, true, false, false, false),
+		suite.SFloat.Eq(21.1))
+}
+
 func TestOpsTestSuite(t *testing.T) {
 	suite.Run(t, new(opsTestSuite))
 }
 
 // suite.sDateTime = NewSeries("col", "2005-01-25", "", "2012-02-05", "1998-11-25", "2001-12-15")
+// 443, 54, "", 90, 48, 82
+// suite.SFloat = NewSeries("col", 43.53, 21.1, 32.54, 65.75, nil)
