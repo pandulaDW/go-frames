@@ -48,6 +48,12 @@ func helperCrud(s *Series, val interface{}, operation string, conditional bool) 
 				data[i] = intVal + sIntVal
 			case operation == "SUBTRACT":
 				data[i] = sIntVal - intVal
+			case operation == "GT":
+				data[i] = sIntVal > intVal
+			case operation == "LT":
+				data[i] = sIntVal < intVal
+			case operation == "EQ":
+				data[i] = sIntVal == intVal
 			}
 		}
 

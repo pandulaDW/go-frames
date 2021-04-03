@@ -118,18 +118,30 @@ func (suite *opsTestSuite) TestSeries_Subtract() {
 }
 
 func (suite *opsTestSuite) TestSeries_Gt() {
+	// assert that function correctly returns an added series int types
+	suite.Equal(NewSeries("gt(col, 90)", true, false, false, false, false, false),
+		suite.SInt.Gt(90))
+
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("gt(col, 30.1)", true, false, true, true, false),
 		suite.SFloat.Gt(30.1))
 }
 
 func (suite *opsTestSuite) TestSeries_Lt() {
+	// assert that function correctly returns an added series int types
+	suite.Equal(NewSeries("lt(col, 50)", false, false, false, false, true, false),
+		suite.SInt.Lt(50))
+
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("lt(col, 30.1)", false, true, false, false, false),
 		suite.SFloat.Lt(30.1))
 }
 
 func (suite *opsTestSuite) TestSeries_Eq() {
+	// assert that function correctly returns an added series int types
+	suite.Equal(NewSeries("eq(col, 90)", false, false, false, true, false, false),
+		suite.SInt.Eq(90))
+
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("eq(col, 21.1)", false, true, false, false, false),
 		suite.SFloat.Eq(21.1))
