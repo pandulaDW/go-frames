@@ -127,6 +127,16 @@ func (suite *opsTestSuite) TestSeries_Gt() {
 		suite.SFloat.Gt(30.1))
 }
 
+func (suite *opsTestSuite) TestSeries_Gte() {
+	// assert that function correctly returns an added series int types
+	suite.Equal(NewSeries("gte(col, 90)", true, false, false, true, false, false),
+		suite.SInt.Gte(90))
+
+	// assert that function correctly returns an added series float types
+	suite.Equal(NewSeries("gte(col, 21.1)", true, true, true, true, false),
+		suite.SFloat.Gte(21.1))
+}
+
 func (suite *opsTestSuite) TestSeries_Lt() {
 	// assert that function correctly returns an added series int types
 	suite.Equal(NewSeries("lt(col, 50)", false, false, false, false, true, false),
@@ -137,6 +147,16 @@ func (suite *opsTestSuite) TestSeries_Lt() {
 		suite.SFloat.Lt(30.1))
 }
 
+func (suite *opsTestSuite) TestSeries_Lte() {
+	// assert that function correctly returns an added series int types
+	suite.Equal(NewSeries("lte(col, 54)", false, true, false, false, true, false),
+		suite.SInt.Lte(54))
+
+	// assert that function correctly returns an added series float types
+	suite.Equal(NewSeries("lte(col, 32.54)", false, true, true, false, false),
+		suite.SFloat.Lte(32.54))
+}
+
 func (suite *opsTestSuite) TestSeries_Eq() {
 	// assert that function correctly returns an added series int types
 	suite.Equal(NewSeries("eq(col, 90)", false, false, false, true, false, false),
@@ -145,6 +165,16 @@ func (suite *opsTestSuite) TestSeries_Eq() {
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("eq(col, 21.1)", false, true, false, false, false),
 		suite.SFloat.Eq(21.1))
+}
+
+func (suite *opsTestSuite) TestSeries_Neq() {
+	// assert that function correctly returns an added series int types
+	suite.Equal(NewSeries("neq(col, 90)", true, true, false, false, true, true),
+		suite.SInt.Neq(90))
+
+	// assert that function correctly returns an added series float types
+	suite.Equal(NewSeries("neq(col, 21.1)", true, false, true, true, false),
+		suite.SFloat.Neq(21.1))
 }
 
 func TestOpsTestSuite(t *testing.T) {

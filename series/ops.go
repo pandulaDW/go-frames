@@ -50,10 +50,16 @@ func helperCrud(s *Series, val interface{}, operation string, conditional bool) 
 				data[i] = sIntVal - intVal
 			case operation == "GT":
 				data[i] = sIntVal > intVal
+			case operation == "GTE":
+				data[i] = sIntVal >= intVal
 			case operation == "LT":
 				data[i] = sIntVal < intVal
+			case operation == "LTE":
+				data[i] = sIntVal <= intVal
 			case operation == "EQ":
 				data[i] = sIntVal == intVal
+			case operation == "NEQ":
+				data[i] = sIntVal != intVal
 			}
 		}
 
@@ -73,10 +79,16 @@ func helperCrud(s *Series, val interface{}, operation string, conditional bool) 
 				data[i] = sFloatVal - floatVal
 			case operation == "GT":
 				data[i] = sFloatVal > floatVal
+			case operation == "GTE":
+				data[i] = sFloatVal >= floatVal
 			case operation == "LT":
 				data[i] = sFloatVal < floatVal
+			case operation == "LTE":
+				data[i] = sFloatVal <= floatVal
 			case operation == "EQ":
 				data[i] = sFloatVal == floatVal
+			case operation == "NEQ":
+				data[i] = sFloatVal != floatVal
 			}
 		}
 
@@ -163,6 +175,20 @@ func (s *Series) Gt(val interface{}) *Series {
 	return newS
 }
 
+// Gte will compare the given value against each value in the calling Series and will return a new Series
+// of type base.Bool, which reports whether the Series values is greater than or equal to the passed val.
+//
+// If another Series is passed as the val parameter using Col method, each value of the calling
+// Series will be checked to see if they are greater than or equal to the corresponding values in the passed Series.
+//
+// The function panics if incompatible values or an incompatible Series is passed.
+func (s *Series) Gte(val interface{}) *Series {
+	newS := helperCrud(s, val, "GTE", true)
+	setOpFuncName(val, "gte", s, newS)
+	newS.column.Dtype = base.Bool
+	return newS
+}
+
 // Lt will compare the given value against each value in the calling Series and will return a new Series
 // of type base.Bool, which reports whether the Series values is less than the passed val.
 //
@@ -177,6 +203,20 @@ func (s *Series) Lt(val interface{}) *Series {
 	return newS
 }
 
+// Lte will compare the given value against each value in the calling Series and will return a new Series
+// of type base.Bool, which reports whether the Series values is less than or equal to the passed val.
+//
+// If another Series is passed as the val parameter using Col method, each value of the calling
+// Series will be checked to see if they are lesser than or equal to the corresponding values in the passed Series.
+//
+// The function panics if incompatible values or an incompatible Series is passed.
+func (s *Series) Lte(val interface{}) *Series {
+	newS := helperCrud(s, val, "LTE", true)
+	setOpFuncName(val, "lte", s, newS)
+	newS.column.Dtype = base.Bool
+	return newS
+}
+
 // Eq will compare the given value against each value in the calling Series and will return a new Series
 // of type base.Bool, which reports whether the Series values is equal to the passed val.
 //
@@ -187,6 +227,20 @@ func (s *Series) Lt(val interface{}) *Series {
 func (s *Series) Eq(val interface{}) *Series {
 	newS := helperCrud(s, val, "EQ", true)
 	setOpFuncName(val, "eq", s, newS)
+	newS.column.Dtype = base.Bool
+	return newS
+}
+
+// Neq will compare the given value against each value in the calling Series and will return a new Series
+// of type base.Bool, which reports whether the Series values is not equal to the passed val.
+//
+// If another Series is passed as the val parameter using Col method, each value of the calling
+// Series will be checked to see if they are not equal to the corresponding values in the passed Series.
+//
+// The function panics if incompatible values or an incompatible Series is passed.
+func (s *Series) Neq(val interface{}) *Series {
+	newS := helperCrud(s, val, "NEQ", true)
+	setOpFuncName(val, "neq", s, newS)
 	newS.column.Dtype = base.Bool
 	return newS
 }
