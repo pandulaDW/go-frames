@@ -108,9 +108,21 @@ func helperCrud(s *Series, val interface{}, operation string, conditional bool) 
 		}
 
 		if s.column.Dtype == base.DateTime {
-			duration, ok := curVal.(time.Duration)
-			if !ok {
-				panic(errors.IncorrectTypedParameter("val", "time.Duration"))
+			var tVal time.Time
+			var duration time.Duration
+
+			if operation != "ADD" {
+				t, ok := curVal.(time.Time)
+				if !ok {
+					panic(errors.IncorrectTypedParameter("val", "time.Time"))
+				}
+				tVal = t
+			} else {
+				d, ok := curVal.(time.Duration)
+				if !ok {
+					panic(errors.IncorrectTypedParameter("val", "time.Duration"))
+				}
+				duration = d
 			}
 			sTVal, ok := s.Data[i].(time.Time)
 			if !ok {
@@ -119,6 +131,12 @@ func helperCrud(s *Series, val interface{}, operation string, conditional bool) 
 			switch {
 			case operation == "ADD":
 				data[i] = sTVal.Add(duration)
+			case operation == "GT":
+				data[i] = sTVal.After(tVal)
+			case operation == "LT":
+				data[i] = sTVal.Before(tVal)
+			case operation == "EQ":
+				data[i] = sTVal.Equal(tVal)
 			}
 		}
 	}
