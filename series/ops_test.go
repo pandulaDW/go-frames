@@ -79,6 +79,11 @@ func (suite *opsTestSuite) TestHelperCrud() {
 		suite.sDateTime.Add(23)
 	})
 
+	// assert that function panics for incorrectly typed values for datetime
+	suite.PanicsWithError(errors.IncorrectTypedParameter("val", "time.Time").Error(), func() {
+		suite.sDateTime.Gt(23)
+	})
+
 	// assert that function panics if invalid series value is encountered
 	sDateTime := suite.sDateTime.DeepCopy()
 	sDateTime.Data[2] = "foo"
@@ -125,6 +130,11 @@ func (suite *opsTestSuite) TestSeries_Gt() {
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("gt(col, 30.1)", true, false, true, true, false),
 		suite.SFloat.Gt(30.1))
+
+	// assert that date is correctly compared
+	t, _ := time.Parse("2006-01-02", "2003-04-25")
+	suite.Equal(NewSeries("gt(col, 2003-04-25 00:00:00 +0000 UTC)", true, false, true, false, false),
+		suite.sDateTime.Gt(t))
 }
 
 func (suite *opsTestSuite) TestSeries_Gte() {
@@ -145,6 +155,11 @@ func (suite *opsTestSuite) TestSeries_Lt() {
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("lt(col, 30.1)", false, true, false, false, false),
 		suite.SFloat.Lt(30.1))
+
+	// assert that date is correctly compared
+	t, _ := time.Parse("2006-01-02", "2003-04-25")
+	suite.Equal(NewSeries("lt(col, 2003-04-25 00:00:00 +0000 UTC)", false, false, false, true, true),
+		suite.sDateTime.Lt(t))
 }
 
 func (suite *opsTestSuite) TestSeries_Lte() {
@@ -165,6 +180,11 @@ func (suite *opsTestSuite) TestSeries_Eq() {
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("eq(col, 21.1)", false, true, false, false, false),
 		suite.SFloat.Eq(21.1))
+
+	// assert that date is correctly compared
+	t, _ := time.Parse("2006-01-02", "2012-02-05")
+	suite.Equal(NewSeries("eq(col, 2012-02-05 00:00:00 +0000 UTC)", false, false, true, false, false),
+		suite.sDateTime.Eq(t))
 }
 
 func (suite *opsTestSuite) TestSeries_Neq() {
