@@ -5,6 +5,7 @@ import (
 	"encoding/gob"
 	"fmt"
 	"github.com/pandulaDW/go-frames/errors"
+	"math/rand"
 	"reflect"
 	"runtime"
 	"strings"
@@ -104,4 +105,43 @@ func GetFunctionName(i interface{}) string {
 // FunctionNameWrapper returns a wrapper name with a given function name and a column name
 func FunctionNameWrapper(funcName, colName string) string {
 	return fmt.Sprintf("%s(%s)", funcName, colName)
+}
+
+// GenerateRandomSeries will generate n number of random integer values where n is in between [0, range_] using
+// the seed value provided.
+//
+// If withReplacement is set to true, the sample will contain duplicate values. And if withReplacement is set to
+// false and if the range_ is lower than n, then the returned sample will contain number of elements equal to
+// the range_.
+func GenerateRandomSeries(n uint64, range_ uint64, seed int64, withReplacement bool) []int {
+	rand.Seed(seed)
+	m := make(map[int]int)
+	seq := make([]int, 0, n)
+
+	if withReplacement {
+		for i := 0; i < int(n); i++ {
+			seq = append(seq, rand.Intn(int(range_)))
+		}
+		return seq
+	}
+
+	if n < range_ {
+		for len(seq) < int(n) {
+			val := rand.Intn(int(range_))
+			if _, ok := m[val]; !ok {
+				m[val] = 0
+				seq = append(seq, val)
+			}
+		}
+	} else {
+		for len(seq) < int(range_) {
+			val := rand.Intn(int(range_))
+			if _, ok := m[val]; !ok {
+				m[val] = 0
+				seq = append(seq, val)
+			}
+		}
+	}
+
+	return seq
 }
