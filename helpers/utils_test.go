@@ -100,3 +100,16 @@ func TestFunctionNameWrapper(t *testing.T) {
 	assert.Equal(t, "sum(profit)", FunctionNameWrapper("sum", "profit"))
 	assert.Equal(t, "min(sum(profit))", FunctionNameWrapper("min", "sum(profit)"))
 }
+
+func TestGenerateRandomSeries(t *testing.T) {
+	// assert that function creates correct random series with replacement
+	assert.Equal(t, []int{5, 7, 8, 0, 3, 5, 7, 6, 8, 3},
+		GenerateRandomSeries(10, 10, 42, true))
+
+	// assert that function creates correct random series without replacement for large range
+	assert.Equal(t, []int{0, 9, 1, 5, 2, 10, 3, 8, 4, 6},
+		GenerateRandomSeries(10, 11, 42, false))
+
+	// assert that function creates correct random series with replacement for small range
+	assert.Equal(t, []int{0, 2, 3, 1, 4}, GenerateRandomSeries(10, 5, 42, false))
+}
