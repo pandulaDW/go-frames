@@ -3,6 +3,7 @@ package dataframes
 import (
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
+	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/series"
 )
 
@@ -46,4 +47,14 @@ func (df *DataFrame) FilterBySeries(boolSeries *series.Series) *DataFrame {
 	}
 
 	return NewDataFrame(filteredSeriesArray...)
+}
+
+// Sample will return a new DataFrame with n number of rows randomly selected using the given seed value.
+//
+// If withReplacement is set to true, the sample can contain duplicate rows. And if withReplacement is set to
+// false and if the length of the DataFrame is lower than n, then the returned sample will contain number of
+// elements equal to the DataFrame length.
+func (df *DataFrame) Sample(n uint64, seed int64, withReplacement bool) *DataFrame {
+	seq := helpers.GenerateRandomSeries(n, uint64(df.length), seed, withReplacement)
+	return df.ILoc(seq, df.Columns())
 }

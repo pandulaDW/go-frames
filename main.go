@@ -15,6 +15,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	df = df.Sample(10, 40, false)
 	fmt.Println(df)
 
 	fmt.Println("time took: ", time.Since(start))
