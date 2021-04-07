@@ -135,6 +135,9 @@ func (suite *opsTestSuite) TestSeries_Gt() {
 	t, _ := time.Parse("2006-01-02", "2003-04-25")
 	suite.Equal(NewSeries("gt(col, 2003-04-25 00:00:00 +0000 UTC)", true, false, true, false, false),
 		suite.sDateTime.Gt(t))
+
+	// assert that string is correctly compared
+	suite.Equal(NewSeries("gt(col, bat)", true, false, true), suite.SObject.Gt("bat"))
 }
 
 func (suite *opsTestSuite) TestSeries_Gte() {
@@ -145,6 +148,9 @@ func (suite *opsTestSuite) TestSeries_Gte() {
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("gte(col, 21.1)", true, true, true, true, false),
 		suite.SFloat.Gte(21.1))
+
+	// assert that string is correctly compared
+	suite.Equal(NewSeries("gte(col, bar)", true, true, true), suite.SObject.Gte("bar"))
 }
 
 func (suite *opsTestSuite) TestSeries_Lt() {
@@ -160,6 +166,9 @@ func (suite *opsTestSuite) TestSeries_Lt() {
 	t, _ := time.Parse("2006-01-02", "2003-04-25")
 	suite.Equal(NewSeries("lt(col, 2003-04-25 00:00:00 +0000 UTC)", false, false, false, true, true),
 		suite.sDateTime.Lt(t))
+
+	// assert that string is correctly compared
+	suite.Equal(NewSeries("lt(col, bat)", false, true, false), suite.SObject.Lt("bat"))
 }
 
 func (suite *opsTestSuite) TestSeries_Lte() {
@@ -170,6 +179,9 @@ func (suite *opsTestSuite) TestSeries_Lte() {
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("lte(col, 32.54)", false, true, true, false, false),
 		suite.SFloat.Lte(32.54))
+
+	// assert that string is correctly compared
+	suite.Equal(NewSeries("lte(col, baz)", false, true, true), suite.SObject.Lte("baz"))
 }
 
 func (suite *opsTestSuite) TestSeries_Eq() {
@@ -185,6 +197,9 @@ func (suite *opsTestSuite) TestSeries_Eq() {
 	t, _ := time.Parse("2006-01-02", "2012-02-05")
 	suite.Equal(NewSeries("eq(col, 2012-02-05 00:00:00 +0000 UTC)", false, false, true, false, false),
 		suite.sDateTime.Eq(t))
+
+	// assert that string is correctly compared
+	suite.Equal(NewSeries("eq(col, foo)", true, false, false), suite.SObject.Eq("foo"))
 }
 
 func (suite *opsTestSuite) TestSeries_Neq() {
@@ -195,6 +210,9 @@ func (suite *opsTestSuite) TestSeries_Neq() {
 	// assert that function correctly returns an added series float types
 	suite.Equal(NewSeries("neq(col, 21.1)", true, false, true, true, false),
 		suite.SFloat.Neq(21.1))
+
+	// assert that string is correctly compared
+	suite.Equal(NewSeries("neq(col, baz)", true, true, false), suite.SObject.Neq("baz"))
 }
 
 func TestOpsTestSuite(t *testing.T) {

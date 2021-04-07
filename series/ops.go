@@ -104,6 +104,18 @@ func helperCrud(s *Series, val interface{}, operation string, conditional bool) 
 			switch {
 			case operation == "ADD":
 				data[i] = sStringVal + strVal
+			case operation == "GT":
+				data[i] = sStringVal > strVal
+			case operation == "GTE":
+				data[i] = sStringVal >= strVal
+			case operation == "LT":
+				data[i] = sStringVal < strVal
+			case operation == "LTE":
+				data[i] = sStringVal <= strVal
+			case operation == "EQ":
+				data[i] = sStringVal == strVal
+			case operation == "NEQ":
+				data[i] = sStringVal != strVal
 			}
 		}
 
