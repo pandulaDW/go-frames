@@ -65,3 +65,8 @@ func InvalidSeriesValError(val interface{}, i int, col string) error {
 	}
 	return errors.New(errStr)
 }
+
+// SeriesDataTypeNotPermitted return an error specifying whether the series data type permits the given operation
+func SeriesDataTypeNotPermitted(operation string, dtype base.DType) error {
+	return fmt.Errorf("%s operation is not permitted for %s type series", operation, dtype)
+}

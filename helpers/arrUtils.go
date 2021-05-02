@@ -41,3 +41,18 @@ func ReverseArray(arr []interface{}) []interface{} {
 
 	return reversedArr
 }
+
+// Contains checks if given value contains in the array
+func Contains(arr []interface{}, value interface{}) bool {
+	m := make(map[interface{}]int)
+
+	for _, val := range arr {
+		m[val] = 0
+	}
+
+	if _, ok := m[value]; ok {
+		return true
+	}
+
+	return false
+}

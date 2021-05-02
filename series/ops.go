@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
+	"github.com/pandulaDW/go-frames/helpers"
 	"time"
 )
 
@@ -151,6 +152,26 @@ func helperCrud(s *Series, val interface{}, operation string, conditional bool) 
 				data[i] = sTVal.Equal(tVal)
 			}
 		}
+
+		if s.column.Dtype == base.Bool {
+			boolVal, ok := curVal.(bool)
+			if !ok {
+				panic(errors.IncorrectTypedParameter("val", "bool"))
+			}
+			sBoolVal, ok := s.Data[i].(bool)
+			if !ok {
+				panic(errors.InvalidSeriesValError(s.Data[i], i, s.column.Name))
+			}
+			nonPermittedOps := []interface{}{"ADD", "SUBTRACT", "GT", "LT", "GTE", "LTE"}
+			switch {
+			case helpers.Contains(nonPermittedOps, operation):
+				panic(errors.SeriesDataTypeNotPermitted(operation, base.Bool))
+			case operation == "AND":
+				data[i] = boolVal && sBoolVal
+			case operation == "OR":
+				data[i] = boolVal || sBoolVal
+			}
+		}
 	}
 
 	newS.Data = data
@@ -271,6 +292,20 @@ func (s *Series) Eq(val interface{}) *Series {
 func (s *Series) Neq(val interface{}) *Series {
 	newS := helperCrud(s, val, "NEQ", true)
 	setOpFuncName(val, "neq", s, newS)
+	newS.column.Dtype = base.Bool
+	return newS
+}
+
+// AND will compare the given value against each value in the calling Series and will return a new Series
+// of type base.Bool, which reports the value arising after Series value is anded against the passed val.
+//
+// If another Series is passed as the val parameter using Col method, each value of the calling
+// Series will be anded against the corresponding values in the passed Series.
+//
+// The function panics if incompatible values or an incompatible Series is passed.
+func (s *Series) AND(val interface{}) *Series {
+	newS := helperCrud(s, val, "AND", true)
+	setOpFuncName(val, "and", s, newS)
 	newS.column.Dtype = base.Bool
 	return newS
 }

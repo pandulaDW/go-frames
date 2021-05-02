@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/ioread"
 	"log"
 	"time"
@@ -16,10 +15,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	df = df.Sample(10, 40, false)
+	highQuantity := df.Col("Quantity").Gte(10)
+	highPrice := df.Col("Unit price").Gte(90.0)
+
+	df = df.FilterBySeries(highQuantity.AND(highPrice))
+
 	fmt.Println(df)
 
 	fmt.Println("time took: ", time.Since(start))
-
-	fmt.Println(helpers.GenerateRandomSeries(3, 5, 42, false))
 }
