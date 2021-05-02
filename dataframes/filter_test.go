@@ -35,3 +35,15 @@ func TestDataFrame_FilterBySeries(t *testing.T) {
 		series.NewSeries("col2", 54.31, 45.6, 23.2))
 	assert.Equal(t, expected, df.FilterBySeries(series.NewSeries("col", true, false, true, false, true)))
 }
+
+func TestSample(t *testing.T) {
+	df := NewDataFrame(series.NewSeries("col1", 12, 34, 54, 65, 90),
+		series.NewSeries("col2", 54.31, 1.23, 45.6, 23.12, 23.2))
+	expected := NewDataFrame(series.NewSeries("col1", 12, 54, 65),
+		series.NewSeries("col2", 54.31, 45.6, 23.12))
+
+	expected = expected.SetIndexBySeries(series.NewSeries("#", 0, 2, 3))
+	expected.Index.IsCustom = false
+
+	assert.Equal(t, expected, df.Sample(3, 42, false))
+}

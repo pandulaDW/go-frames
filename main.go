@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/pandulaDW/go-frames/helpers"
 	"github.com/pandulaDW/go-frames/ioread"
 	"log"
 	"time"
@@ -19,4 +20,6 @@ func main() {
 	fmt.Println(df)
 
 	fmt.Println("time took: ", time.Since(start))
+
+	fmt.Println(helpers.GenerateRandomSeries(3, 5, 42, false))
 }
