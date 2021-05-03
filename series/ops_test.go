@@ -248,6 +248,24 @@ func (suite *opsTestSuite) TestSeries_Or() {
 		suite.SBool.OR(false))
 }
 
+func (suite *opsTestSuite) TestSeries_Not() {
+	// assert that function panics if incorrect series is given
+	suite.PanicsWithError(errors.SeriesDataTypeNotPermitted("NOT", base.Bool).Error(), func() {
+		suite.SInt.NOT()
+	})
+
+	// assert that function panics if invalid series value is encountered
+	sBool := suite.SBool.DeepCopy()
+	sBool.Data[2] = 3.5
+	suite.PanicsWithError(errors.InvalidSeriesValError(3.5, 2, "col").Error(), func() {
+		sBool.NOT()
+	})
+
+	// assert that function correctly returns an not series
+	suite.Equal(NewSeries("not(col)", false, true, false),
+		suite.SBool.NOT())
+}
+
 func TestOpsTestSuite(t *testing.T) {
 	suite.Run(t, new(opsTestSuite))
 }
