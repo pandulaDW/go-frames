@@ -15,10 +15,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	highQuantity := df.Col("Quantity").Gte(10)
-	highPrice := df.Col("Unit price").Gte(90.0)
-
-	df = df.FilterBySeries(highQuantity.AND(highPrice))
+	notYangon := df.Col("City").Eq("Yangon").NOT()
+	df = df.FilterBySeries(notYangon)
 
 	fmt.Println(df)
 

@@ -323,3 +323,27 @@ func (s *Series) OR(val interface{}) *Series {
 	newS.column.Dtype = base.Bool
 	return newS
 }
+
+// NOT will reverse each value in a base.Bool series to it's boolean counterpart.
+//
+// The function panics if the passed series is not of type base.Bool.
+func (s *Series) NOT() *Series {
+	newS := s.ShallowCopy()
+
+	if s.column.Dtype != base.Bool {
+		panic(errors.SeriesDataTypeNotPermitted("NOT", base.Bool))
+	}
+
+	data := make([]interface{}, s.Len())
+	for i, val := range s.Data {
+		boolVal, ok := val.(bool)
+		if !ok {
+			panic(errors.InvalidSeriesValError(val, i, s.column.Name))
+		}
+		data[i] = !boolVal
+	}
+
+	newS.Data = data
+	newS.column.Name = helpers.FunctionNameWrapper("not", s.column.Name)
+	return newS
+}
