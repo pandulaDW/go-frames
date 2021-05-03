@@ -309,3 +309,17 @@ func (s *Series) AND(val interface{}) *Series {
 	newS.column.Dtype = base.Bool
 	return newS
 }
+
+// OR will compare the given value against each value in the calling Series and will return a new Series
+// of type base.Bool, which reports the value arising after Series value is ored against the passed val.
+//
+// If another Series is passed as the val parameter using Col method, each value of the calling
+// Series will be ored against the corresponding values in the passed Series.
+//
+// The function panics if incompatible values or an incompatible Series is passed.
+func (s *Series) OR(val interface{}) *Series {
+	newS := helperCrud(s, val, "OR", true)
+	setOpFuncName(val, "or", s, newS)
+	newS.column.Dtype = base.Bool
+	return newS
+}

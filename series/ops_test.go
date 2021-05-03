@@ -1,6 +1,7 @@
 package series
 
 import (
+	"github.com/pandulaDW/go-frames/base"
 	"github.com/pandulaDW/go-frames/errors"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -14,12 +15,14 @@ type opsTestSuite struct {
 	sBool     *Series
 	SObject   *Series
 	sDateTime *Series
+	SBool     *Series
 }
 
 func (suite *opsTestSuite) SetupTest() {
 	suite.SInt = NewSeries("col", 443, 54, "", 90, 48, 82)
 	suite.SFloat = NewSeries("col", 43.53, 21.1, 32.54, 65.75, nil)
 	suite.SObject = NewSeries("col", "foo", "bar", "baz")
+	suite.SBool = NewSeries("col", true, false, true)
 	suite.sDateTime = NewSeries("col", "2005-01-25", "", "2012-02-05", "1998-11-25", "2001-12-15")
 	_ = suite.sDateTime.CastAsTime("2006-01-02")
 }
@@ -71,6 +74,24 @@ func (suite *opsTestSuite) TestHelperCrud() {
 	sObject.Data[2] = 3.5
 	suite.PanicsWithError(errors.InvalidSeriesValError(3.5, 2, "col").Error(), func() {
 		sObject.Add("foo")
+	})
+
+	// Bool ----------------------------------------------
+	// assert that function panics for incorrectly typed values for object
+	suite.PanicsWithError(errors.IncorrectTypedParameter("val", "bool").Error(), func() {
+		suite.SBool.AND(12)
+	})
+
+	// assert that function panics if invalid series value is encountered
+	sBool := suite.SBool.DeepCopy()
+	sBool.Data[2] = 3.5
+	suite.PanicsWithError(errors.InvalidSeriesValError(3.5, 2, "col").Error(), func() {
+		sBool.AND(false)
+	})
+
+	// assert that function panics if bool series calls an incorrect operation
+	suite.PanicsWithError(errors.SeriesDataTypeNotPermitted("ADD", base.Bool).Error(), func() {
+		suite.SBool.Add(false)
 	})
 
 	// DateTime ----------------------------------------
@@ -213,6 +234,18 @@ func (suite *opsTestSuite) TestSeries_Neq() {
 
 	// assert that string is correctly compared
 	suite.Equal(NewSeries("neq(col, baz)", true, true, false), suite.SObject.Neq("baz"))
+}
+
+func (suite *opsTestSuite) TestSeries_And() {
+	// assert that function correctly returns an anded series
+	suite.Equal(NewSeries("and(col, false)", false, false, false),
+		suite.SBool.AND(false))
+}
+
+func (suite *opsTestSuite) TestSeries_Or() {
+	// assert that function correctly returns an ored series
+	suite.Equal(NewSeries("or(col, false)", true, false, true),
+		suite.SBool.OR(false))
 }
 
 func TestOpsTestSuite(t *testing.T) {
