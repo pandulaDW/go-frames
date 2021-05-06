@@ -28,11 +28,7 @@ func (s *Series) Apply(mapper base.ApplyFunc) (*Series, error) {
 	return newSeries, nil
 }
 
-// ComposeWithAnd takes in variadic number of base.Bool Series and return a single base.Bool Series
-// by applying AND operation to all the provided Series.
-//
-// The function panics if Series with mismatched number of rows or wrongly typed Series are given.
-func ComposeWithAnd(sBool ...*Series) *Series {
+func compose(operator, colName string, sBool ...*Series) *Series {
 	initLen := sBool[0].Len()
 	data := make([]interface{}, initLen)
 
@@ -51,11 +47,33 @@ func ComposeWithAnd(sBool ...*Series) *Series {
 			if !ok {
 				panic(errors.InvalidSeriesValError(series.Data[i], i, series.column.Name))
 			}
-			val = val && sVal
+			switch operator {
+			case "AND":
+				val = val && sVal
+			case "OR":
+				val = val || sVal
+			}
+
 		}
 		data[i] = val
 	}
 
-	newS := &Series{Data: data, column: base.Column{Name: "compose-with-and", Dtype: base.Bool}}
+	newS := &Series{Data: data, column: base.Column{Name: colName, Dtype: base.Bool}}
 	return newS
+}
+
+// ComposeWithAnd takes in variadic number of base.Bool Series and return a single base.Bool Series
+// by applying AND operation to all the provided Series.
+//
+// The function panics if Series with mismatched number of rows or wrongly typed Series are given.
+func ComposeWithAnd(sBool ...*Series) *Series {
+	return compose("AND", "compose-with-and", sBool...)
+}
+
+// ComposeWithOR takes in variadic number of base.Bool Series and return a single base.Bool Series
+// by applying OR operation to all the provided Series.
+//
+// The function panics if Series with mismatched number of rows or wrongly typed Series are given.
+func ComposeWithOR(sBool ...*Series) *Series {
+	return compose("OR", "compose-with-or", sBool...)
 }
