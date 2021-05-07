@@ -41,7 +41,13 @@ func compose(operator, colName string, sBool ...*Series) *Series {
 	}
 
 	for i := 0; i < initLen; i++ {
-		val := true
+		var val bool
+		if operator == "AND" {
+			val = true
+		} else {
+			val = false
+		}
+
 		for _, series := range sBool {
 			sVal, ok := series.Data[i].(bool)
 			if !ok {
@@ -53,7 +59,6 @@ func compose(operator, colName string, sBool ...*Series) *Series {
 			case "OR":
 				val = val || sVal
 			}
-
 		}
 		data[i] = val
 	}
